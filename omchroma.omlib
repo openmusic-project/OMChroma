@@ -1,0 +1,46 @@
+;;;===========================================================================
+;;; OMChroma lib for om7
+;;;===========================================================================
+
+(:om-lib
+ 
+ (:version 5.0)
+
+ (:doc "High-level control of sound synthesis in OM.")
+
+ (:author " C. Agon, M. Stroppa, J. Bresson, S. Lemouton, IRCAM (2000-2017)")
+
+ ;;; SOURCE FILES TO LOAD
+ (:source-files
+  (:pathname (:directory (:relative "sources")) (:name "package"))
+  (:pathname (:directory (:relative "sources" "cs-events")) (:name "csound-parser"))
+  (:pathname (:directory (:relative "sources" "cs-events")) (:name "csound-array"))
+  (:pathname (:directory (:relative "sources" "cs-events")) (:name "csound-tables"))
+  (:pathname (:directory (:relative "sources" "cs-events")) (:name "csound-inits"))
+  (:pathname (:directory (:relative "sources" "cs-events")) (:name "csound-event"))
+  (:pathname (:directory (:relative "sources" "cs-events")) (:name "csound-synthesis"))
+  (:pathname (:directory (:relative "sources" "cs-events")) (:name "csound-sss"))
+  (:pathname (:directory (:relative "sources" "cs-events")) (:name "load-classes"))
+
+  (:pathname (:directory (:relative "sources" "chroma")) (:name "load"))
+
+  (:pathname (:directory (:relative "sources")) (:name "function-reference"))
+  )
+
+ ;;; DECLARED SYMBOLS VISIBLE AND ACCESSIBLE THROUGH THE OM PACKAGE TREE
+ (:symbols
+  (:packages 
+   (:package 
+    (:name "cs-events")
+    (:functions "cr::cs-synthesize") 
+    (:classes "cr::cs-array" "cr::cs-init")
+    (:packages 
+     (:package 
+      (:name "tables")
+      (:functions) 
+      (:classes "cr::text-cs-table" "cr::gen-cs-table" "cr::gen01" "cr::gen01" "cr::gen02" "cr::gen-02" "cr::gen05" "cr::gen-05" "cr::gen07" "cr::gen-07")
+      ))
+    )))
+)
+
+
