@@ -1,28 +1,34 @@
 (in-package :om)
 
-(defun get-orc (name &optional (folder :local))
+(defvar *cs-orc-folder* nil)
+
+
+(defun get-orc (name &optional (folder nil))
+  "
+Returns the a csound orchestra called <name>.orc if found in the <folder> and subfolders.
+<folder> :local will look in the same folder where this function is called
+<folder> NIL will look in *cs-orc-folder* 
 "
-Return the a csound orchestra contained in the folder and subfolders
-specified by the global variable cr::CSorc.
-If a folder is passed as an argument, look for it in this folder and all the subfolders.
-Automatically add the type orc to the file.
-NB: csd files will not work.
-"
-(let ((result nil))
-  (when (equal folder :local) 
-    (setf folder (make-pathname :directory (pathname-directory *load-pathname*))))
-  (when (null folder)
-    (setf folder (get-cr-path :orc)))
-  (loop for els in (om-directory folder :files t :directories t)
-        while (not result) do
-        (if (directoryp els)
-            (setf result (get-orc name els))
-          (when (and  name
-                      (pathname-name els)
-                      (pathname-type els)
-                      (string-equal name (pathname-name els))
-                      (string-equal (pathname-type els) "orc"))
-            (setf result els))))
-  result))
+  (let ((result nil)
+        (real-folder 
+         (cond ((equal folder :local) (make-pathname :directory (pathname-directory *load-pathname*)))
+               ((null folder) *cs-orc-folder*)
+               (t folder))))
+    (when (probe-file real-folder)
+      (loop for file in (om-directory real-folder :files t :directories nil)
+            while (not result) do
+            (print file)
+            (when (and  name
+                        (pathname-name file)
+                        (pathname-type file)
+                        (string-equal name (pathname-name file))
+                        (string-equal (pathname-type file) "orc"))
+              (setf result file)))
+      (unless result 
+        (loop for dir in (om-directory real-folder :files nil :directories t)
+              while (not result) do
+              (setf result (get-orc name dir)))
+        ))
+    result))
 
 

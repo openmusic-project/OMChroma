@@ -1,10 +1,9 @@
 
 
-(in-package :cr)
+(in-package :chroma)
 
 (defvar *cr-out-dir* nil)
 (defvar *cr-csfun-dir* nil)
-(defvar *cr-orc-dir* nil)
 (defvar *cr-wt-dir* nil)
 (defvar *cr-models-dir* nil)
 (defvar *cr-userfun-dir* nil)
@@ -15,7 +14,6 @@
   (let ((root (case dir 
                  (:out *cr-out-dir*)
                  (:csfun *cr-csfun-dir*)
-                 (:orc *cr-orc-dir*)
                  (:wt *cr-wt-dir*)
                  (:models *cr-models-dir*)
                  (:userfun *cr-userfun-dir*)

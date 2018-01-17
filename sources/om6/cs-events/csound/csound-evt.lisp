@@ -120,8 +120,6 @@
 (defvar *globals-csound-tables* nil)
 (defvar *auto-init-table-id* 1000)
 (defvar *bpf-cs-coerce* 'gen07)
-;;; also in OM2Csound...
-(defvar *def-table-size* 513)
 
 ;;;=======================================================
 
@@ -195,26 +193,6 @@
 
 
 ;;;=============================================
-
-(defclass file-cs-table ()
-  ((id :initform nil :initarg :id :accessor id)
-   (csstring :initform nil :initarg :vect :accessor csstring)))
-
-(defmethod cs-table-string ((self file-cs-table)) (csstring self))
-
-(defun SCsT (string)
-  (let ((table (make-instance 'file-cs-table
-                 :id (gen-table-id-from-str string))))
-    (setf (csstring table) string)
-    (push table *globals-csound-tables*)
-    table))
-
-(defun CsT (id vect &key (size *def-table-size*) (gennum 7))
-  (let ((table (make-instance 'file-cs-table :id id)))
-    (setf (csstring table) (format nil "f ~D 0 ~D ~D ~{~S ~}" id size gennum vect))
-    (push table *globals-csound-tables*)
-    table))
-
 
 (defmethod get-table-id ((self integer)) self)
 

@@ -87,11 +87,11 @@
 
 ; (defclass-from-cs-orc #P"/Users/bresson/SRC/OM7/ircam/LIBRARIES/omchroma/sources/cs-events/classes/basic/add-a1.orc")
   
-(defun def-all-cs-classes (folder &optional inPackage)
+(defun def-all-cs-classes (folder &key name inPackage)
 
   (om::om-print-dbg "Defining classes from: ~A" (list folder) "OMCHROMA")
 
-  (let ((package (om::AddPackage2Pack (car (last (pathname-directory folder)))
+  (let ((package (om::AddPackage2Pack (or name (car (last (pathname-directory folder))))
                                       (or inPackage (om::find-om-library "OMChroma")))))
 
   (let ((files (om-api:om-directory folder :type "orc" :directories nil))
@@ -101,7 +101,7 @@
               (om::addclass2pack class package)
               ))
       (loop for dir in (sort subfolders 'string< :key 'namestring) do 
-            (def-all-cs-classes dir package))
+            (def-all-cs-classes dir :inPackage package))
       )))
 
 

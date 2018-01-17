@@ -23,14 +23,14 @@
 
 (in-package :cr)
 
-(when *load-pathname*
-  (let ((base-dir (om-api:om-make-pathname :directory *load-pathname*)))
+(let ((cs-dir (om-api:om-make-pathname
+                 :directory (append (butlast (pathname-directory *load-pathname*) 2) '("csound-orcs")))))
     
-    ;;; => DEFINE CLASSES FROM .ORC FILES in 'classes' 
-    (def-all-cs-classes (merge-pathnames "classes/" base-dir))
+    ;;; => DEFINE CLASSES FROM .ORC FILES 
+    (def-all-cs-classes cs-dir :name "Classes")
     
     ;;; => LOAD ALL LISP FILES IN 'advanced-classes' 
-    (mapcar 'load (om-api:om-directory (merge-pathnames "parsing/advanced-classes/" base-dir) :type "lisp" :recursive t))
+    (mapcar 'load (om-api:om-directory (merge-pathnames "advanced-cs-classes/" *load-pathname*) :type "lisp" :recursive t))
 
-    ))
+    )
 

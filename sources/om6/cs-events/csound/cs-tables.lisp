@@ -2,8 +2,8 @@
 (in-package :om)
 
 ;;; redefined in OM2Csound lib preferences
-(defvar *cs-max-points* 4097)
-(defvar *def-table-size* 513)
+(defvar *cs-max-points* 1024)
+(defvar *def-table-size* 4097)
 
 (defclass! CS-table () 
    ((id :initform "?" :initarg :id :accessor id)
@@ -23,6 +23,26 @@
 
 (defmethod cs-table-string ((self gen-cs-table))
   (format nil "f ~D ~D ~D ~D ~{ ~6F~}" (round (id self)) (stime self) (size self) (gen-num self) (param-list self)))
+
+;================================================
+(defclass file-cs-table ()
+  ((id :initform nil :initarg :id :accessor id)
+   (csstring :initform nil :initarg :vect :accessor csstring)))
+
+(defmethod cs-table-string ((self file-cs-table)) (csstring self))
+
+(defun SCsT (string)
+  (let ((table (make-instance 'file-cs-table
+                 :id (gen-table-id-from-str string))))
+    (setf (csstring table) string)
+    (push table *globals-csound-tables*)
+    table))
+
+(defun CsT (id vect &key (size *def-table-size*) (gennum 7))
+  (let ((table (make-instance 'file-cs-table :id id)))
+    (setf (csstring table) (format nil "f ~D 0 ~D ~D ~{~S ~}" id size gennum vect))
+    (push table *globals-csound-tables*)
+    table))
 
 ;================================================
 (defclass! bpf-cs-table (CS-table bpf) ()
