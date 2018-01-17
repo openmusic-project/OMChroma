@@ -8,7 +8,7 @@
 ;-------| ADAPTED to omChroma 050221, Marco Stroppa
 ;*******************************************************************
 
-(in-package cr)
+(in-package :cr)
 
 ;-----------------------------------------------------------------------------
 (defun get-gbl (var)
@@ -92,16 +92,17 @@
 (set-gbl 'KR '(get-gbl SR))		; CONTROL RATE FOR CSOUND
 (set-gbl 'NCH 1)		; NUMBER OF CHANNELS
 (set-gbl 'DURMIN 0.01)		; MINIMUM DURATION FOR A NOTE
-(set-gbl 'MINFQ 15.0)		; MINIMUM FREQUENCY FOR A NOTE
+(set-gbl 'MINFQ 13.0)		; MINIMUM FREQUENCY FOR A NOTE
 (set-gbl 'MAXSI 12.0)		; MAXIMUM SAMPLE INCREMENT WHEN READING A WT
 
-(set-gbl 'DEF-GEN-SIZE 513)	; DEFAULT GEN SIZE
+(set-gbl 'DEF-GEN-SIZE 16385)	; DEFAULT GEN SIZE
 (set-gbl 'EXPZERO 0.00001)	; REPLACE 0 IN EXPONENTIAL GENS
 
-(set-gbl 'PMAX 796)		; MAXIMUM NUMBER OF CSOUND P FIELDS
-                                ; USED WHEN COMPILING FUNCTIONS (= MAX - 2,
-                                ;    USED AT THE BEGINNING)
-                                ; IF () NO CONTROL
+(set-gbl 'PMAX 1024) ; MAXIMUM NUMBER OF CSOUND P FIELDS
+;(set-gbl 'PMAX om::*cs-max-points*) ; MAXIMUM NUMBER OF CSOUND P FIELDS
+                            ; USED WHEN COMPILING FUNCTIONS (= MAX - 2,
+                            ;    USED AT THE BEGINNING)
+                            ; IF () NO CONTROL
 (set-gbl 'DIAPASON 'om::*diapason-freq*)	; CURRENT DIAPASON
 
 
@@ -120,7 +121,7 @@
 (set-gbl 'USER 'om::*composer-name*)	; USER'S NAME FOR PERSONALIZED MESSAGES
 
 (eval 'om::*diapason-freq*)
-(eval 'DIAPASON)
+(eval DIAPASON)
 ;-----------------------------------------------------------------------------;-----------------------------------------------------------------------------
 ; Temporary place for the dynamically computed GENS of a WT object
 (set-gbl 'WTL ())		; A-LIST OF WT OBJECTS

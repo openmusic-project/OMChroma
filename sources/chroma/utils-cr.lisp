@@ -8,7 +8,7 @@
 ; THIS FILE CONTAINS THE DEFINITION OF MIXED FUNCTIONS GENERALLY USEFUL EITHER
 ;   FOR THE CHROMA SYSTEM INTERNALLY ONLY OR BETWEEN CHROMA AND OM
 
-(in-package cr)
+(in-package :cr)
 
 ;------------------------------------------------------------------
 ; FUNCTIONS (in alphabetical order):
