@@ -187,9 +187,9 @@
        (basicpack (find "Basic Classes" (subpackages cspack) :key 'name :test 'string-equal))
        (advpack (find "Advanced Classes" (subpackages cspack) :key 'name :test 'string-equal))
        (spacepack (find "Multi Channels" (subpackages cspack) :key 'name :test 'string-equal)))
-  (load-chroma-classes (om-relative-path '("sources" "omchroma" "csound" "classes" "Basic") nil) basicpack)
-  (load-chroma-classes (om-relative-path '("sources" "omchroma" "csound" "classes" "Advanced") nil) advpack)
-  (load-chroma-classes (om-relative-path '("sources" "chromaspat" "classes") nil) spacepack)
+  (load-chroma-classes (om-relative-path '("sources" "om6" "cs-events" "csound" "classes" "Basic") nil) basicpack)
+  (load-chroma-classes (om-relative-path '("sources" "om6" "cs-events" "csound" "classes" "Advanced") nil) advpack)
+  (load-chroma-classes (om-relative-path '("sources" "om6" "chromaspat" "classes") nil) spacepack)
   )
 
 
@@ -201,13 +201,13 @@
 
 
 (print "
- ======================================
+ ==============================
  OMChroma
- ======================================
+ ==============================
  High-level control of sound synthesis in OM
  (c) Ircam 2000-2018
  C. Agon, M. Stroppa, J. Bresson, S. Lemouton
- ======================================
+ ==============================
 ")
 
 
