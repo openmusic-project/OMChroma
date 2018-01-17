@@ -2,6 +2,8 @@
 *.zip
 codesign
 
+*.64xfasl
+
 .DS_Store
 .DS_Store?
 ._*
