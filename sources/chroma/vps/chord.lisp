@@ -1,13 +1,12 @@
-(in-package chroma)
+(in-package :cr)
 
-(defclass CHORD 
-;(om::defclass! CHORD 
+(om::defclass! CHORD 
   (VPS)
   ((sp-list :initform nil
             :documentation "list of symbolic-pitch objects"
             :accessor sp-list))
   (:documentation "Un accord")
-;  (:icon 132)
+  (:icon 132)
   )
 
 (defmethod check-syntax ((x chord))

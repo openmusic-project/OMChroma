@@ -1,0 +1,1 @@
+csound -A -s -m7 -3 -g ./$1.orc ./$1.sco -o ./$1.aif
