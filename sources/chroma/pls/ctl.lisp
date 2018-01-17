@@ -9,7 +9,7 @@
 ; PACKAGE TO DEAL WITH CONTROL DATA
 ;                 ASSOCIATED TYPE NAME: CTL
 
-(in-package chroma)
+(in-package :cr)
 
 ; DESCRIPTION OF THE DATA STRUCTURE:
 ; Control data are characterized by a KEY and a VALUE associated to the key.
@@ -82,7 +82,20 @@
 
 (defun list_ctl (ctl)
    (pls-check-type 'CTL ctl 'list_ctl)
-   (key-list_tbl (contents ctl)) )
+   (lkeys_tbl (contents ctl)) )
+
+
+;	NAME:		sizeof_ctl  (PREDICATE)
+;	TYPE:		Expr with 1 argument
+;	CALL:		(sizeof_ctl ctl)
+;	FUNCTION:	return a the amount of elements
+;	VALUE:		the list above
+;	SOURCE:		$LLsys/ctl.ll
+
+(defun sizeof_ctl (ctl)
+   (pls-check-type 'CTL ctl 'sizeof_ctl)
+   (length (contents ctl)) )
+
 
 
 ;	NAME:		set_/rm_ctl  (MODIFIERS)

@@ -6,7 +6,7 @@
 ;-------| Copyright 1986 MIT
 ;*********************************************************************
 
-(in-package cr)
+(in-package :cr)
 
 ; GENERAL-PURPOSE FUNCTIONS INDEPENDENT OF THE PARTICULAR TYPE
 
@@ -54,12 +54,13 @@
 "
 
    (let* ((datca (car datum))
-          (datcd (cdr datum))
+;         (datcd (cdr datum))
           (name (string-upcase (concatenate 'string "sizeof_" (string (pls-type datum))))))
      (setf name (intern name :cr))
-     (ifn datcd
-          (funcall (fdefinition name) datca)
-       (funcall (fdefinition name) datca datcd))))
+     (funcall (fdefinition name) datum)))
+;     (ifn datcd
+;          (funcall (fdefinition name) datum)
+;       (funcall (fdefinition name) datca datcd))))
 
 
 (defun prnt (&rest data)

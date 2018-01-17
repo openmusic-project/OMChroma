@@ -9,7 +9,7 @@
 ; PACKAGE TO DEAL WITH RAW DATA
 ;                 ASSOCIATED TYPE NAME: raw
 
-(in-package chroma)
+(in-package :cr)
 
 ; DESCRIPTION OF THE DATA STRUCTURE:
 
@@ -70,6 +70,21 @@
      (if (is-tagged data)
                     (is-empty data)
                     data)))
+
+
+;	NAME:		sizeof_raw  (PREDICATE)
+;	TYPE:		Expr with 1 argument
+;	CALL:		(sizeof_raw data)
+;	FUNCTION:	return the amount of items in data
+;	VALUE:		a number
+;	SOURCE:		$LLsys/raw.ll
+
+(defun sizeof_raw (data)
+   (pls-check-type 'RAW data 'sizeof_raw)
+   (let ((data (contents data)))
+     (if (atom data)
+         1
+       (length data))))
 
 
 ;	NAME:		print_/short-print_raw  (INFO)

@@ -12,7 +12,7 @@
 
 ; ADDED AUGUST 2000: VARIOUS KINDS OF INTERPOLATION (SEE FUN.LISP)
 
-(in-package cr)
+(in-package :cr)
 
 ;-----------------------------------------------------------------------------
 ; GLOBALS
@@ -33,7 +33,7 @@
 ;ADDED 0008, Marco: generalize other forms of interpolation
 
 ;corrected null exp, ms, 1002
-(defun lkp (nev fun &optional (exp 1.0))
+(defun lkp (nev fun &optional (exp 0.0))
 "
 ; (lkp NEV FUN) / (fix-lkp NEV FUN)
 ; 	sample FUN NEV equally spaced times
@@ -51,12 +51,12 @@
           (step 1)
           (acc 0) )
       (loop while (>= (decf nev) 0)
-            do (newl result (y-val_fun fun acc exp))
+             do (newl result (y-val_fun fun acc exp))
             do (incf acc step))
       (nreverse result)) ) )
 
 ;using om-round, corrected null exp, ms, 1002
-(defun fix-lkp (nev fun &optional (exp 1.0))
+(defun fix-lkp (nev fun &optional (exp 0.0))
 "
 ; (lkp NEV FUN) / (fix-lkp NEV FUN)
 ; 	sample FUN NEV equally spaced times, fixed-point result

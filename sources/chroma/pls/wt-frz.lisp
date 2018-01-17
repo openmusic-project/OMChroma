@@ -5,7 +5,7 @@
 ;-------| By Marco Stroppa
 ;-------| Copyright 1991 IRCAM
 ;*****************************************************************************
-(in-package cr)
+(in-package :cr)
 
 ; SPECIFICATION AND CONTROL OF A FREEZING ALGORITHM FOR WT OBJECTS
 

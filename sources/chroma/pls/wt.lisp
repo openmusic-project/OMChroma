@@ -91,7 +91,7 @@
 ;	fade-env
 
 
-(in-package chroma)
+(in-package :cr)
 
 ;(set-colon 'PLS)
 

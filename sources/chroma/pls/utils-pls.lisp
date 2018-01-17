@@ -10,7 +10,7 @@
 ; THIS FILE CONTAINS THE BASIC FUNCTIONS FOR THE PULS SYSTEM
 ;      IT SHOULD BE LOADED AT THE BEGINNING
 
-(in-package cr)
+(in-package :cr)
 
 ;-----------------------------------------------------------------------------
 ; AVAILABLE GENERAL FUNCTIONS (in alphabetical order):
@@ -51,7 +51,7 @@ NOTE: <l> cannot be empty"
 "
 Signal an error of type for function f"
 
-    (om-beep)
+    (om::om-beep)
     (error "Wrong type for structure ~%~a~% in function ~a~%" l f))
 
 ;-----------------------------------------------------------------------------
@@ -62,12 +62,14 @@ Signal an error of type for function f"
   (nth (random (length list))list))
 
 ;-----------------------------------------------------------------------------
-;pwr2
+;pwr2, same as closest-pwr2
 (defun pwr2 (n)
 "RETURN THE POWER OF TWO IMMEDIATELY > n"
-  (let ((exp 0))
-    (loop while (< (expt 2 (incf exp)) n) )
-    (expt 2 exp)) )
+  (om::closest-pwr2 n))
+
+;  (let ((exp 0))
+;    (loop while (< (expt 2 (incf exp)) n) )
+;    (expt 2 exp)) )
 
 ;-----------------------------------------------------------------------------
 ;rplac
@@ -79,9 +81,9 @@ Signal an error of type for function f"
            l)))
 
 ;-----------------------------------------------------------------------------
-;cassq
-(defun cassq (sym l)
-  (cdr (assoc sym l)))
+;cassq - already defined in utils-cr.lisp
+;(defun cassq (sym l)
+;  (cdr (assoc sym l)))
 
 ;-----------------------------------------------------------------------------
 ;prin
@@ -104,8 +106,9 @@ Signal an error of type for function f"
 "String any number of args"
   (format () "~s~s" x y))
 
-(defun concat (&rest lpname) 
-  (coerce (mapcan 'pname lpname) 'symbol))
+; does not work any longer... 1801, ms
+;(defun concat (&rest lpname) 
+;  (coerce (mapcan 'pname lpname) 'symbol))
 ;-----------------------------------------------------------------------------
 
 ;-----------------------------------------------------------------------------
@@ -256,70 +259,133 @@ specified by the environment variable LLwt"
 ;    (dur     .  1.5761)
 ;    (n-ch    . 2)
 ;    (pk-mode . float)
+;    (smpl-type . float)
+;    (smpl-size . 24)
 ;    (n-smpl  . 139008)
+;    (snd-type . "aif")))
+
+; no longer available
 ;    (peak-amp  . #(522.44421	33.34753))
 ;    (peak-smpl . #(44933	0]))
 ;    (peak-time . #( 1.019	 0.000]))
 ;    ) )
-(defun get-sndinfo (file-in)
-  (with-open-file  (stream  file-in :direction :input)
-    (if(not(equal  (get-id stream) "FORM"))
-      (error "Unrecognized AIFF file FORM")
-      (progn (get-long stream)               ; chunkSize
-             (if(not(equal  (get-id stream) "AIFF"))
-               (error "Unrecognized AIFF file AIFF")
-               (if(not(equal  (get-id stream) "COMM"))
-                 (error "Unrecognized AIFF file COMM")
-                 (let ((sr) (dur) (n-ch) (pk-mode) (n-smpl))
-                   (get-long stream)           ; chunkSize
-                   (setf n-ch (get-integer stream))
-                   (setf n-smpl (get-long stream))
-                   (setf pk-mode (get-integer stream))         ; en fait SampleSize
-                   (setf sr (get-double stream))
-                   (setf dur (float (/ n-smpl n-ch sr)))
-                   (list (cons 'file file-in)
-                         (cons 'SR sr)
-                         (cons 'dur dur)
-                         (cons 'n-ch n-ch)
-                         (cons 'pk-mode pk-mode)
-                         (cons 'n-smpl n-smpl)
-                         ))))))))
+;    (list (cons 'file file-in)
+;          (cons 'sr sr)
+;          (cons 'dur dur)
+;          (cons 'n-ch n-ch)
+;          (cons 'pk=mode pk-mode)
+;          (cons 'smpl-type pk-mode)
+;          (cons 'smpl-size smpl-size)
+;          (cons 'n-smpl n-smpl)
+;          (cons 'snd-type snd-type))
 
-;(get-sndinfo (ccl:choose-file-dialog :button-string "file-in") )
 
-(defun get-integer (stream)
-(decs-to-bignum (list (char-int(read-char stream))(char-int(read-char stream) ))))
+;(multiple-value-bind (buffer format n-channels sample-rate sample-size size skip)  (audio-io::om-get-sound-info (om::om-choose-file-dialog))
+;  (list buffer format n-channels sample-rate sample-size size skip))
+;("AIFF(int)" 2 48000 24 11771540 1 nil)
+;("AIFF(float)" 1 96000 32 96000 1 nil)
+;("Wav(int)" 1 48000 24 100878986 1 nil)
 
-(defun get-long (stream)
-(decs-to-bignum (list (char-int(read-char stream))
-                      (char-int(read-char stream))
-                      (char-int(read-char stream))
-                      (char-int(read-char stream) ))))
+(defun read-sound-format (format)
+; separate the buffer+format string coming from om-get-sound-info and return the two values separately (type and size)
+; not very elegant...:-(!!
+; if none are found, return the whole format
+  (let* ((buf (subseq format 0 1))
+         (smpltype (if (string-equal buf "A") (subseq format 5 6) (subseq format 4 5))))
+;AIFF=4 characters, Wav=3 characters
+    (list (cond ((string-equal buf "A") "aif")
+                ((string-equal buf "W") "wav")
+                (t format))
+          (cond ((string-equal smpltype "f") "float")
+                ((string-equal smpltype "i") "int")
+          (t format)))))
 
-(defun get-id (stream)
-  (format nil "~a~a~a~a"  (read-char stream)
-          (read-char stream)
-          (read-char stream)
-          (read-char stream) ))
 
-(defun get-double (stream)
-  (let*((int1 (get-integer stream))
-        (int2 (get-integer stream)))
-    (*(expt 2 (- int1 16398))int2)))
+; new version, using libsndfile, 1801, ms
+(defun get-sndinfo (&rest file-in)
+  (let* ((l-results
+         (multiple-value-bind (buffer format n-channels sample-rate sample-size size skip)
+             (ifn file-in (audio-io::om-get-sound-info (om::om-choose-file-dialog))
+               (audio-io::om-get-sound-info file-in))
+           (list buffer format n-channels sample-rate sample-size size skip)))
+         
+         (sr (third l-results))
+         (n-ch (second l-results))
+         (frmt (first l-results))
+         (n-smpl (fifth l-results))
+         (smpl-size (fourth l-results))
+         (pk-mode (second (read-sound-format frmt)))
+         (snd-type (first (read-sound-format frmt)))
+         (dur (/ n-smpl sr n-ch 1.0)))
+    (list (cons 'file file-in)
+          (cons 'sr sr)
+          (cons 'dur dur)
+          (cons 'n-ch n-ch)
+          (cons 'pk=mode pk-mode)
+          (cons 'smpl-type pk-mode)
+          (cons 'smpl-size smpl-size)
+          (cons 'n-smpl n-smpl)
+          (cons 'snd-type snd-type))
+    ))
+
+; (with-open-file  (stream  file-in :direction :input)
+;    (if(not(equal  (get-id stream) "FORM"))
+;      (error "Unrecognized AIFF file FORM")
+;      (progn (get-long stream)               ; chunkSize
+;             (if(not(equal  (get-id stream) "AIFF"))
+;               (error "Unrecognized AIFF file AIFF")
+;               (if(not(equal  (get-id stream) "COMM"))
+;                 (error "Unrecognized AIFF file COMM")
+;                 (let ((sr) (dur) (n-ch) (pk-mode) (n-smpl))
+;                   (get-long stream)           ; chunkSize
+;                   (setf n-ch (get-integer stream))
+;                   (setf n-smpl (get-long stream))
+;                   (setf pk-mode (get-integer stream))         ; en fait SampleSize
+;                   (setf sr (get-double stream))
+;                   (setf dur (float (/ n-smpl n-ch sr)))
+;                   (list (cons 'file file-in)
+;                         (cons 'SR sr)
+;                         (cons 'dur dur)
+;                         (cons 'n-ch n-ch)
+;                         (cons 'pk-mode pk-mode)
+;                         (cons 'n-smpl n-smpl)
+;                         ))))))))
+
+;(get-sndinfo (om:choose-file-dialog) )
+
+;(defun get-integer (stream)
+;(decs-to-bignum (list (char-int(read-char stream))(char-int(read-char stream) ))))
+
+;(defun get-long (stream)
+;(decs-to-bignum (list (char-int(read-char stream))
+;                      (char-int(read-char stream))
+;                      (char-int(read-char stream))
+;                      (char-int(read-char stream) ))))
+
+;(defun get-id (stream)
+;  (format nil "~a~a~a~a"  (read-char stream)
+;          (read-char stream)
+;          (read-char stream)
+;          (read-char stream) ))
+
+;(defun get-double (stream)
+;  (let*((int1 (get-integer stream))
+;        (int2 (get-integer stream)))
+;    (*(expt 2 (- int1 16398))int2)))
 
 ;from mikhail malt:
-(defun decs-to-bignum (liste)
-"conversion d'une liste d'entiers en un bignum.
-Le premier lment est le plus representatif et le dernier le moins"
-(let ((long (1- (length liste))))
-  (cond
-   ((null liste) 0)
-   (t (+ (ash (car liste) (* long 8))
-         (decs-to-bignum (rest liste)))))))
+;(defun decs-to-bignum (liste)
+;"conversion d'une liste d'entiers en un bignum.
+;Le premier lment est le plus representatif et le dernier le moins"
+;(let ((long (1- (length liste))))
+;  (cond
+;   ((null liste) 0)
+;   (t (+ (ash (car liste) (* long 8))
+;         (decs-to-bignum (rest liste)))))))
 
 
 ;-----------------------------------------------------------------------------
-;auxiliary functions, for debugging purpose
+;auxiliary functions, for debugging purposes (OBSOLETE NOW)
 (defun read-aiff-header (file-in)
     (with-open-file  (stream  file-in :direction :input)
       (if(not(equal  (get-id stream) "FORM"))
@@ -335,7 +401,7 @@ Le premier lment est le plus representatif et le dernier le moins"
             (format t "SampleRate-~a-~%"(get-double stream))
             ))))
 
-;(read-aiff-header (ccl:choose-file-dialog :button-string "file-in") )
+;(read-aiff-header (om::om-choose-file-dialog) )
 
 (defun get-bin-double (stream)
 (format nil "~a~a~a~a"  (dec-to-bin(char-int (read-char stream))8)
@@ -409,7 +475,7 @@ dir: directory where the file is to be written (default: value of CSfun).
                      (when (> f-num (get-gbl 'WTFOMAX))
                        (format t "            WARNING: function number > upper limit of ~a~%" (get-gbl 'WTFOMAX)))
                      (format out-stream ";  Number of samples: ~a~%" n-smpls)
-                     (format out-stream "(ScSt \"f ~a 0 ~a 1 " f-num f-size)
+                     (format out-stream "(om::ScSt \"f ~a 0 ~a 1 " f-num f-size)
                      (format out-stream "\\\"~a\\\" 0 4 1\")~%"sndfilein ))) wt-list))))
   "done")
 ;-----------------------------------------------------------------------------

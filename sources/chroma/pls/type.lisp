@@ -16,7 +16,7 @@
 ; CURRENT IMPLEMENTATION:
 ;    A tagged datum is always a cons of a type and its contents.
 
-(in-package cr)
+(in-package :cr)
 
 ; AVAILABLE FUNCTIONS:
 ;	CONSTRUCTORS: attach-type

@@ -6,7 +6,7 @@
 ;-------| By Marco Stroppa
 ;-------| Copyright 1990 IRCAM
 ;*****************************************************************************
-(in-package cr)
+(in-package :cr)
 
 ; PACKAGE TO DEAL WITH BREAK-POINT FUNCTIONS
 ;                 ASSOCIATED TYPE NAME: FUN
@@ -76,12 +76,12 @@
 ;	VALUE:		the new structure
 ;	SOURCE:		$LLpls/fun.ll
 "
-    (unless (and (>= (length all) 2)
+  (unless (and (>= (length all) 2)
                (evenp (length all)))
     (error "We're sorry, the number of arguments must be even and >= 2   ~a" all))
   (mapc #'(lambda (num)
-          (unless (numberp num)
-            (error "Arguments are not all numbers, sorry ~a" num)))
+            (unless (numberp num)
+              (error "Arguments are not all numbers, sorry ~a" num)))
         all)
   ; IF THERE ARE ONLY TWO VALUES, CREATE A CONSTANT FUNCTION OF 4 VALUES
   ; (0 1) -> (0 1 0 2)
@@ -232,25 +232,21 @@
 ;	NAME:		y-val_fun  (SELECTOR)
 ;	TYPE:		Expr with 2 or more arguments
 ;	CALL:		(y-val_fun fun x-val [optional paramters])
-;	FUNCTION:	return the Y value corresponding to the given X value
-;			   x-val
-;			optional parameters are needed so as to have an
-;			   interpolation other than a first-order [CAN BE EXPANDED]
-;			correct calls:
-;                          (y-val_fun fun X) -> linear interpolation
-;                          (y-val_fun fun X -0.5) -> exponential interpolation (log-shaped
-;                               going up, exp-shaped coming down if 0.0<exp<1.0, the other way
-;                               if exp>1.0; exp=1.0 -> linear interpolation)
-;                          (y-val_fun fun X '(exp 0.5)) -> same as above
-;                          (y-val_fun fun X '(exp2 0.5)) -> symetric exponential/log curves
-;                               (exp-shaped going up and down if exp > 1.0; log-shaped both ways
-;                               if 0.0<exp<1.0)
-;                          (y-val_fun fun X '(sin[1])) -> same as (y-val_fun fun X 'sin[1])
-;                             complete sinusoidal shape (from -pi/2 to pi/2)
-;                          (y-val_fun fun X '(sin2)) -> same as (y-val_fun fun X 'sin2)
-;                             use only 1/2 sin, from 0 to pi/2, slightly log up, exp down
-;                          (y-val_fun fun X '(sin3)) -> same as (y-val_fun fun X 'sin3)
-;                             use only 1/2 sin, from 0 to pi/2, symetric shapes
+;	FUNCTION:	return the Y value corresponding to the given X value x-val
+;				optional parameters are needed so as to have an
+;			   	interpolation other than a first-order [CAN BE EXPANDED]
+;				correct calls:
+;                          (y-val_fun fun X) -> linear interpolation (exp = 0.0)
+;                          (y-val_fun fun X 1.0) -> exponential interpolation
+;								(exp-shaped going up, log-shaped coming down)
+;                          (y-val_fun fun X -1.0) -> exponential interpolation
+;								(log-shaped going up, exp-shaped coming down)
+;                          (y-val_fun fun X '(exp2 1.0)) -> symetric exp curves (up and down)
+;                          (y-val_fun fun X '(exp2 -1.0)) -> symetric log curves (up and down)
+;                          (y-val_fun fun X 'sin) -> complete sinusoidal shape (from -pi/2 to pi/2), symetric
+;                          (y-val_fun fun X 'sin1) -> same as sin
+;                          (y-val_fun fun X 'sin2) -> use only 1/2 sin, from 0 to pi/2, slightly log up, exp down
+;                          (y-val_fun fun X 'sin3) -> use only 1/2 sin, from 0 to pi/2, symetric shapes
 ;	VALUE:		the value of which above
 "
     (pls-check-type 'FUN fun 'y-val_fun)
@@ -776,11 +772,11 @@ By Serge Lemouton, July 2001
 ;	SOURCE:		$LLpls/fun.ll
 
 (defun print_fun (fun)
-  (print (format () "Structure of type: ~a~%" (pls-type fun)))
+  (print (format () "Structure of type: ~a" (pls-type fun)))
   (let ((cts (contents fun))
         (counter 0))
     (loop while cts
-          do (print (format () "   Y~d = ~a, X~d = ~a~%"  (incf counter) (nextl cts) counter (nextl cts))))
+          do (print (format () "   Y~d = ~a, X~d = ~a"  (incf counter) (nextl cts) counter (nextl cts))))
     'done) )
 
 (defun short-print_fun (fun)

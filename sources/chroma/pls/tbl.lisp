@@ -6,7 +6,7 @@
 ;-------| Copyright 1986 MIT
 ;*****************************************************************************
 
-(in-package cr)
+(in-package :cr)
 
 ; PACKAGE TO DEAL WITH ONE- OR TWO-DIMENSIONAL TABLES
 ;                 ASSOCIATED TYPE NAME: TBL
@@ -30,7 +30,7 @@
 ;	CONSTRUCTORS: make_tbl
 ;	SELECTORS:    lookup_tbl
 ;		      soft_lkp_tbl
-;		      key-list_tbl
+;		      lkeys_tbl
 ;	MODIFIERS:    insert_tbl
 ;		      rm_tbl
 ;		      merge_tbl
@@ -281,7 +281,6 @@
     (rm_tbl-sub2 (cdr tbl) key1)))
 
 
-
 ;	NAME:		merge_tbl  (MODIFIERS)
 ;	TYPE:		Expr with at least arguments
 ;	CALL:		(merge_tbl tbl1 tbl2l [tblN])
@@ -418,7 +417,7 @@
 ;	FUNCTION:	nicely or shortely print a structure of type TBL
 ;	VALUE:		the string 'done
 "
-  (print (format () "~a~%" (pls-type tbl)))
+  (print (format () "~a" (pls-type tbl)))
   (mapc 'shrtprntsbtbl (contents tbl))
   'done)
 
@@ -427,6 +426,6 @@
     (mapc
      (lambda (ssbtbl)
        (if (eq key1 (car ssbtbl))
-           (print (format () "  ~a / ~a~%" key1 (cdr ssbtbl)))
-           (print (format () "  ~a, ~a / ~a~%" key1 (car ssbtbl) (cdr ssbtbl)))))
+           (print (format () "  ~a / ~a" key1 (cdr ssbtbl)))
+           (print (format () "  ~a, ~a / ~a" key1 (car ssbtbl) (cdr ssbtbl)))))
      (cdr sbtbl))))

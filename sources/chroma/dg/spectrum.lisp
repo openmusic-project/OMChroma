@@ -9,7 +9,7 @@
 ; THIS FILES CONTAINS VARYING FUNCTIONS TO GENERATE HARMONIC, SHIFTED,
 ;	AND STRETCHED SPECTRA ACCORDING TO MC ADAMS' FORMULAS
 
-(in-package cr)
+(in-package :cr)
 ;-----------------------------------------------------------------------------
 ; AVAILABLE FUNCTIONS
 ;	sp
@@ -214,7 +214,7 @@
 ;	transpose a spectrum (list of freq) by an interval INT (scaler of f0)
 
 ; EX: (xpose (spsht 440 10 0.0 2.0) 0.5) --> octave below
-;     (xpose (spsht 440 10 0.0 2.0) 2) --> fifth above
+;     (xpose (spsht 440 10 0.0 2.0) 2) --> octave above
 "
     (let ((result ()) )
 	(loop while sp
@@ -222,7 +222,8 @@
 	(nreverse result)) )
 
 ;added 1002, ms
-(defun xpose-n (n fq sp)
+;made compatible with xpose, ms1801
+(defun xpose-n (sp n fq)
 "
 ; (xpose-n N FQ SP)
 ;	transpose a spectrum (list of freq) so that it's N'th component matches fq
@@ -230,13 +231,16 @@
 ; EX: (xpose-n 3 (pch->fq 'do4) (spsht 100 10 0.0 2.0)) --> 3rd ovtn to C4
 ;     (xpose-n 3 400.0 (spsht 100 10 0.0 2.0)) --> 3rd ovtn to 400.0
 "
-    (let ((result ())
-          (fqn (nth (1- n) sp)))
-      (let ((ratio (/ fq fqn)))
-	(loop while sp
-	    do (newl result (* ratio (nextl sp))) ))
-	(nreverse result)) )
-
+    (let ((sp (if (listp sp) sp fq))
+          (n (if (listp sp) n sp))
+          (fq (if (listp sp) fq n)))
+      (let ((result ())
+            (fqn (nth (1- n) sp)))
+        (let ((ratio (/ fq fqn)))
+          (loop while sp
+                do (newl result (* ratio (nextl sp))) ))
+	(nreverse result)) ))
+    
 ;-----------------------------------------------------------------------------
 
 ;-----------------------------------------------------------------------------
