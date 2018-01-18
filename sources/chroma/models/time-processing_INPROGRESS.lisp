@@ -32,7 +32,7 @@
 
 ;---------------------------------------------------------------;
 ; TIME FUNCTIONS
-(defmethod! remove-segments ((lsegs list) (ltimes list) epsilon &optional lvps)
+(defmethod remove-segments ((lsegs list) (ltimes list) epsilon &optional lvps)
             :indoc '("List of time segments" "List of time values" "Minimum time resolution" "Optional list")
             :initvals '('((0 1) (1 1.4) (2 2.1)) '(1.2 2) 0.001 '(a b c)) 
             :numouts 2
@@ -94,7 +94,7 @@ The match is done within the precision of an epsilon [0.001sec] of the given val
 
 ;---------------------------------------------------------------;
 ; MINIMUM DURATION
-(defmethod! min-dur ((ltimes list) mindur &optional lvps)
+(defmethod min-dur ((ltimes list) mindur &optional lvps)
             :indoc '("List of durations or time segments" "Minimum duration (use chroma's global value as default)" "List of vps")
             :initvals '('(0 1 1.05) 0.1 '(a b c)) 
             :numouts 2
@@ -126,7 +126,7 @@ If a list of vps's is also given, remove the corresponding vps as well. If mindu
 
 ;---------------------------------------------------------------;
 ;ms_1205
-(defmethod! temporal-pivot ((ltimes list) (nth number) (tp number))
+(defmethod temporal-pivot ((ltimes list) (nth number) (tp number))
             :indoc '("List of times or time segments" "Nth el in list" "Temporal pivot for that element")
             :initvals '('((0 1) (1 1.4) (2 2.1)) 2 10.0) 
             :numouts 1
@@ -143,7 +143,7 @@ If a list of vps's is also given, remove the corresponding vps as well. If mindu
 
 ;---------------------------------------------------------------;
 ;ms_1205 (new)
-(defmethod! time-shift ((ltimes list) (offset t) &key (sortflag t))
+(defmethod time-shift ((ltimes list) (offset t) &key (sortflag t))
             :indoc '("List of times or time segments" "Time offset" ":sortflag Sort flag [t]")
             :initvals '('((0 1) (1 1.4) (2 2.1)) '(1.2 2)) 
             :numouts 1
@@ -177,7 +177,7 @@ Negative times are eliminated (with warning message)."
 
 ;---------------------------------------------------------------;
 ;ms_1205 (new)
-(defmethod! time-stretch ((ltimes list) stretch &key (exp 1.0) (sortflag t))
+(defmethod time-stretch ((ltimes list) stretch &key (exp 1.0) (sortflag t))
             :indoc '("List of times or time segments" "Stretching value" ":exp Exponent [1]" ":sortflag [t]")
             :initvals '(((0 1) (1 1.4) (2 2.1)) (1.2 2) 2.0 1.0) 
             :numouts 1
@@ -206,7 +206,7 @@ Negative times are eliminated (with warning message)."
 
 ;---------------------------------------------------------------;
 ;ms_1205 (new)
-(defmethod! time-sht ((ltimes list) offset stretch &key (exp 1.0) (sortflag t))
+(defmethod time-sht ((ltimes list) offset stretch &key (exp 1.0) (sortflag t))
             :indoc '("List of times or time segments" "Time offset" "Stretching value" "Exponent")
             :initvals '(((0 1) (1 1.4) (2 2.1)) 0.0 1.0 1.0) 
             :numouts 1
@@ -215,7 +215,7 @@ Negative times are eliminated (with warning message)."
 
             (time-shift (print (time-stretch ltimes stretch :exp exp :sortflag sortflag)) offset :sortflag sortflag))
 
-(defmethod! time-sth ((ltimes list) offset stretch &key (exp 1.0) (sortflag t))
+(defmethod time-sth ((ltimes list) offset stretch &key (exp 1.0) (sortflag t))
             :indoc '("List of times or time segments" "Time offset" "Stretching value" "Exponent")
             :initvals '(((0 1) (1 1.4) (2 2.1)) 0.0 1.0 1.0) 
             :numouts 1
@@ -247,7 +247,7 @@ Negative times are eliminated (with warning message)."
 
 ;---------------------------------------------------------------;
 ;OBSOLETE???
-(defmethod! time-map-fun ((markers list) fun &optional (exp 1.0))
+(defmethod time-map-fun ((markers list) fun &optional (exp 1.0))
             :indoc '("List of times or time segments" "Stretching bpf or chroma fun" "Exponent")
             :initvals '(((0 1) (1 1.4) (2 2.1)) 2.0 (simple-bpf-from-list (0 1 2) (0.0 1.0 10.0) bpf 5) 1.0)
             :numouts 1
@@ -264,7 +264,7 @@ Negative times are eliminated (with warning message)."
 
 
 ;ms_1205 (new)
-(defmethod! time-map ((segs list) timefun &key (exp 0.0) (durmin (cr::get-gbl 'cr::durmin)) (durmode t) (sortflag ()) (mapmode 'rel) (apply 'all))
+(defmethod time-map ((segs list) timefun &key (exp 0.0) (durmin (cr::get-gbl 'cr::durmin)) (durmode t) (sortflag ()) (mapmode 'rel) (apply 'all))
             :indoc '("List of onsets or time segments [(<beg-onset i> <end-onset i>)]"
                      "Time map [bpf or chroma fun]"
                      "Exponent [0.0=linear]" "Minimum allowed duration [0.01]" "Behaviour if too small dur" )
@@ -426,7 +426,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(durs->timestruct '((0 1) (2 1) (4 1)))
 
 
-(defmethod! onsets->durstruct (lonsets) 
+(defmethod onsets->durstruct (lonsets) 
             :icon '(141)
             :indoc '("a list of onsets or time segments [(<beg-onset i> <end-onset i>)]")
             :initvals '('(0 1 2 3))
@@ -437,7 +437,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(onsets->durstruct '(0 1 2 3 5))
 ;(onsets->durstruct '((0 1) (2 5) (6 10)))
 
-(defmethod! durs->onsets (ldurs &optional (beg 0.0)) 
+(defmethod durs->onsets (ldurs &optional (beg 0.0)) 
             :icon '(141)
             :indoc '("a list of durations or time segments [(<time i> <dur i>)]" "starting time")
             :initvals '('(0 1 2 3))
@@ -448,7 +448,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(durs->onsets '(1 1 1 1) 0.1)
 ;(durs->onsets '((0 1) (2 1) (4 1)))
 
-(defmethod! onsets->ioi (time-struct)
+(defmethod onsets->ioi (time-struct)
             :icon '(141)
             :indoc '("lonsets or time structure")
             :initvals '('(0 1 2 3))
@@ -461,7 +461,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(onsets->ioi '((0 1) (2 1) (4 1)))
 ;(onsets->ioi '((0 0.5) (1.1 1.5) (2.0 2.5) (3.3 3.5)))
 
-(defmethod! get-onsets (time-struct)
+(defmethod get-onsets (time-struct)
             :icon '(141)
             :indoc '("lonsets or time structure")
             :initvals '('(0 1 2 3))
@@ -473,7 +473,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(get-onsets '(0 1 2 3))
 ;(get-onsets '((0 0.5) (1.1 1.5) (2.2 2.5) (3.3 3.5)))
 
-(defmethod! get-second (time-struct)
+(defmethod get-second (time-struct)
             :icon '(141)
             :indoc '("lonsets or time structure")
             :initvals '('(0 1 2 3))
@@ -507,11 +507,11 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 
 ;---------------------------------------------------------------;
 ;ms_1205
-(defmethod! durs->segs (ldurs  &key (begtime 0.0) (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
+(defmethod durs->segs (ldurs  &key (begtime 0.0) (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
             (print "Deprecated, use durs->timestruct")
             (durs->timestruct ldurs :begtime begtime :fact fact :op op :durmin durmin :durmode durmode))
 
- (defmethod! durs->timestruct (ldurs  &key (begtime 0.0) (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
+(defmethod durs->timestruct (ldurs  &key (begtime 0.0) (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
             :icon '(141)
   :indoc '("a list of durations or time segments [(ti duri)]" "initial time (only for ldurs)"
            "factor [0.0]" "operator [+]" "minimum allowed duration [0.01]" "behaviour if too small dur")
@@ -550,7 +550,7 @@ Negative times are eliminated (with warning message). *** STILL TO DO!"
 ;(durs->timestruct '(1 1 1 1 1) 0.0 :fact 0.01 :op '* :durmin 0.1)
 
 
-(defmethod! segs->durs (lonsets &key (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
+(defmethod segs->durs (lonsets &key (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
             :icon '(141)
   :indoc '("a list of onsets or time segments [(<beg-onset i> <end-onset i>)]"
            "factor [0.0]" "operator [+]" "minimum allowed duration" "behaviour if too small dur")

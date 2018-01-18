@@ -1,6 +1,27 @@
-(in-package chroma)
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa
+;=====================================================
 
-;(om::defclass! symbolic-pitch
+(in-package :cr)
+
 (defclass symbolic-pitch
   ()
   ((item :initform ""
@@ -27,7 +48,6 @@
               :initarg :deviation
               :accessor deviation)
    )
-;  (:icon 129)
   )
 
 (defmethod initialize-instance :after ((x symbolic-pitch) &rest initargs)
@@ -66,9 +86,7 @@
   (* (diapason x) (expt 2 (/ (- (midi-note x) 69) 12))))
 
 
-;(om::defmethod! transpose ((x symbolic-pitch) (ratio number))
 (defmethod transpose ((x symbolic-pitch) (ratio number))
-;  :icon 130
   (let ((deviation 0) pitch)
     (setf pitch (fq->pch (* ratio (freq x))))
     (setf deviation (cdr pitch)
@@ -76,7 +94,6 @@
     (make-instance 'symbolic-pitch :pitch pitch :deviation deviation))
   )
 
-;(om::defmethod! transpose ((x symbolic-pitch) (interval t))
 (defmethod transpose ((x symbolic-pitch) (interval t))
   (let ((deviation 0) pitch)
     (unless (interval-p interval)

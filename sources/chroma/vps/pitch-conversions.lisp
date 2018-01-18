@@ -1,3 +1,25 @@
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa
+;=====================================================
+
 #|
 
 Further debugged and modified (defun->defmethod) by Marco, May 1998
@@ -19,29 +41,23 @@ pch-class   *   *   *     *     *    *      *           \
 |#
 
 
-(in-package chroma)
+(in-package :cr)
 
 ;FREQUENCY
-;(defmethod fq->pch ((f number) &optional (approx 0))
-(om::defmethod! fq->pch ((f number) &optional (approx 0))
-  :icon '(141)
+(defmethod fq->pch ((f number) &optional (approx 0))
   (fq-to-pch f approx))
 
-;(defmethod fq->pch ((f list) &optional (approx 0))
-(om::defmethod! fq->pch ((f list) &optional (approx 0))
-  :icon '(141)
-    (cond ((pitch-with-octave-p f) f)
-         ((or (symbolp f) (stringp f))
-          (error "CANNOT CALCULATE THE FREQ OF ~a, SIR ~a" f (get-gbl USER)))
-         (t (mapcar (lambda (x) (fq-to-pch x approx)) f))))
+(defmethod fq->pch ((f list) &optional (approx 0))
+  (cond ((pitch-with-octave-p f) f)
+        ((or (symbolp f) (stringp f))
+         (error "CANNOT CALCULATE THE FREQ OF ~a, SIR ~a" f (get-gbl USER)))
+        (t (mapcar (lambda (x) (fq-to-pch x approx)) f))))
 
-;(defmethod fq->pch ((f t) &optional (approx 0))
-(om::defmethod! fq->pch ((f t) &optional (approx 0))
-  :icon '(141)
+(defmethod fq->pch ((f t) &optional (approx 0))
   (declare (ignore approx))
-    (if (pitch-with-octave-p f)
+  (if (pitch-with-octave-p f)
       f
-      (error "MYSTERIOUS ARGUMENT, SIR: ~a" f)))
+    (error "MYSTERIOUS ARGUMENT, SIR: ~a" f)))
 
 (defmethod fq-to-pch ((f t) &optional (approx 0))
   (if (pitch-with-octave-p f)
@@ -49,58 +65,41 @@ pch-class   *   *   *     *     *    *      *           \
     (midi->pch (fq->midi f) approx)))
 
 
-;(defmethod fq->midi ((l list) &optional (diapason 440.0))
-(om::defmethod! fq->midi ((f list))
-                :icon '(141)
-                (mapcar #'fq-to-midi f))
+(defmethod fq->midi ((f list))
+  (mapcar #'fq-to-midi f))
 
-;(defmethod fq->midi (l)
-(om::defmethod! fq->midi ((f number))
-                :icon '(141)
-                (fq-to-midi f))
+(defmethod fq->midi (f)
+  (fq-to-midi f))
 
-(om::defmethod! fq->midi ((f t))
-                (error "CANNOT CALCULATE THE MIDI OF ~a, SIR ~a" f (get-gbl USER)))
+(defmethod fq->midi ((f t))
+  (error "CANNOT CALCULATE THE MIDI OF ~a, SIR ~a" f (get-gbl USER)))
 
 (defmethod fq-to-midi (f)
   (+ 69 (/(log (/ f (get-gbl 'diapason))) (log(expt 2 (/ 1 12))) )))
 
-;(defmethod fq->midic ((l list))
-(om::defmethod! fq->midic ((f list))
-  :icon '(141)
+(defmethod fq->midic ((f list))
  (mapcar #'fq->midic f))
 
-;(defmethod fq->midic (l)
-(om::defmethod! fq->midic ((f number))
-  :icon '(141)
-      (midi->midic (fq-to-midi f)))
+(defmethod fq->midic ((f number))
+  (midi->midic (fq-to-midi f)))
+
+(defmethod fq->midic ((f t))
+  (error "CANNOT CALCULATE THE MIDIC OF ~a, SIR ~a" f (get-gbl USER)))
 
 
-(om::defmethod! fq->midic ((f t))
-                (error "CANNOT CALCULATE THE MIDIC OF ~a, SIR ~a" f (get-gbl USER)))
-
-
-;(defmethod fq->ratio ((l list))
-(om::defmethod! fq->ratio ((f list))
-  :icon '(141)
+(defmethod fq->ratio ((f list))
   (cond ((null (second f))())
         (t ( cons (/(second f)(first f))(fq->ratio(cdr f))))))
 
-;(defmethod fq->ratio (l)
-(om::defmethod! fq->ratio ((l t))
-  :icon '(141)
+(defmethod fq->ratio ((l t))
   (error "I NEED A LIST OF AT LEAST TWO ARGUMENTS, SIR ~a, AND YOU GAVE ME ~a" (get-gbl USER) l))
 
 
 ; COMPOUND CONVERSIONS, ms0906
-;(defmethod fq->itvl (l)
-(om::defmethod! fq->itvl (l)
-  :icon '(141)
+(defmethod fq->itvl (l)
   (ratio->itvl (fq->ratio l)))
 
-;(defmethod fq->semitones (l)
-(om::defmethod! fq->semitones (l)
-  :icon '(141)
+(defmethod fq->semitones (l)
   (ratio->semitones (fq->ratio l)))
 
 #|
@@ -132,32 +131,24 @@ pch-class   *   *   *     *     *    *      *           \
 
 
 ;PITCH
-;(defmethod pch->fq ((note number) &rest diap)        ;nouvelle version pour pch (cf : LLdg-pitch.lisp) 
-(om::defmethod! pch->fq ((note number) &rest diap)
-  :icon '(141)
+(defmethod pch->fq ((note number) &rest diap)        ;nouvelle version pour pch (cf : LLdg-pitch.lisp) 
   (declare (ignore diap))
   note)
 
-;(defmethod pch->fq ((note list) &rest diap)        ;nouvelle version pour pch (cf : LLdg-pitch.lisp) 
-(om::defmethod! pch->fq ((note list) &rest diap)
-  :icon '(141)
+(defmethod pch->fq ((note list) &rest diap)        ;nouvelle version pour pch (cf : LLdg-pitch.lisp) 
   (let ((diap (ifn diap (get-gbl DIAPASON) (car diap))) )
     (if(or(memberp (cdr note) *DEVIATIONS*) (numberp (cdr note)))
-      (freq (make-instance 'symbolic-pitch :pitch (string (car note)) 
-                           :diapason diap 
-                           :deviation (cdr note)))
+        (freq (make-instance 'symbolic-pitch :pitch (string (car note)) 
+                             :diapason diap 
+                             :deviation (cdr note)))
       (mapcar (lambda (n) (pch->fq n diap)) note))))
 
-;(defmethod pch->fq ((note t) &rest diap)        ;nouvelle version pour pch (cf : LLdg-pitch.lisp) 
-(om::defmethod! pch->fq ((note t) &rest diap)        ;nouvelle version pour pch (cf : LLdg-pitch.lisp) 
-  :icon '(141)
+(defmethod pch->fq ((note t) &rest diap)        ;nouvelle version pour pch (cf : LLdg-pitch.lisp) 
   (let ((diap (ifn diap (get-gbl DIAPASON) (car diap))) )
     (freq (make-instance 'symbolic-pitch :pitch (string note) 
                          :diapason diap))))
 
-;(defmethod pch->midi (note &rest diap)
-(om::defmethod! pch->midi (note &rest diap)
-  :icon '(141)
+(defmethod pch->midi (note &rest diap)
   (let ((diap (ifn diap (get-gbl DIAPASON) (car diap))) )
     (cond ((numberp note) note)
           ((listp note)
@@ -171,46 +162,34 @@ pch-class   *   *   *     *     *    *      *           \
                                      :diapason diap))))))
 
 
-;(defmethod pch->midic (note &rest diap)
-(om::defmethod! pch->midic (note &rest diap)
-  :icon '(141)
+(defmethod pch->midic (note &rest diap)
   (ifn diap
-       (midi->midic (pch->midi note))
+      (midi->midic (pch->midi note))
     (midi->midic (pch->midi note diap))))
 
 
-;(defmethod pch->itvl (note)
-(om::defmethod! pch->itvl (note)
-  :icon '(141)
+(defmethod pch->itvl (note)
   (semitones->itvl(pch->semitones note)))
 
-;(defmethod pch->semitones (note)
-(om::defmethod! pch->semitones (note)
-  :icon '(141)
+(defmethod pch->semitones (note)
   (midi->semitones(pch->midi note)))
 
 
-;(defmethod pch->pch-class ((note cons)) ; if a cons it is a pitch with deviation
-(om::defmethod! pch->pch-class ((note cons)) ; if a cons it is a pitch with deviation
-  :icon '(141)
+(defmethod pch->pch-class ((note cons)) ; if a cons it is a pitch with deviation
   (if (numberp (cdr note))                ; IF it is a cons with deviation
     (if (pitch-without-octave-p note)             ; if there is no octave, add 48 so as
       (+ 48 (midi->pch-class (pch->midi note)))   ;    to start the list at 0 (DO4)
       (midi->pch-class (pch->midi note)))
     (mapcar #'pch->pch-class note)))      ; ELSE it is a list of notes
 
-;(defmethod pch->pch-class ((note t)) ; default: single pitch without deviation
-(om::defmethod! pch->pch-class ((note t)) ; default: single pitch without deviation
-  :icon '(141)
+(defmethod pch->pch-class ((note t)) ; default: single pitch without deviation
   (if (pitch-without-octave-p note)             ; if there is no octave, add 48 so as
     (+ 48 (midi->pch-class (pch->midi note)))   ;    to start the list at 0 (DO4)
     (midi->pch-class (pch->midi note))))
 
 
 ; COMPOUND CONVERSIONS, ms0906
-;(defmethod pch->ratio (l)
-(om::defmethod! pch->ratio (l)
-  :icon '(141)
+(defmethod pch->ratio (l)
   (semitones->ratio (pch->semitones l)))
 
 #|
@@ -254,9 +233,7 @@ pch-class   *   *   *     *     *    *      *           \
 
 
 ;MIDI
-;(defmethod midi->pch ((p number) &optional (approx 0))
-(om::defmethod! midi->pch ((p number) &optional (approx 0))
-  :icon '(141)
+(defmethod midi->pch ((p number) &optional (approx 0))
 ; (setf p (from-midic p)) suppressed, Marco 0907, input can only be MIDI
  (let ((*package* (find-package :chroma))
        (octave (floor (+ p .5) 12))
@@ -270,28 +247,20 @@ pch-class   *   *   *     *     *    *      *           \
           (format () "~a~a"(cdr(assoc note *SCPITCH-ALIST*)) (- octave 1)))
         ))))
 
-;(defmethod midi->pch ((p list) &optional (approx 0))
-(om::defmethod! midi->pch ((p list) &optional (approx 0))
-  :icon '(141)
+(defmethod midi->pch ((p list) &optional (approx 0))
   (mapcar #'(lambda (x) (midi->pch x approx)) p))
 
 
-;(defmethod midi->semitones ((l list))
-(om::defmethod! midi->semitones ((l list))
-  :icon '(141)
- (cond((null (second l))())
+(defmethod midi->semitones ((l list))
+  (cond((null (second l))())
        (t( cons (- (from-midic (second l)) (from-midic (first  l))) (midi->semitones (cdr l))))))
 
-;(defmethod midi->semitones ((l t))
-(om::defmethod! midi->semitones ((l t))
-  :icon '(141)
+(defmethod midi->semitones ((l t))
   (error "I NEED A LIST OF AT LEAST TWO ARGUMENTS, SIR AND YOU GAVE ME ~a" l))
 
 
-;(defmethod midi->pch-class ((note number))
-(om::defmethod! midi->pch-class ((note number))
-  :icon '(141)
- (- (from-midic (pch-reduce note)) 60))
+(defmethod midi->pch-class ((note number))
+  (- (from-midic (pch-reduce note)) 60))
 
 ;new, ms0907
 (defun pch-reduce (val)
@@ -312,12 +281,10 @@ pch-class   *   *   *     *     *    *      *           \
 ;(midi->pch-class '(49 73 77))
 
 (defmethod midi->pch-class ((l list))
-;(om::defmethod! midi->pch-class ((l list))
   (mapcar #'midi->pch-class l))
 
 
 (defmethod from-midic ((midi number))
-;(om::defmethod! from-midic ((note number))
   (if (< midi 127) midi
       (/ midi 100.0)))
 ;    (round (/ midi 100.0)))) ; WRONG VERSION, corrected by Marco, Feb 21, 2000
@@ -325,29 +292,21 @@ pch-class   *   *   *     *     *    *      *           \
 (defmethod from-midic ((midi list))
   (mapcar #'from-midic midi))
 
-;(defmethod midi->midic ((l number))
-(om::defmethod! midi->midic ((l number))
-  :icon '(141)
+(defmethod midi->midic ((l number))
   (round (* (from-midic l) 100)))
 
-;(defmethod midi->midic ((l list))
-(om::defmethod! midi->midic ((l list))
+(defmethod midi->midic ((l list))
   (mapcar #'midi->midic l))
 
 
 ; COMPOUND CONVERSIONS, ms0906
-(om::defmethod! midi->fq (l)
-  :icon '(141)
+(defmethod midi->fq (l)
   (pch->fq (midi->pch l)))
 
-;(defmethod midi->ratio (l)
-(om::defmethod! midi->ratio (l)
-  :icon '(141)
+(defmethod midi->ratio (l)
   (semitones->ratio (midi->semitones l)))
 
-;(defmethod midi->itvl (l)
-(om::defmethod! midi->itvl (l)
-  :icon '(141)
+(defmethod midi->itvl (l)
   (semitones->itvl (midi->semitones l)))
 
 #|
@@ -378,45 +337,30 @@ pch-class   *   *   *     *     *    *      *           \
 
 
 ;MIDIC
-;(defmethod midic->midi ((l number))
-(om::defmethod! midic->midi ((l number))
-  :icon '(141)
+(defmethod midic->midi ((l number))
   (/ l 100.0))
 
-(om::defmethod! midic->midi ((l list))
-  :icon '(141)
+(defmethod midic->midi ((l list))
   (mapcar #'midic->midi l))
 
 
 ; COMPOUND CONVERSIONS, ms 0906
-;(defmethod midic->fqmidic- (l)
-(om::defmethod! midic->fq (l)
-  :icon '(141)
+(defmethod midic->fqmidic- (l)
   (midi->fq (midic->midi l)))
 
-;(defmethod midic->pch (l)
-(om::defmethod! midic->pch (l)
-  :icon '(141)
+(defmethod midic->pch (l)
   (midi->pch (midic->midi l)))
 
-;(defmethod midic->ratio (l)
-(om::defmethod! midic->ratio (l)
-  :icon '(141)
+(defmethod midic->ratio (l)
   (midi->ratio (midic->midi l)))
 
-;(defmethod midic->itvl (l)
-(om::defmethod! midic->itvl (l)
-  :icon '(141)
+(defmethod midic->itvl (l)
   (midi->itvl (midic->midi l)))
 
-;(defmethod midic->semitones (l)
-(om::defmethod! midic->semitones (l)
-  :icon '(141)
+(defmethod midic->semitones (l)
   (midi->semitones (midic->midi l)))
 
-;(defmethod midic->pch-class (l)
-(om::defmethod! midic->pch-class (l)
-  :icon '(141)
+(defmethod midic->pch-class (l)
   (midi->pch-class (midic->midi l)))
 
 #|
@@ -448,66 +392,48 @@ pch-class   *   *   *     *     *    *      *           \
 
 
 ;RATIO
-;(defmethod ratio->fq ((int list) (ref number))
-(om::defmethod! ratio->fq ((int list) (ref number))
-  :icon '(141)
- (if (null int)
+(defmethod ratio->fq ((int list) (ref number))
+  (if (null int)
      (list ref)  
    (cons ref (ratio->fq (cdr int) (* ref  (car int))))))
 
-;(defmethod ratio->fq ((int number) (ref number))
-(om::defmethod! ratio->fq ((int number) (ref number))
-  :icon '(141)
+(defmethod ratio->fq ((int number) (ref number))
   (ratio->fq (list int) ref))
 
-;(defmethod ratio->fq (int ref)
-(om::defmethod! ratio->fq (int ref)
-  :icon '(141)
+(defmethod ratio->fq (int ref)
   (error "MYSTERIOUS ARGUMENTS, SIR ~a: ~a - ~a" (get-gbl USER) int ref))
 
-;(defmethod ratio->itvl (int)
-(om::defmethod! ratio->itvl (int)
-  :icon '(141)
- (semitones->itvl(ratio->semitones int)))
+(defmethod ratio->itvl (int)
+  (semitones->itvl(ratio->semitones int)))
 
 
-;(defmethod ratio->semitones ((l list))
-(om::defmethod! ratio->semitones ((l list))
-  :icon '(141)
- (mapcar #'ratio-to-semitones l))
+(defmethod ratio->semitones ((l list))
+  (mapcar #'ratio-to-semitones l))
 
-;(defmethod ratio->semitones ((l number))
-(om::defmethod! ratio->semitones ((l number))
-  :icon '(141)
-     (ratio-to-semitones l))
+(defmethod ratio->semitones ((l number))
+  (ratio-to-semitones l))
 
-;(defmethod ratio->semitones (l)
-(om::defmethod! ratio->semitones (l)
-  :icon '(141)
+(defmethod ratio->semitones (l)
   (error "MYSTERIOUS ARGUMENT, SIR: ~a" l))
 
 (defmethod ratio-to-semitones (ratio)
-;(om::defmethod! ratio-to-semitones (ratio)
   (* 12 (log ratio 2)))
 
 
 ; COMPOUND CONVERSIONS, ms 0906
-(om::defmethod! ratio->midi (val ref)
-  :icon '(141)
+(defmethod ratio->midi (val ref)
   (itvl->midi (let ((it (ratio->itvl val)))
                 (if (listp (car it))
                     it
                   (list it))) ref))
 
-(om::defmethod! ratio->midic (val ref)
-  :icon '(141)
+(defmethod ratio->midic (val ref)
   (itvl->midic (let ((it (ratio->itvl val)))
                  (if (listp (car it))
                      it
                    (list it))) ref))
 
-(om::defmethod! ratio->pch (val ref &optional (approx 0))
-  :icon '(141)
+(defmethod ratio->pch (val ref &optional (approx 0))
   (itvl->pch (let ((it (ratio->itvl val)))
                  (if (listp (car it))
                      it
@@ -536,9 +462,7 @@ pch-class   *   *   *     *     *    *      *           \
 
 
 ;INTERVAL
-;(defmethod itvl->fq (int (ref number))
-(om::defmethod! itvl->fq (int (ref number))
-  :icon '(141)
+(defmethod itvl->fq (int (ref number))
   (let ((deviation 0)(octave 0)(intervalle)(freq)
         (int (if (listp int) int (list int))))
     (if (null int) (list ref)
@@ -565,17 +489,13 @@ pch-class   *   *   *     *     *    *      *           \
                (cons ref (itvl->fq (cdr int) freq)
                      )))))
 
-;(defmethod itvl->fq (int (ref t))
-(om::defmethod! itvl->fq (int (ref t))
-  :icon '(141)
+(defmethod itvl->fq (int (ref t))
   (declare (ignore int))
-          (error "CAN'T UNDERSTAND YOUR REFERENCE FREQUENCY: ~a" ref))
+  (error "CAN'T UNDERSTAND YOUR REFERENCE FREQUENCY: ~a" ref))
 
  
-;(defmethod itvl->midi (int (ref number))
-(om::defmethod! itvl->midi (int (ref number))
-  :icon '(141)
- (let ((deviation 0)(octave 0)(intervalle)(pitch)
+(defmethod itvl->midi (int (ref number))
+  (let ((deviation 0)(octave 0)(intervalle)(pitch)
         (int (if (listp int) int (list int))))
     (if (null int) (list ref)
         (progn (if (memberp (car int) *INTERVALLES*) 
@@ -601,32 +521,22 @@ pch-class   *   *   *     *     *    *      *           \
                (cons ref (itvl->midi (cdr int) pitch)
                      )))))
 
-;(defmethod itvl->midi (int (ref t))
-(om::defmethod! itvl->midi (int (ref t))
-  :icon '(141)
+(defmethod itvl->midi (int (ref t))
   (itvl->midi (ratio->itvl val) ref))
 
 
-;(defmethod itvl->midic (int (ref number))
-(om::defmethod! itvl->midic (int (ref number))
-  :icon '(141)
- (midi->midic (itvl->midi int (midic->midi ref))))
+(defmethod itvl->midic (int (ref number))
+  (midi->midic (itvl->midi int (midic->midi ref))))
 
 
-;(defmethod itvl->midic (int (ref t))
-(om::defmethod! itvl->midic (int (ref t))
-  :icon '(141)
+(defmethod itvl->midic (int (ref t))
   (itvl->midic int (pch->midi ref)))
 
 
-;(defmethod itvl->ratio (int)
-(om::defmethod! itvl->ratio (int)
-  :icon '(141)
- (semitones->ratio (itvl->semitones int)))
+(defmethod itvl->ratio (int)
+  (semitones->ratio (itvl->semitones int)))
 
-;(defmethod itvl->pch (int note &optional (approx 0))
-(om::defmethod! itvl->pch (int note &optional (approx 0))
-  :icon '(141)
+(defmethod itvl->pch (int note &optional (approx 0))
 ; if approx is needed, go through a frequency conversion (less precise)
 ;    otherwise use a midi conversion
  (if (and (numberp approx) (= approx 0))
@@ -634,10 +544,8 @@ pch-class   *   *   *     *     *    *      *           \
     (fq->pch (itvl->fq int (pch->fq note)) approx)))
 
 
-;(defmethod itvl->semitones (int)
-(om::defmethod! itvl->semitones (int)
-  :icon '(141)
- (let ((deviation 0)(octave 0)(intervalle)(semitones)
+(defmethod itvl->semitones (int)
+  (let ((deviation 0)(octave 0)(intervalle)(semitones)
         (int (if (listp int) int (list int))))
     (if (null int) ()
         (progn (if (memberp (car int) *INTERVALLES*) 
@@ -685,37 +593,25 @@ pch-class   *   *   *     *     *    *      *           \
 
 
 ;SEMITONES
-;(defmethod semitones->ratio ((l list))
-(om::defmethod! semitones->ratio ((l list))
-  :icon '(141)
- (mapcar #'semitones-to-ratio l))
+(defmethod semitones->ratio ((l list))
+  (mapcar #'semitones-to-ratio l))
 
-;(defmethod semitones->ratio ((l number))
-(om::defmethod! semitones->ratio ((l number))
-  :icon '(141)
+(defmethod semitones->ratio ((l number))
   (semitones-to-ratio l))
 
-;(defmethod semitones->ratio (l)
-(om::defmethod! semitones->ratio (l)
-  :icon '(141)
+(defmethod semitones->ratio (l)
   (error "CANNOT TRUST YOUR ARGUMENT: ~a" l))
 
 (defmethod semitones-to-ratio (ratio)
      (expt 2 (/ ratio 12)))
 
-;(defmethod semitones->itvl ((l list))
-(om::defmethod! semitones->itvl ((l list))
-  :icon '(141)
- (mapcar #'semitones-to-itvl l))
+(defmethod semitones->itvl ((l list))
+  (mapcar #'semitones-to-itvl l))
 
-;(defmethod semitones->itvl ((l number))
-(om::defmethod! semitones->itvl ((l number))
-  :icon '(141)
+(defmethod semitones->itvl ((l number))
   (semitones-to-itvl l))
 
-;(defmethod semitones->itvl (l)
-(om::defmethod! semitones->itvl (l)
-  :icon '(141)
+(defmethod semitones->itvl (l)
   (error "MIND YOUR ARGUMENT, PLEASE: ~a" l))
 
 (defmethod semitones-to-itvl (i)
@@ -729,31 +625,27 @@ pch-class   *   *   *     *     *    *      *           \
 
 
 ; COMPOUND CONVERSIONS, ms 0906
-(om::defmethod! semitones->fq (val ref)
-  :icon '(141)
+(defmethod semitones->fq (val ref)
   (itvl->fq (let ((it (semitones->itvl val)))
               (if (listp (car it))
                   it
                 (list it))) ref))
 
 
-(om::defmethod! semitones->pch (val ref &optional (approx 0))
-  :icon '(141)
+(defmethod semitones->pch (val ref &optional (approx 0))
   (itvl->pch (let ((it (semitones->itvl val)))
                (if (listp (car it))
                    it
                  (list it))) ref approx))
 
 
-(om::defmethod! semitones->midi (val ref)
-  :icon '(141)
+(defmethod semitones->midi (val ref)
   (itvl->midi (let ((it (semitones->itvl val)))
                 (if (listp (car it))
                     it
                   (list it))) ref))
 
-(om::defmethod! semitones->midic (val ref)
-  :icon '(141)
+(defmethod semitones->midic (val ref)
   (itvl->midic (let ((it (semitones->itvl val)))
                 (if (listp (car it))
                     it
@@ -795,53 +687,33 @@ pch-class   *   *   *     *     *    *      *           \
 |#
 
 ;PITCH CLASSES
-;(defmethod pch-class->pch ((l list) &optional (approx 0))
-(om::defmethod! pch-class->pch ((l list) &optional (approx 0))
-  :icon '(141)
- (mapcar #'(lambda (x) (pch-class->pch x approx)) l))
+(defmethod pch-class->pch ((l list) &optional (approx 0))
+  (mapcar #'(lambda (x) (pch-class->pch x approx)) l))
 
-;(defmethod pch-class->pch ((l number) &optional (approx 0))
-(om::defmethod! pch-class->pch ((l number) &optional (approx 0))
-  :icon '(141)
+(defmethod pch-class->pch ((l number) &optional (approx 0))
   (midi->pch (pch-class->midi l) approx))
 
-(om::defmethod! pch-class->pch ((l t) &optional (approx 0))
-  :icon '(141)
+(defmethod pch-class->pch ((l t) &optional (approx 0))
   (declare (ignore approx))
   (error "I HAVE SOME PROBLEMS WITH YOUR ARGUMENT: ~a~%" l))
 
 
-;(defmethod pch-class->midi ((l list))
-(om::defmethod! pch-class->midi ((l list))
-  :icon '(141)
- (mapcar #'pch-class->midi l))
+(defmethod pch-class->midi ((l list))
+  (mapcar #'pch-class->midi l))
 
-;(defmethod pch-class->midi ((l number))
-(om::defmethod! pch-class->midi ((l number))
-  :icon '(141)
+(defmethod pch-class->midi ((l number))
   (+ l 60))
 
-;(defmethod pch-class->midi ((l t))
-(om::defmethod! pch-class->midi ((l t))
-  :icon '(141)
+(defmethod pch-class->midi ((l t))
   (error "MIND YOUR ARGUMENT, PLEASE: ~a" l))
 
 
-;(defmethod pch-class->fq ((l list))
-(om::defmethod! pch-class->fq ((l list))
-  :icon '(141)
- (mapcar #'pch-class->fq l))
+(defmethod pch-class->fq ((l list))
+  (mapcar #'pch-class->fq l))
 
-;(defmethod pch-class->fq ((l number))
-(om::defmethod! pch-class->fq ((l number))
-  :icon '(141)
+(defmethod pch-class->fq ((l number))
   (pch->fq (pch-class->pch l)))
 
-;(defmethod pch-class->fq ((l t))
-(om::defmethod! pch-class->fq ((l t))
-  :icon '(141)
+(defmethod pch-class->fq ((l t))
   (error "I HAVE SOME PROBLEMS WITH YOUR ARGUMENT: ~a~%" l))
 
-#|
-
-|#

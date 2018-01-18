@@ -1,12 +1,33 @@
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa
+;=====================================================
+
 (in-package :cr)
 
-(om::defclass! CHORD 
+(defclass CHORD 
   (VPS)
   ((sp-list :initform nil
             :documentation "list of symbolic-pitch objects"
             :accessor sp-list))
   (:documentation "Un accord")
-  (:icon 132)
   )
 
 (defmethod check-syntax ((x chord))
@@ -17,7 +38,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;1
 
-(om::defclass! SPL
+(defclass SPL
   (CHORD)
   ((the-list :type list 
              :initform '(DO2  DO3 DO5)
@@ -25,7 +46,6 @@
              :accessor the-list
              :reader get_vps))
   (:documentation "Symbolic Pitch List" )
-  (:icon 626)
 )
 
 (defmethod initialize-instance :after ((x spl) &rest initargs)
@@ -38,14 +58,11 @@
       (print (format nil "pitch without octave in ~a" (the-list x)))))
 
 (defmethod note-list ((x spl) &key reference)                
-;(om::defmethod! note-list ((x spl) &key reference)                
   " note-list "
   (declare (ignore reference))
   (relative-pitch (the-list x)))
 
 (defmethod get-spl ((x spl) &key octave reference &allow-other-keys ) 
-;(om::defmethod! get-spl ((x spl) &key octave reference &allow-other-keys ) 
-;  :icon 130
   (declare (ignore octave reference))
   (the-list x))
 
@@ -57,7 +74,6 @@
             (format t "~%NOTE = ~a " i))))
   
 (defmethod get-cil ((x spl) &key (midi ()))
-;(om::defmethod! get-cil ((x spl) &key (midi ()))
   (let ((result (midi->semitones (pch->midi (the-list x)))))
   (if midi
     result
@@ -65,7 +81,6 @@
     )))
 
 (defmethod get-rpl ((x spl) &key reference)
-;(om::defmethod! get-rpl ((x spl) &key reference)
   (declare (ignore reference))
   (let ((result)
         (origine-octave (octave(car(sp-list x)))))
@@ -91,7 +106,6 @@
     (nreverse result)))
 
 (defmethod get-gil ((x spl) &key (midi ()))
-;(om::defmethod! get-gil ((x spl) &key (midi ()))
   (let ((result (get-gil-vps (mapcar #'(lambda (y)  (midi-note y))(sp-list x)))))
     (if midi
       result
@@ -99,8 +113,6 @@
       )))
 
 (defmethod get-ail ((x spl) &key (reference ())(midi ()) &allow-other-keys)
-;(om::defmethod! get-ail ((x spl) &key (reference ())(midi ()) &allow-other-keys)
-;  :icon 130
   (if(null reference)(error "MISSING REFERENCE IN ~a"(type-of x)))
   (let ((result (get-ail-vps (mapcar #'(lambda (y) (midi-note y))(sp-list x))
                              (pch->midi (fq->pch reference)))))
@@ -110,7 +122,6 @@
       )))
 
 (defmethod get-surface ((x spl) &key (midi ()))
-;(om::defmethod! get-surface ((x spl) &key (midi ()))
   (let ((result (-(midi-note (car(last(sp-list x))))
                   (midi-note (first(sp-list x))))))
     (if midi
@@ -119,11 +130,9 @@
       )))
 
 (defmethod get-density ((x spl))
-;(om::defmethod! get-density ((x spl))
   (/ (number-of-notes x)(1+ (get-surface x :midi t))))
 
 (defmethod get-homogeneity ((x spl) &key (expanded ())(midi ()))
-;(om::defmethod! get-homogeneity ((x spl) &key (expanded ())(midi ()))
   (let* ((cil (get-cil x :midi t))
         (result (list (apply #'max cil)(apply #'min cil))))
     (if expanded
@@ -136,18 +145,15 @@
         ))))
       
 (defmethod get-sd ((x spl))
-;(om::defmethod! get-sd ((x spl))
   (get-sd-vps (get-cil x :midi t)))
 
 (defmethod get-cs ((x spl) &key (space ()))
-;(om::defmethod! get-cs ((x spl) &key (space ()))
   (if space
     (get-cs-vps (get-gil x :midi t) space)
     (get-cs-vps (get-gil x :midi t))))
 
 ;;;;;;;;;2
-;(defclass RPL 
-(om::defclass! RPL 
+(defclass RPL 
   (CHORD)
   ((the-list :type list 
              :initform '(DO2  DO3 do5)
@@ -155,11 +161,9 @@
              :accessor the-list
              :reader get_vps))
   (:documentation "Relative Pitch List" )
-  (:icon 626)
   )
 
 (defmethod get-rpl ((x rpl) &key reference)
-;(om::defmethod! get-rpl ((x rpl) &key reference)
   (declare (ignore reference))
   (the-list x))
 
@@ -169,27 +173,22 @@
   (check-order x))
 
 (defmethod get-spl ((x rpl) &key octave &allow-other-keys)
-;(om::defmethod! get-spl ((x rpl) &key octave &allow-other-keys)
   (if (null octave)(error "MISSING REFERENCE OCTAVE"))
   (mapcar #'(lambda (y)(midi->pch(+ (* 12 octave) (midi-note y))))
              (sp-list x)))
 
 (defmethod get-ail ((x rpl) &key octave reference &allow-other-keys)
-;(om::defmethod! get-ail ((x rpl) &key octave reference &allow-other-keys)
   (get-ail (make-instance 'spl :the-list (get-spl x :octave octave ))
            :reference reference))
 
 (defmethod get-fql ((x rpl)&key (octave 0))
-;(om::defmethod! get-fql ((x rpl)&key (octave 0))
   (mapcar #'(lambda (y) (* (expt 2 octave) y))(fql x)))
 
 (defmethod get-arl ((x rpl) &key reference octave)
-;(om::defmethod! get-arl ((x rpl) &key reference octave)
   (freqs-to-arl (get-fql x :octave octave) (pch->fq reference)))
 
 ;;;;;;;;;2b
 (defclass PPL 
-;(om::defclass! PPL 
   (CHORD)
   ((the-list :type list 
              :initform '(DO LA SOL)
@@ -197,7 +196,6 @@
              :accessor the-list
              :reader get_vps))
   (:documentation "Pure Pitch List" )
-;  (:icon 135)
   )
 
 (defmethod get-ppl ((x ppl) &key)
@@ -223,27 +221,23 @@
           do (setf curr-freq (freq p)))))
 
 (defmethod get-spl ((x ppl) &key octave &allow-other-keys)
-;(om::defmethod! get-spl ((x ppl) &key octave &allow-other-keys)
   (if (null octave)(error "MISSING REFERENCE OCTAVE"))
   (mapcar #'(lambda (y)(midi->pch(+ (* 12 octave) (midi-note y))))
              (sp-list x)))
 
 (defmethod get-ail ((x ppl) &key octave reference &allow-other-keys)
-;(om::defmethod! get-ail ((x ppl) &key octave reference &allow-other-keys)
   (get-ail (make-instance 'spl :the-list (get-spl x :octave octave ))
            :reference reference))
 
 (defmethod get-fql ((x ppl)&key (octave 0))
-;(om::defmethod! get-fql ((x ppl)&key (octave 0))
   (mapcar #'(lambda (y) (* (expt 2 octave) y))(fql x)))
 
 (defmethod get-arl ((x ppl) &key reference octave)
-;(om::defmethod! get-arl ((x ppl) &key reference octave)
   (freqs-to-arl (get-fql x :octave octave) (pch->fq reference)))
 
 
 ;;;;;;;;;3
-(om::defclass! CIL 
+(defclass CIL 
   (CHORD)
   ((the-list :type list 
              :initform '(6- 7+ 6- 6-)
@@ -251,7 +245,6 @@
              :accessor the-list
              :reader get_vps))
   (:documentation "Contiguous Interval List" )
-  (:icon 627)
   ) 
 
 (defmethod initialize-instance :after ((x cil) &rest initargs)
@@ -260,7 +253,6 @@
   (check-order x))
 
 (defmethod get-cil ((x cil) &key )
-;(om::defmethod! get-cil ((x cil) &key )
   (the-list x))
 
 (defmethod check-order ((x cil))
@@ -285,31 +277,26 @@
   (1+ (length (the-list x))))
 
 (defmethod get-spl ((x cil) &key reference &allow-other-keys)
-;(om::defmethod! get-spl ((x cil) &key reference &allow-other-keys)
   (if (null reference)(error "MISSING REFERENCE PITCH"))
 (mapcar #'midi->pch (itvl->midi (the-list x) (pch->midi(fq->pch reference)))))
 
 (defmethod get-ail ((x cil) &key reference midi &allow-other-keys)
-;(om::defmethod! get-ail ((x cil) &key reference midi &allow-other-keys)
   (declare (ignore midi))
   (get-ail (make-instance 'spl :the-list (get-spl x :reference reference ))
            :reference reference))
 
 (defmethod get-fql ((x cil) &key reference)
-;(om::defmethod! get-fql ((x cil) &key reference)
   (get-fql (make-instance 'spl :the-list (get-spl x :reference reference ))))
 
 (defmethod  get-crl ((x cil))
-;(om::defmethod!  get-crl ((x cil))
   (fq->ratio (get-fql x :reference 100)))
 
 (defmethod get-arl ((x cil) &key reference )
-;(om::defmethod! get-arl ((x cil) &key reference)
   (freqs-to-arl (get-fql x :reference reference) (pch->fq reference)))
 
 
 ;;;;;;;;4
-(om::defclass! AIL 
+(defclass AIL 
   (anchored-vps CHORD)
   ((the-list :type list 
              :initform '((1 -1 12) (2+ 0 -5) 3+ 7+ (3- 1 -50))
@@ -320,11 +307,9 @@
               :initarg :reference
               :accessor reference))
   (:documentation "Anchored Interval List" )
-  (:icon 628)
   )
 
 (defmethod get-ail ((x ail) &key reference midi &allow-other-keys)
-;(om::defmethod! get-ail ((x ail) &key reference midi &allow-other-keys)
   (declare (ignore midi))
   (get-ail (make-instance 'spl :the-list (get-spl x)) :reference reference))
 
@@ -350,12 +335,9 @@
         do (error "INTERVALLE NON AUTORISE : ~a" i)))
 
 (defmethod get-spl ((x ail) &key &allow-other-keys)
-;(om::defmethod! get-spl ((x ail) &key &allow-other-keys)
-;(om::defmethod*? get-spl ((x ail) &key &allow-other-keys)
   (mapcar #'midi->pch (ail-to-midi (the-list x) (pch->midi(fq->pch(reference x))))))
 
 (defmethod get-cil ((x ail) &key )
-;(om::defmethod! get-cil ((x ail) &key )
  (get-cil (make-instance 'spl :the-list (get-spl x))))
 
 (defmethod print_vs ((x ail))

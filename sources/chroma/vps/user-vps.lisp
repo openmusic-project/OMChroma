@@ -1,3 +1,25 @@
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa
+;=====================================================
+
 ;*****************************************************************************
 ;-------| VPS SYSTEM
 ;-------| This file is: $LLvps/user-vps.lisp
@@ -5,7 +27,9 @@
 ;-------| Version 1.1, September 1999
 ;-------| Copyright 1998 IRCAM
 ;*****************************************************************************
-(in-package chroma)
+
+(in-package :cr)
+
 
 ;; THIS FILE SPECIFIES THE USER-ACCESSIBLE INTERFACE TO THE VPS
 ;;    OBJECT SYSTEM BY PROVINDING A SET OF METHODS THAT DO NOT USE
@@ -117,8 +141,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmethod make_vps ((list list) &optional reference)
-;(om::defmethod! make_vps ((list list) &optional reference)
-;  :icon 130
   " Automatically instanciates an object of the super-class VS,
        except PPL's which are internal structures and must be initialized
        on purpose"
@@ -334,8 +356,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod rpl_vps ((vps spl) &rest pars)
-;(om::defmethod! rpl_vps ((vps spl) &rest pars)
-;  :icon 130
   (ifn pars
        (get-rpl vps)
     (get-rpl (make-instance 'FQL
@@ -343,7 +363,6 @@ pch-class    *  *    *    *     *      *          \
              :approx (car pars))))
 
 (defmethod rpl_vps ((vps rpl) &rest pars)
-;(om::defmethod! rpl_vps ((vps rpl) &rest pars)
   (ifn pars
        (get-rpl vps)
     (get-rpl (make-instance 'FQL
@@ -351,19 +370,17 @@ pch-class    *  *    *    *     *      *          \
              :approx (car pars))))
 
 (defmethod rpl_vps ((vps cil) &rest pars)
-;(om::defmethod! rpl_vps ((vps cil) &rest pars)
-(when (null pars)
+  (when (null pars)
     (error "NEED AT LEAST A REFERENCE AS AN ARGUMENT"))
   (let ((ref (car pars))
         (approx (cadr pars)))
     (ifn approx
-         (get-rpl vps :reference ref)
+        (get-rpl vps :reference ref)
       (get-rpl (make-instance 'FQL
-                 :the-list (get-fql vps :reference ref))
+                              :the-list (get-fql vps :reference ref))
                :approx approx))))
 
 (defmethod rpl_vps ((vps ail) &rest pars)
-;(om::defmethod! rpl_vps ((vps ail) &rest pars)
   (ifn pars
        (get-rpl vps)
     (get-rpl (make-instance 'FQL
@@ -371,7 +388,6 @@ pch-class    *  *    *    *     *      *          \
              :approx (car pars))))
 
 (defmethod rpl_vps ((vps fql) &rest pars)
-;(om::defmethod! rpl_vps ((vps fql) &rest pars)
   (when (null pars)
     (error "NEED AT LEAST A MAX-NN OR THRESHOLD AS AN ARGUMENT"))
   (let ((choice (car pars))
@@ -395,8 +411,6 @@ pch-class    *  *    *    *     *      *          \
                (t (error "AMAZING CHOICE, SIR: ~a" choice))))))
 
 (defmethod rpl_vps ((vps crl) &rest pars)
-;(defmethod rpl_vps ((vps crl) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "NEED AT LEAST A REFERENCE AS AN ARGUMENT"))
   (let ((ref (car pars))
@@ -406,13 +420,11 @@ pch-class    *  *    *    *     *      *          \
       (get-rpl vps :reference ref :approx approx))))
 
 (defmethod rpl_vps ((vps arl) &rest pars)
-;(om::defmethod! rpl_vps ((vps arl) &rest pars)
   (ifn pars
        (get-rpl vps)
     (get-rpl vps :approx (car pars))))
 
 (defmethod rpl_vps ((vps t) &rest pars)
-;(om::defmethod! rpl_vps ((vps t) &rest pars)
   (declare (ignore pars))
   ())
 ; TO ALLOW FOR EMPTY STRUCTURE: RETURN NIL IF THE DATA IS NOT GOOD
@@ -462,8 +474,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod cil_vps ((vps spl) &rest pars)
-;(om::defmethod! cil_vps ((vps spl) &rest pars)
-;  :icon 130
   (ifn pars
        (get-cil vps :midi nil)
     (get-cil (make-instance 'FQL
@@ -471,8 +481,6 @@ pch-class    *  *    *    *     *      *          \
              :approx (car pars))) )
 
 (defmethod cils_vps ((vps spl) &rest pars)
-;(om::defmethod! cils_vps ((vps spl) &rest pars)
-;  :icon 130
   (ifn pars
        (mapcar #'float (get-cil vps :midi t))
     (float-semitones
@@ -480,8 +488,6 @@ pch-class    *  *    *    *     *      *          \
               :approx (car pars)))))
 
 (defmethod cil_vps ((vps rpl) &rest pars)
-;(om::defmethod! cil_vps ((vps rpl) &rest pars)
-;  :icon 130
   (ifn pars
        (get-cil vps)
     (get-cil (make-instance 'FQL
@@ -489,8 +495,6 @@ pch-class    *  *    *    *     *      *          \
              :approx (car pars))) )
 
 (defmethod cils_vps ((vps rpl) &rest pars)
-;(om::defmethod! cils_vps ((vps rpl) &rest pars)
-;  :icon 130
   (ifn pars
        (float-semitones (get-cil vps))
     (float-semitones
@@ -499,8 +503,6 @@ pch-class    *  *    *    *     *      *          \
               :approx (car pars)))))
 
 (defmethod cil_vps ((vps cil) &rest pars)
-;(om::defmethod! cil_vps ((vps cil) &rest pars)
-;    :icon 130
     (ifn pars
          (get-cil vps)
       (get-cil (make-instance 'FQL
@@ -508,8 +510,6 @@ pch-class    *  *    *    *     *      *          \
                :approx (car pars))))
 
 (defmethod cils_vps ((vps cil) &rest pars)
-;(om::defmethod! cils_vps ((vps cil) &rest pars)
-;    :icon 130
     (ifn pars
          (float-semitones (get-cil vps))
       (float-semitones
@@ -519,8 +519,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod cil_vps ((vps ail) &rest pars)
-;(om::defmethod! cil_vps ((vps ail) &rest pars)
-;    :icon 130
     (ifn pars
          (get-cil vps)
       (get-cil (make-instance 'FQL
@@ -528,8 +526,6 @@ pch-class    *  *    *    *     *      *          \
                :approx (car pars))))
 
 (defmethod cils_vps ((vps ail) &rest pars)
-;(om::defmethod! cils_vps ((vps ail) &rest pars)
-;  :icon 130
   (ifn pars
        (float-semitones (get-cil vps))
     (float-semitones 
@@ -538,8 +534,6 @@ pch-class    *  *    *    *     *      *          \
               :approx (car pars)))))
 
 (defmethod cil_vps ((vps fql) &rest pars)
-;(om::defmethod! cil_vps ((vps fql) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "NEED AT LEAST A MAX-NN OR THRESHOLD AS AN ARGUMENT"))
   (let ((choice (car pars))
@@ -563,8 +557,6 @@ pch-class    *  *    *    *     *      *          \
                (t (error "AMAZING CHOICE, SIR: ~a" choice))))))
 
 (defmethod cils_vps ((vps fql) &rest pars)
-;(om::defmethod! cils_vps ((vps fql) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "NEED AT LEAST A MAX-NN OR THRESHOLD AS AN ARGUMENT"))
   (let ((choice (car pars))
@@ -593,44 +585,32 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod cil_vps ((vps crl) &rest pars)
-;(om::defmethod! cil_vps ((vps crl) &rest pars)
-;    :icon 130
     (ifn pars
          (get-cil vps)
       (get-cil vps :approx (car pars))))
 
 (defmethod cils_vps ((vps crl) &rest pars)
-;(om::defmethod! cils_vps ((vps crl) &rest pars)
-;    :icon 130
     (ifn pars
          (float-semitones (get-cil vps))
       (float-semitones (get-cil vps :approx (car pars)))))
 
 (defmethod cil_vps ((vps arl) &rest pars)
-;(om::defmethod! cil_vps ((vps arl) &rest pars)
-;  :icon 130
   (ifn pars
        (get-cil vps)
     (get-cil vps :approx (car pars))))
 
 (defmethod cils_vps ((vps arl) &rest pars)
-;(om::defmethod! cils_vps ((vps arl) &rest pars)
-;  :icon 130
   (ifn pars
        (float-semitones (get-cil vps))
     (float-semitones (get-cil vps :approx (car pars)))))
 
 (defmethod cil_vps ((vps t) &rest pars)
-;(om::defmethod! cil_vps ((vps t) &rest pars)
-;  :icon 130
   (declare (ignore pars))
   ())
 ; TO ALLOW FOR EMPTY STRUCTURE: RETURN NIL IF THE DATA IS NOT GOOD
 ;  (error "CAN USE cil_vps WITH ONE OF THE 7 CLASSES OF VPS ONLY : ~a" vps))
 
 (defmethod cils_vps ((vps t) &rest pars)
-;(om::defmethod! cils_vps ((vps t) &rest pars)
-;  :icon 130
   (declare (ignore pars))
   ())
 ; TO ALLOW FOR EMPTY STRUCTURE: RETURN NIL IF THE DATA IS NOT GOOD
@@ -688,8 +668,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod ail_vps ((vps spl) &rest pars)
-;(om::defmethod! ail_vps ((vps spl) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "WANNA A REFERENCE"))
   (let ((ref (car pars))
@@ -714,8 +692,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod ail_vps ((vps rpl) &rest pars)
-;(om::defmethod! ail_vps ((vps rpl) &rest pars)
-;  :icon 130
   (when (null (cdr pars)) &optional reference
     (error "WANNA A REFERENCE AND AN OCTAVE NUMBER"))
   (let ((ref (car pars))
@@ -743,8 +719,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod ail_vps ((vps cil) &rest pars)
-;(om::defmethod! ail_vps ((vps cil) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "WANNA A REFERENCE"))
   (let ((ref (car pars))
@@ -770,8 +744,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod ail_vps ((vps ail) &rest pars)
-;(om::defmethod! ail_vps ((vps ail) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "WANNA A REFERENCE"))
   (let ((ref (car pars))
@@ -796,8 +768,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod ail_vps ((vps fql) &rest pars)
-;(om::defmethod! ail_vps ((vps fql) &rest pars)
-;  :icon 130
   (when (null (cdr pars))
     (error "WITHOUT A REFERENCE AND MAX-NN OR THRESHOLD AS ARGUMENTS I DON'T WORK!"))
   (let ((ref (car pars))
@@ -859,8 +829,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod ail_vps ((vps crl) &rest pars)
-;(om::defmethod! ail_vps ((vps crl) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "WANNA A REFERENCE"))
   (let ((ref (car pars))
@@ -880,8 +848,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod ail_vps ((vps arl) &rest pars)
-;(om::defmethod! ail_vps ((vps arl) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "WANNA A REFERENCE"))
   (let ((ref (car pars))
@@ -901,8 +867,6 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod ail_vps ((vps t) &rest pars)
-;(om::defmethod! ail_vps ((vps t) &rest pars)
-;  :icon 130
   (declare (ignore pars))
   ())
 ; TO ALLOW FOR EMPTY STRUCTURE: RETURN NIL IF THE DATA IS NOT GOOD
@@ -930,35 +894,25 @@ pch-class    *  *    *    *     *      *          \
 ;   ARL: (fql_vps arl)
 
 (defmethod fql_vps ((vps vps) &rest pars)
-;(om::defmethod! fql_vps ((vps vps) &rest pars)
-;  :icon 130
   (declare (ignore pars))
   (get-fql vps))
 
 (defmethod fql_vps ((vps rpl) &rest pars)
-;(om::defmethod! fql_vps ((vps rpl) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "HOW CAN I FO MY JOB IF YOU DON'T GIVE ME THE OCTAVE NUMBER?"))
          (get-fql vps :octave (car pars)))
 
 (defmethod fql_vps ((vps cil) &rest pars)
-;(om::defmethod! fql_vps ((vps cil) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "GIVE ME THE REFERENCE, PLEASE"))
          (get-fql vps :reference (car pars)))
 
 (defmethod fql_vps ((vps crl) &rest pars)
-;(om::defmethod! fql_vps ((vps crl) &rest pars)
-;  :icon 130
   (when (null pars)
     (error "GIVE ME THE REFERENCE, PLEASE"))
          (get-fql vps :reference (car pars)))
 
 (defmethod fql_vps ((vps t) &rest pars)
-;(om::defmethod! fql_vps ((vps t) &rest pars)
-;  :icon 130
   (declare (ignore pars))
 ;  (print (format () "This is not a valid fql, sir! ~a" vps))
   ())
@@ -981,12 +935,9 @@ pch-class    *  *    *    *     *      *          \
 ;   ARL: (rcl_vps arl)
 
 (defmethod crl_vps ((vps vps))
-;(om::defmethod! crl_vps ((vps vps))
-;  :icon 130
   (get-crl vps))
 
 (defmethod crl_vps ((vps t))
-;(om::defmethod! crl_vps ((vps t))
   ())
 ; TO ALLOW FOR EMPTY STRUCTURE: RETURN NIL IF THE DATA IS NOT GOOD
 ;  (error "CAN USE spl_vps WITH ONE OF THE 7 CLASSES OF VPS ONLY : ~a" vps))
@@ -1006,19 +957,15 @@ pch-class    *  *    *    *     *      *          \
 ;   ARL: (arl_vps arl)
 
 (defmethod arl_vps ((vps vps) ref &rest pars)
-;(om::defmethod! arl_vps ((vps vps) ref &rest pars)
-;  :icon 130
   (declare (ignore pars))
   (get-arl vps :reference ref))
 
 (defmethod arl_vps ((vps rpl) ref &rest pars)
-;(om::defmethod! arl_vps ((vps rpl) ref &rest pars)
   (when (null pars)
     (error "HOW CAN I FO MY JOB IF YOU DON'T GIVE ME THE OCTAVE NUMBER?"))
          (get-arl vps :octave (car pars) :reference ref))
 
 (defmethod arl_vps ((vps t) ref &rest pars)
-;(om::defmethod! arl_vps ((vps t) ref &rest pars)
   (declare (ignore pars ref))
   ())
 ; TO ALLOW FOR EMPTY STRUCTURE: RETURN NIL IF THE DATA IS NOT GOOD
@@ -1036,8 +983,6 @@ pch-class    *  *    *    *     *      *          \
 ; (nn_vps vps)
 ;  Return the Number of Notes of a VPS
 (defmethod nn_vps ((vps vps))
-;(om::defmethod! nn_vps ((vps vps))
-;  :icon 130
   (number-of-notes vps))
 
 
@@ -1045,12 +990,9 @@ pch-class    *  *    *    *     *      *          \
 ; (gils_vps vps)
 ;  Return the Global Interval List in a symbolic or semitonal notation
 (defmethod gil_vps ((vps vps))
-;(om::defmethod! gil_vps ((vps vps))
-;    :icon 130
     (get-gil vps))
+
 (defmethod gils_vps ((vps vps))
-;(om::defmethod! gils_vps ((vps vps))
-;    :icon 130 
     (mapcar #'float (get-gil vps :midi t)))
 
 
@@ -1058,13 +1000,9 @@ pch-class    *  *    *    *     *      *          \
 ; (surf-s_vps vps)
 ;  Return the Surface of a VPS as an interval or in semitones
 (defmethod surf_vps ((vps vps))
-;(om::defmethod! surf_vps ((vps vps))
-;    :icon 130
     (get-surface vps))
 
 (defmethod surf-s_vps ((vps vps))
-;(om::defmethod! surf-s_vps ((vps vps))
-;    :icon 130
     (float (get-surface vps :midi t)))
 
 
@@ -1072,9 +1010,7 @@ pch-class    *  *    *    *     *      *          \
 ;  Return the Density of a VPS
 ;  A density of 1.0 = a cluster of semitones, of 2.0 = 1/4 tones,...
 (defmethod dens_vps ((vps vps))
-;(om::defmethod! dens_vps ((vps vps))
-;    :icon 130
-    (float (get-density vps)))
+  (float (get-density vps)))
 
 
 ; (hom_vps vps)
@@ -1087,37 +1023,28 @@ pch-class    *  *    *    *     *      *          \
 ;      hom-e: a list of of two symbolic intervals
 ;      hom-es: a list of two intervals in semitones
 (defmethod hom_vps ((vps vps))
-;(om::defmethod! hom_vps ((vps vps))
-;  :icon 130
   (get-homogeneity vps))
+
 (defmethod hom-s_vps ((vps vps))
-;(om::defmethod! hom-s_vps ((vps vps))
-;  :icon 130
   (float (get-homogeneity vps :midi t)))
+
 (defmethod hom-e_vps ((vps vps))
-;(om::defmethod! hom-e_vps ((vps vps))
-;  :icon 130
   (get-homogeneity vps :expanded t))
+
 (defmethod hom-es_vps ((vps vps))
-;(om::defmethod! hom-es_vps ((vps vps))
-;  :icon 130
   (mapcar #'float (get-homogeneity vps :midi t :expanded t)))
 
 
 ; (sd_vps vps)
 ;  Return the Standard Deviation of a VPS (minimum 4 items)
 (defmethod sd_vps ((vps vps))
-;(om::defmethod! sd_vps ((vps vps))
-;    :icon 130
-    (get-sd vps))
+  (get-sd vps))
 
 ; (cs_vps vps [S-Space])
 ;  Return the Coefficient of Stability of a VPS
 ;  Take the values of the constant *STABILITY-SPACE* if second argument is nil
 (defmethod cs_vps ((vps vps) &optional ss)
-;(om::defmethod! cs_vps ((vps vps) &optional ss)
-;    :icon 130
-    (get-cs vps :space ss))
+  (get-cs vps :space ss))
 
 
 ;----------------------------------------------------------------------------
@@ -1126,42 +1053,36 @@ pch-class    *  *    *    *     *      *          \
 ;  If f0 is missing, take the first if FQL or the one on ARL
 ;  Does not work for RPL, CIL and CRL which must be converted into another VPS
 (defmethod harm_vps ((vps vps) &optional f0)
-;(om::defmethod! harm_vps ((vps vps) &optional f0)
-;  :icon 130
   (if f0
     (float (get-harmonicity vps :f0 f0))
     (float (get-harmonicity vps))))
 
 (defmethod harm_vps ((vps rpl) &optional f0)
-;(om::defmethod! harm_vps ((vps rpl) &optional f0)
   (declare (ignore f0))
   (error "CANNOT ACCEPT A RPL, SIR. WANNA ANOTHER VPS: ~a" vps))
+
 (defmethod harm_vps ((vps cil) &optional f0)
-;(om::defmethod! harm_vps ((vps cil) &optional f0)
   (declare (ignore f0))
   (error "CANNOT ACCEPT A CIL, SIR. WANNA ANOTHER VPS: ~a" vps))
+
 (defmethod harm_vps ((vps crl) &optional f0)
-;(om::defmethod! harm_vps ((vps crl) &optional f0)
   (declare (ignore f0))
   (error "CANNOT ACCEPT A CRL, SIR. WANNA ANOTHER VPS: ~a" vps))
 
 (defmethod harm-e_vps ((vps vps) &optional f0)
-;(om::defmethod! harm-e_vps ((vps vps) &optional f0)
-;  :icon 130
   (if f0
     (mapcar #'float (get-harmonicity vps :f0 f0 :expanded t))
     (mapcar #'float (get-harmonicity vps :expanded t))))
 
 (defmethod harm-e_vps ((vps rpl) &optional f0)
-;(om::defmethod! harm-e_vps ((vps rpl) &optional f0)
   (declare (ignore f0))
   (error "CANNOT ACCEPT A RPL, SIR. WANNA ANOTHER VPS: ~a" vps))
+
 (defmethod harm-e_vps ((vps cil) &optional f0)
-;(om::defmethod! harm-e_vps ((vps cil) &optional f0)
   (declare (ignore f0))
   (error "CANNOT ACCEPT A CIL, SIR. WANNA ANOTHER VPS: ~a" vps))
+
 (defmethod harm-e_vps ((vps crl) &optional f0)
-;(om::defmethod! harm-e_vps ((vps crl) &optional f0)
   (declare (ignore f0))
   (error "CANNOT ACCEPT A CRL, SIR. WANNA ANOTHER VPS: ~a" vps))
 
@@ -1171,22 +1092,19 @@ pch-class    *  *    *    *     *      *          \
 ;  Return the Virtual Fundamental of a VPS
 ;  Does not work for RPL, CIL and CRL which must be converted into another VPS
 (defmethod vf0_vps ((vps vps) &optional grid)
-;(om::defmethod! vf0_vps ((vps vps) &optional grid)
-;  :icon 130
   (if grid
     (get-virt-fund vps :grid-ratio grid)
     (get-virt-fund vps)))
 
 (defmethod vf0_vps ((vps rpl) &optional f0)
-;(om::defmethod! vf0_vps ((vps rpl) &optional f0)
   (declare (ignore f0))
   (error "CANNOT ACCEPT A RPL, SIR. WANNA ANOTHER VPS: ~a" vps))
+
 (defmethod vf0_vps ((vps cil) &optional f0)
-;(om::defmethod! vf0_vps ((vps cil) &optional f0)
   (declare (ignore f0))
   (error "CANNOT ACCEPT A CIL, SIR. WANNA ANOTHER VPS: ~a" vps))
+
 (defmethod vf0_vps ((vps crl) &optional f0)
-;(om::defmethod! vf0_vps ((vps crl) &optional f0)
   (declare (ignore f0))
   (error "CANNOT ACCEPT A CRL, SIR. WANNA ANOTHER VPS: ~a" vps))
 
@@ -1251,8 +1169,6 @@ pch-class    *  *    *    *     *      *          \
 ;	(spsht 440 '(2 3.3 5.1 7) 2.5 0.01)
 
 (defmethod spsht_vps (f0 np sh st &rest ran)
-;(om::defmethod! spsht_vps (f0 np sh st &rest ran)
-;  :icon 130
   (let ((ran (ifn ran 0.0 (car ran))))
     (make_vps (spsht (pch->fq f0) np sh st ran))))
 
@@ -1267,8 +1183,6 @@ pch-class    *  *    *    *     *      *          \
 ; Ex: (spl_vps (anch-xpose_vps (make_vps '("DO4" "MI4" "SOL4") "FAd3"))
 
 (defmethod xpose_vps ((vps spl) beg-pch)
-;(om::defmethod! xpose_vps ((vps spl) beg-pch)
-;  :icon 130 
   (unless (pitch-with-octave-p beg-pch)
     (if (pitch-without-octave-p beg-pch)
       (error "~%SORRY, BUT I NEED AN OCTAVE WITH YOUR PITCH, Sir ~a~%"
@@ -1279,20 +1193,16 @@ pch-class    *  *    *    *     *      *          \
     (make_vps (itvl->pch cil beg-pch))))
    
 (defmethod xpose_vps ((l-vps list) beg-pch)
-;(om::defmethod! xpose_vps ((l-vps list) beg-pch)
   (loop for vps in l-vps
         collect (xpose_vps vps beg-pch)))
    
 (defmethod xpose_vps ((vps t) beg-pch)
-;(om::defmethod! xpose_vps ((vps t) beg-pch)
   (declare (ignore beg-pch))
   (error "~%~%FOR THE TIME BEING, I CAN ONLY WORK IF YOU GIVE ME AN SPL, MILORD
     WHY DID YOU GIVE ME THIS? ~%~a~%" vps))
 
 
 (defmethod xpose-end_vps ((vps spl) end-pch)
-;(om::defmethod! xpose-end_vps ((vps spl) end-pch)
-;  :icon 130
   (unless (pitch-with-octave-p end-pch)
     (if (pitch-without-octave-p end-pch)
       (error "~%SORRY, BUT I NEED AN OCTAVE WITH YOUR PITCH, Sir ~a~%"
@@ -1304,12 +1214,10 @@ pch-class    *  *    *    *     *      *          \
     (transpose vps itvl)))
    
 (defmethod xpose-end_vps ((l-vps list) end-pch)
-;(om::defmethod! xpose-end_vps ((l-vps list) end-pch)
   (loop for vps in l-vps
         collect (xpose-end_vps vps end-pch)))
    
 (defmethod xpose-end_vps ((vps t) end-pch)
-;(om::defmethod! xpose-end_vps ((vps t) end-pch)
   (declare (ignore end-pch))
   (error "~%~%FOR THE TIME BEING, I CAN ONLY WORK IF YOU GIVE ME AN SPL, MILORD
     WHY DID YOU GIVE ME THIS? ~%~a~%" vps))
@@ -1381,9 +1289,9 @@ pch-class    *  *    *    *     *      *          \
 
 (defmethod type-of_vps (list &optional reference)
   " Automatically finds one of the 7 VPS classes of the input argument.
-  Return nil if no match is found.
+    Return nil if no match is found.
   For PPL's, internal structure, it does not work"
-    (cond
+  (cond
      ((not (consp list)) (format nil "WANNA A LIST, SIR! ~a" list))
      ((and reference
            (interval-p (car list)))

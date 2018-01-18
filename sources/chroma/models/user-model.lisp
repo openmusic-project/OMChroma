@@ -1,3 +1,23 @@
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+;=====================================================
 
 ;---------------------------------------------------------------;
 ;****** USER-DEFINED FUNCTIONS FOR MODIFYING MODELS ************;
@@ -6,7 +26,7 @@
 ; transpose-fql
 
 ;---------------------------------------------------------------;
-(in-package chroma)
+(in-package :chroma)
 
 #|
     ;Template for modifications
@@ -78,35 +98,3 @@ OR
             do (setf wanted (/ wanted 2.0)))
       (/ wanted ref)))))
 
-;---------------------------------------------------------------;
-; TIME FUNCTIONS
-(in-package :om)
-
-#|
-(defmethod! remove-segments (lsegs ltimess &key :lvps lvps :epsilon (epsilon 0.001))
-            :indoc '("List of time segments" "List of time values" ":vps List of fql's" ":epsilon Minimum time resolution")
-            :doc "Remove the time segment(s)  that correspond to the given time values.
-If a list of vps's is also given, remove the corresponding vps as well.
-The match is done within the precision of an epsilon [0.001sec] of the given value."
-            :icon 2002
-            (let ((ltim ltimes)
-                  (result))
-              (if lvps
-                  'done
-                  (loop for seg in lsegs do
-                        (when (within? (setf ltim (nextl! ltim)) seg)
-                          (push seg result))))
-              result))
-|#
-;(remove-segments '((0 1) (1 2) (3 4) (5 6)) '(0.5 2.5 5))
-
-(defun within? (val segment epsilon)
-  (and (>= val (- (car segment) epsilon)) (<= val (+ (cadr segment) epsilon))))
-
-; (within? 5.01 '(3.0 5.0) 0.01)
-;---------------------------------------------------------------;
-; MIXED FUNCTIONS
-
-;---------------------------------------------------------------;
-; 
-;***************************************************************;

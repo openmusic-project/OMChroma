@@ -1,10 +1,30 @@
-;VPS SUPERCLASSES
-;;;;;;;;;
-(in-package chroma)
-        
-;;;;;;;;;
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa
+;=====================================================
 
-(om::defclass! VS ()
+; VPS SUPERCLASSES
+
+(in-package :cr)
+        
+(defclass VS ()
   ((the-list :type list 
              :initform nil
              :initarg :the-list 
@@ -36,7 +56,7 @@
 
         
 ;;;;;;;;;
-(om::defclass! VPS 
+(defclass VPS 
   (VS)
   ((fql :initform nil
         ;:initarg :fql
@@ -46,12 +66,11 @@
    ;           :initarg :reference
    ;           :accessor reference)
    (diapason :initform (get-gbl DIAPASON) :accessor diapason))
-  (:icon 660)
   (:documentation "Vertical Pitch Structure" ))
 
 ;; mixin class for AIL and ARL
-(om::defclass! anchored-vps ()
-               ((reference :initform nil :initarg :reference :accessor reference)))
+(defclass anchored-vps ()
+  ((reference :initform nil :initarg :reference :accessor reference)))
 
 (defmethod reorder-vps ((x vps)) 
   (error (concatenate 'string 
@@ -83,92 +102,63 @@
   )
 
 (defmethod get-fql ((x t) &key &allow-other-keys)
-;(om::defmethod! get-fql ((x t)&key &allow-other-keys)
-;  :icon 130
   ())
 ;to allow empty fql in models (get-fql nil) -> nil
 
 (defmethod get-fql ((x vps) &key &allow-other-keys)
-;(om::defmethod! get-fql ((x vps) &key &allow-other-keys)
-; :icon 130
  (fql x))
 
 (defmethod get-rpl ((x vps) &key reference )
-;(om::defmethod! get-rpl ((x vps) &key reference )
-;  :icon 130
   (get-rpl (make-instance 'spl :the-list (get-spl x :reference reference ))))
 
 (defmethod get-cil ((x vps) &key )
-;(om::defmethod! get-cil ((x vps) &key )
-;   :icon 130
-(get-cil (make-instance 'spl :the-list (get-spl x :reference 'la4 :octave 2))))
+  (get-cil (make-instance 'spl :the-list (get-spl x :reference 'la4 :octave 2))))
 
 (defmethod get-crl ((x vps))
-;(om::defmethod! get-crl ((x vps))
-;  :icon 130
   (fq->ratio (fql x)))
 
 (defmethod get-arl ((x vps) &key reference)
   (freqs-to-arl (fql x) (pch->fq reference)))
 
 (defmethod note-list ((x vps) &key reference)                
-;(om::defmethod! note-list ((x vps) &key reference)                
-;  :icon 130
   " note-list "
   (note-list(make-instance 'spl :the-list
                            (get-spl x :octave 2 :reference reference))))
 
 (defmethod get-gil ((x vps) &key (midi ()))
-;(om::defmethod! get-gil ((x vps) &key (midi ()))
-;  :icon 130
   (get-gil (make-instance 'spl :the-list (get-spl x :octave 2 :reference 'la4))
           :midi midi))
 
 (defmethod get-surface ((x vps) &key (midi ()))
-;(om::defmethod! get-surface ((x vps) &key (midi ()))
-;  :icon 130
   (get-surface
    (make-instance 'spl :the-list
                   (get-spl x :octave 2 :reference 'la4)) :midi midi))
 
 (defmethod get-density ((x vps))
-;(om::defmethod! get-density ((x vps))
-;  :icon 130
   (get-density
    (make-instance 'spl :the-list (get-spl x :octave 2 :reference 'la4))))
 
 (defmethod get-homogeneity ((x vps) &key (expanded ()) (midi ()))
-;(om::defmethod! get-homogeneity ((x vps)&key (expanded ())(midi ()))
-;  :icon 130
   (get-homogeneity
    (make-instance 'spl :the-list (get-spl x :octave 2 :reference 'la4))
    :midi midi :expanded expanded))
 
 (defmethod get-sd ((x vps))
-;(om::defmethod! get-sd ((x vps))
-;  :icon 130
   (get-sd (make-instance 'spl :the-list (get-spl x :octave 2 :reference 'la4))))
 
 (defmethod get-cs ((x vps) &key (space ()))
-;(om::defmethod! get-cs ((x vps) &key (space ()))
-;  :icon 130
   (get-cs
    (make-instance 'spl :the-list (get-spl x :octave 2 :reference 'la4))
    :space space))
 
 (defmethod get-harmonicity ((x vps) &key octave reference  (f0 ())
                                     (expanded ()))
-;(om::defmethod! get-harmonicity ((x vps) &key octave reference  (f0 ())
-;                                    (expanded ()))
-;  :icon 130
   (get-harmonicity
    (make-instance 'fql :the-list (get-fql x :octave octave
                                           :reference reference))
    :f0 f0 :expanded expanded))
 
 (defmethod get-virt-fund ((x vps) &key octave reference  (grid-ratio 0.001))
-;(om::defmethod! get-virt-fund ((x vps) &key octave reference  (grid-ratio 0.001))
-;  :icon 130
   (get-virt-fund
    (make-instance 'fql :the-list (get-fql x :octave octave
                                           :reference reference))
@@ -195,7 +185,6 @@
   (print_vs (make_vps x)))
 
 (defmethod number-of-notes ((x vps))
-;  :icon 130
   "Number of Notes in a VPS"
   (length (the-list x)))
 
@@ -210,3 +199,4 @@
 (defmethod get-min-bw ((x t)) nil)
 (defmethod the-list ((x t)) nil)
 (defmethod amplitudes ((x t)) nil)
+

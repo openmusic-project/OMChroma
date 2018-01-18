@@ -1,6 +1,29 @@
-(in-package chroma)
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa
+;=====================================================
 
-(om::defclass! SPECTRUM
+
+(in-package :cr)
+
+(defclass SPECTRUM
   (VPS)
   ((amplitudes :initform nil
                :initarg :amplitudes
@@ -15,7 +38,6 @@
         :reader get-bw
         :documentation "List of Bandwidths"))
   (:documentation "Spectrum" )
-  (:icon 660)
   )
 
 
@@ -96,7 +118,6 @@
                       :reference reference :approx approx
                       :threshold threshold :max-nn max-nn))))
 (defmethod get-cil ((x spectrum) &key  approx (max-nn *MAX-NN*) threshold)
-;(om::defmethod! get-cil ((x spectrum) &key  approx (max-nn *MAX-NN*) threshold)
   (get-cil (make-instance 'spl
              :the-list (get-spl x :reference 'la4 :approx approx
                                 :threshold threshold :max-nn max-nn))))
@@ -142,12 +163,12 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;5
-(om::defclass! FQL 
+;;;;;;;;5
+
+(defclass FQL 
   (SPECTRUM)
   ()
   (:documentation "Frequencies List" )
-  (:icon 621)
   )
 
 (defmethod set-freq-list ((x fql))
@@ -170,15 +191,12 @@
 
 (defmethod get-harmonicity ((x fql) &key (f0 ()) (expanded nil)
                                &allow-other-keys)
-;(om::defmethod! get-harmonicity ((x fql) &key (f0 ()) (expanded nil)
-;                               &allow-other-keys)
   (if(null f0)(setf f0 (car (copy-list (fql x)))))
   (let ((result (mapcar #'(lambda (y) (harm-dist-f (pch->fq f0) y)) (fql x))))
     (if expanded result
         (/ (apply #'+ result) (length result)))))
 
 (defmethod get-virt-fund ((x fql) &key (grid-ratio .001)  &allow-other-keys)
-;(om::defmethod! get-virt-fund ((x fql) &key (grid-ratio .001)  &allow-other-keys)
   (fond-virt-f (fql x) grid-ratio))
 
 (defmethod print_vs ((x fql))
@@ -194,9 +212,9 @@
 
 
   ;;;;;;;;6
-(om::defclass! CRL (SPECTRUM) ()
-               (:documentation "Contiguous Ratios List" )
-               (:icon 622))
+(defclass CRL (SPECTRUM) ()
+  (:documentation "Contiguous Ratios List" )
+  )
 
 (defmethod initialize-instance :after ((x crl) &rest initargs)
   (declare (ignore initargs))
@@ -213,24 +231,19 @@
 
 (defmethod get-spl :before ((x crl) &key reference approx
                               (max-nn *MAX-NN*) threshold &allow-other-keys)
-;(om::defmethod! get-spl :before ((x crl) &key reference approx
-;                              (max-nn *MAX-NN*) threshold &allow-other-keys)
 (declare (ignore approx max-nn  threshold))
   (get-fql x :reference reference))
 
 (defmethod get-fql :before ((x crl) &key (reference 100))
-;(om::defmethod! get-fql :before ((x crl) &key (reference 100))
   (setf (fql x) (ratio->fq (the-list x) (pch->fq reference))))
 
 (defmethod get-ail ((x crl) &key reference approx (max-nn *MAX-NN*) threshold &allow-other-keys)
-;(om::defmethod! get-ail ((x crl) &key reference approx (max-nn *MAX-NN*) threshold &allow-other-keys)
   (get-ail (make-instance 'spl
                           :the-list (get-spl x :reference reference :approx approx
                                              :threshold threshold :max-nn max-nn))
            :reference reference))
 
 (defmethod get-arl ((x crl) &key reference)
-;(om::defmethod! get-arl ((x crl) &key reference)
   (freqs-to-arl (get-fql x :reference reference) (pch->fq reference)))
 
 (defmethod number-of-notes ((x crl))
@@ -240,11 +253,9 @@
 
 ;;;;;;;;7
 
-(om::defclass! ARL 
-  (anchored-vps SPECTRUM)
+(defclass ARL (anchored-vps SPECTRUM)
   ((reference :initform 100.0 :initarg :reference :accessor reference))
-  (:documentation "Anchored Ratios List (Spectrum)")
- (:icon 623))
+  (:documentation "Anchored Ratios List (Spectrum)"))
 
 (defmethod initialize-instance :after ((x arl) &rest initargs)
   (declare (ignore initargs))
@@ -261,8 +272,6 @@
   (setf (fql x)(arl-to-freq(the-list x)(pch->fq(reference x)))))
 
 (defmethod get-spl :before ((x arl) &key approx &allow-other-keys)
-;(om::defmethod*? get-spl :before ((x arl) &key approx &allow-other-keys)
-;(om::defmethod! get-spl :before ((x arl) &key approx &allow-other-keys)
   (get-fql x :approx approx))
 
 (defmethod print_vs ((x arl))
@@ -276,7 +285,7 @@
 ;;;;;;;;8
 
 ;vps-spectrum-fql extension for partials model
-(om::defclass! PTL 
+(defclass PTL 
   (FQL)  
   ((duration :initform 0
              :initarg :duration
@@ -309,7 +318,6 @@
              :type list
              :documentation "List of amplitude scaler functions (max amp in the fql) (not normalised)"))
   (:documentation "FQL EXTENSION" )
-  (:icon 661)
   )
 
 

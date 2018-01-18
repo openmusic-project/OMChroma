@@ -1,4 +1,26 @@
-(in-package chroma)
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa
+;=====================================================
+
+(in-package :cr)
 
 ;---------------------------------------------------------------------------------
 ; (match SPL1 SPL2 :tolerance :step :notes)
@@ -52,8 +74,6 @@
 |#
 
 (defmethod match ((x spl) (y spl) &key (tolerance 50) (step 100))
-;(om::defmethod! match ((x spl) (y spl) &key (tolerance 50) (step 100))
-;  :icon 130
   (let* (result
          (x-low (first (get-spl x)))
          (x-high (car(last (get-spl x))))
@@ -84,23 +104,20 @@
                           (push p2 match-list)
                           (return)))))
   (list nmatch (list y (reverse match-list)))))
-;---------------------------------------------------------------------------------
 
+;---------------------------------------------------------------------------------
+; Returns a list of VPS that can be used in a data base
+; :matches: wanted matching pitches
+;           nil = only the best match
+;           number = only the "number" matching pitches (0 = no matching pitches)
+;REMARK: to have all the matches, use "merge"
 (defmethod match_vps ((x spl) (y spl) &key (matches ()) (tolerance 50) (step 100))
-;(om::defmethod! match_vps ((x spl) (y spl) &key (matches ()) (tolerance 50) (step 100))
-;  :icon 130
-  ; Returns a list of VPS that can be used in a data base
-  ; :matches: wanted matching pitches
-  ;           nil = only the best match
-  ;           number = only the "number" matching pitches (0 = no matching pitches)
-  ;REMARK: to have all the matches, use "merge"
   (let ((result (match x y :tolerance tolerance :step step)))
     (if matches
       (cdar (member matches result :test #'= :key #'car))
       (cdr (first result)))))
 
 (defmethod match_vps ((x vps) (y vps) &key &allow-other-keys)
-;(om::defmethod! match_vps ((x vps) (y vps) &key &allow-other-keys)
   (error "YOU MUST GIVE ME TWO SPL'S. I CANNOT CONVERT THEM ALONE!
 ARG1: ~a
 ARG2: ~a" x y))

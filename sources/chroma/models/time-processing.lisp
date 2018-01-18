@@ -1,10 +1,30 @@
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+;=====================================================
 
 ;---------------------------------------------------------------;
 ;****** USER-DEFINED FUNCTIONS FOR MODIFYING MODELS' ***********;
 ;****** TEMPORAL DATA ******************************************;
 ;---------------------------------------------------------------;
 
-(in-package :om)
+(in-package :cr)
 
 ; AVAILABLE TIME FUNCTIONS (alphabetical list)
 ; durs->onsets
@@ -32,16 +52,16 @@
 
 ;---------------------------------------------------------------;
 ; TIME FUNCTIONS
-(defmethod! remove-segments ((lsegs list) (ltimes list) epsilon &optional lvps)
-            :indoc '("List of time segments" "List of time values" "Minimum time resolution" "Optional list")
-            :initvals '('((0 1) (1 1.4) (2 2.1)) '(1.2 2) 0.001 '(a b c)) 
-            :numouts 2
-            :doc "Remove the time segment(s) that correspond to the given time values.
-If the segments are single markers, they are converted into adjacent time segments,
-before applying remove-segments.
-If a list of vps's is also given, remove the corresponding vps as well.
-The match is done within the precision of an epsilon [0.001sec] of the given value."
-            :icon 2002
+(defmethod remove-segments ((lsegs list) (ltimes list) epsilon &optional lvps)
+  ;:indoc '("List of time segments" "List of time values" "Minimum time resolution" "Optional list")
+  ;:initvals '('((0 1) (1 1.4) (2 2.1)) '(1.2 2) 0.001 '(a b c)) 
+  ;:numouts 2
+  ;:doc "Remove the time segment(s) that correspond to the given time values.
+;If the segments are single markers, they are converted into adjacent time segments,
+;before applying remove-segments.
+;If a list of vps's is also given, remove the corresponding vps as well.
+;The match is done within the precision of an epsilon [0.001sec] of the given value."
+  ;:icon 2002
 
             (let ((lsegs (if (listp (car lsegs)) lsegs (onsets->timestruct lsegs))))
               (if lvps
@@ -94,14 +114,13 @@ The match is done within the precision of an epsilon [0.001sec] of the given val
 
 ;---------------------------------------------------------------;
 ; MINIMUM DURATION
-(defmethod! min-dur ((ltimes list) mindur &optional lvps)
-            :indoc '("List of durations or time segments" "Minimum duration (use chroma's global value as default)" "List of vps")
-            :initvals '('(0 1 1.05) 0.1 '(a b c)) 
-            :numouts 2
-            :doc "Remove the duration(s) or time segment(s) that are shorter than the minimum duration.
-If a list of vps's is also given, remove the corresponding vps as well. If mindur is nil, do nothing.
-"
-            :icon 2002
+(defmethod min-dur ((ltimes list) mindur &optional lvps)
+  ;:indoc '("List of durations or time segments" "Minimum duration (use chroma's global value as default)" "List of vps")
+  ;:initvals '('(0 1 1.05) 0.1 '(a b c)) 
+  ;:numouts 2
+  ;:doc "Remove the duration(s) or time segment(s) that are shorter than the minimum duration.
+  ;If a list of vps's is also given, remove the corresponding vps as well. If mindur is nil, do nothing."
+  :icon 2002
             (if mindur
               (let ((ltim ltimes))
                 (if lvps
@@ -126,43 +145,42 @@ If a list of vps's is also given, remove the corresponding vps as well. If mindu
 
 ;---------------------------------------------------------------;
 ;ms_1205
-(defmethod! temporal-pivot ((ltimes list) (nth number) (tp number))
-            :indoc '("List of times or time segments" "Nth el in list" "Temporal pivot for that element")
-            :initvals '('((0 1) (1 1.4) (2 2.1)) 2 10.0) 
-            :numouts 1
-            :doc "Place the nth element of a list of times to tp Place the other vals around."
-            :icon 2002
-
-              (let* ((ref-time (nth nth ltimes))
-                     (time (if (listp ref-time) (car ref-time) ref-time))
-                     (tp (- tp time)))
-                (om+ tp ltimes)))
+(defmethod temporal-pivot ((ltimes list) (nth number) (tp number))
+  ;:indoc '("List of times or time segments" "Nth el in list" "Temporal pivot for that element")
+  ;:initvals '('((0 1) (1 1.4) (2 2.1)) 2 10.0) 
+  ;:numouts 1
+  ;:doc "Place the nth element of a list of times to tp Place the other vals around."
+  ;:icon 2002
+  (let* ((ref-time (nth nth ltimes))
+         (time (if (listp ref-time) (car ref-time) ref-time))
+         (tp (- tp time)))
+    (om+ tp ltimes)))
 
 ;(temporal-pivot '((0 0.4) (1.1 1.8) (2.2 2.9) (3.3 3.9) (4.5 5.5)) 2 10.0)
 ;(temporal-pivot '(0 1.1 2.2 3.3 4.5) 3 10.0)
 
 ;---------------------------------------------------------------;
 ;ms_1205 (new)
-(defmethod! time-shift ((ltimes list) (offset t) &key (sortflag t))
-            :indoc '("List of times or time segments" "Time offset" ":sortflag Sort flag [t]")
-            :initvals '('((0 1) (1 1.4) (2 2.1)) '(1.2 2)) 
-            :numouts 1
-            :doc "Add the value of offset to all the times or time segments.
-If offset is nil, set the first time to 0.0.
-If offset is a list, use each value of the list as an offset, repeating the last one, if needed.
-If during the stretch times are not increasing, and sortflag is t, reorder the list.
-Negative times are eliminated (with warning message)."
-            :icon 2002
+(defmethod time-shift ((ltimes list) (offset t) &key (sortflag t))
+  ;:indoc '("List of times or time segments" "Time offset" ":sortflag Sort flag [t]")
+  ;:initvals '('((0 1) (1 1.4) (2 2.1)) '(1.2 2)) 
+  ;:numouts 1
+  ;:doc "Add the value of offset to all the times or time segments.
+;If offset is nil, set the first time to 0.0.
+;If offset is a list, use each value of the list as an offset, repeating the last one, if needed.
+;If during the stretch times are not increasing, and sortflag is t, reorder the list.
+;Negative times are eliminated (with warning message)."
+  ;:icon 2002
 
-              (let* ((l (length ltimes))
-                     (loffsets (cond
-                             ((numberp offset) (cr::rept l offset))
-                             ((null offset) (if (listp (car ltimes)) (cr::rept l (- (caar ltimes))) (cr::rept l (- (car ltimes)))))
-                             ((listp offset) (cr::l-val l offset))
-                             (t (om-beep-msg (format () "I cannot understand what you mean with ~a" offset)))))
-                     (result (loop for time in ltimes for offset in loffsets
-                                   collect (om+ offset time))))
-                (if sortflag (sort. result '< (when (listp (car result)) 'car)) result)))
+  (let* ((l (length ltimes))
+         (loffsets (cond
+                    ((numberp offset) (cr::rept l offset))
+                    ((null offset) (if (listp (car ltimes)) (cr::rept l (- (caar ltimes))) (cr::rept l (- (car ltimes)))))
+                    ((listp offset) (cr::l-val l offset))
+                    (t (om-beep-msg (format () "I cannot understand what you mean with ~a" offset)))))
+         (result (loop for time in ltimes for offset in loffsets
+                       collect (om+ offset time))))
+    (if sortflag (sort. result '< (when (listp (car result)) 'car)) result)))
 
 
 ;(time-shift '(1 2.2 3.3 4.4) 0)
@@ -177,25 +195,24 @@ Negative times are eliminated (with warning message)."
 
 ;---------------------------------------------------------------;
 ;ms_1205 (new)
-(defmethod! time-stretch ((ltimes list) stretch &key (exp 1.0) (sortflag t))
-            :indoc '("List of times or time segments" "Stretching value" ":exp Exponent [1]" ":sortflag [t]")
-            :initvals '(((0 1) (1 1.4) (2 2.1)) (1.2 2) 2.0 1.0) 
-            :numouts 1
-            :doc "Multiply all the times or time segments by stretch raised to the exp'th power [default exp = 1.0, no power].
-If stretch is a list, use each value of the list as an offset, repeating the last one, if needed.
-If during the stretch times are not increasing, and sortflag is t, reorder the list.
-Negative times are eliminated (with warning message)."
+(defmethod time-stretch ((ltimes list) stretch &key (exp 1.0) (sortflag t))
+  ;:indoc '("List of times or time segments" "Stretching value" ":exp Exponent [1]" ":sortflag [t]")
+  ;:initvals '(((0 1) (1 1.4) (2 2.1)) (1.2 2) 2.0 1.0) 
+  ;:numouts 1
+  ;:doc "Multiply all the times or time segments by stretch raised to the exp'th power [default exp = 1.0, no power].
+;If stretch is a list, use each value of the list as an offset, repeating the last one, if needed.
+;If during the stretch times are not increasing, and sortflag is t, reorder the list.
+;Negative times are eliminated (with warning message)."
+  ;:icon 2002
 
-            :icon 2002
-
-            (let* ((l (length ltimes))
-                   (lstretches (cond
-                              ((numberp stretch) (cr::rept l stretch))
-                              ((listp stretch) (cr::l-val l stretch))
-                              (t (om-beep-msg (format () "I cannot understand what you mean with ~a" stretch)))))
-                   (result (loop for time in ltimes for stretch in lstretches
-                                 collect (om* (expt stretch exp) time))))
-              (if sortflag (sort. result '< (when (listp (car result)) 'car)) result)))
+  (let* ((l (length ltimes))
+         (lstretches (cond
+                      ((numberp stretch) (cr::rept l stretch))
+                      ((listp stretch) (cr::l-val l stretch))
+                      (t (om-beep-msg (format () "I cannot understand what you mean with ~a" stretch)))))
+         (result (loop for time in ltimes for stretch in lstretches
+                       collect (om* (expt stretch exp) time))))
+    (if sortflag (sort. result '< (when (listp (car result)) 'car)) result)))
 
 ;(time-stretch '(1 2.2 3.3 4.4) 2.0)
 ;(time-stretch '(1 2.2 3.3 4.4) 2.0 :exp 0.8)
@@ -206,23 +223,21 @@ Negative times are eliminated (with warning message)."
 
 ;---------------------------------------------------------------;
 ;ms_1205 (new)
-(defmethod! time-sht ((ltimes list) offset stretch &key (exp 1.0) (sortflag t))
-            :indoc '("List of times or time segments" "Time offset" "Stretching value" "Exponent")
-            :initvals '(((0 1) (1 1.4) (2 2.1)) 0.0 1.0 1.0) 
-            :numouts 1
-            :doc "Apply time-shift to time-stretched values."
-            :icon 2002
+(defmethod time-sht ((ltimes list) offset stretch &key (exp 1.0) (sortflag t))
+  ;:indoc '("List of times or time segments" "Time offset" "Stretching value" "Exponent")
+  ;:initvals '(((0 1) (1 1.4) (2 2.1)) 0.0 1.0 1.0) 
+  ;:numouts 1
+  ;:doc "Apply time-shift to time-stretched values."
+  ;:icon 2002  
+  (time-shift (print (time-stretch ltimes stretch :exp exp :sortflag sortflag)) offset :sortflag sortflag))
 
-            (time-shift (print (time-stretch ltimes stretch :exp exp :sortflag sortflag)) offset :sortflag sortflag))
-
-(defmethod! time-sth ((ltimes list) offset stretch &key (exp 1.0) (sortflag t))
-            :indoc '("List of times or time segments" "Time offset" "Stretching value" "Exponent")
-            :initvals '(((0 1) (1 1.4) (2 2.1)) 0.0 1.0 1.0) 
-            :numouts 1
-            :doc "Apply time-stretch to time-shifted values."
-            :icon 2002
-
-            (time-stretch (time-shift ltimes offset :sortflag sortflag) stretch :exp exp :sortflag sortflag))
+(defmethod time-sth ((ltimes list) offset stretch &key (exp 1.0) (sortflag t))
+  ;:indoc '("List of times or time segments" "Time offset" "Stretching value" "Exponent")
+  ;:initvals '(((0 1) (1 1.4) (2 2.1)) 0.0 1.0 1.0) 
+  ;:numouts 1
+  ;:doc "Apply time-stretch to time-shifted values."
+  ;:icon 2002
+  (time-stretch (time-shift ltimes offset :sortflag sortflag) stretch :exp exp :sortflag sortflag))
 
 ;(time-shift (time-stretch '(0 1 2) 2.0 :exp 1.0) 1.1)
 ;(time-stretch (time-shift '(0 1 2) 1.1) 2.0 :exp 1.0)
@@ -247,12 +262,12 @@ Negative times are eliminated (with warning message)."
 
 ;---------------------------------------------------------------;
 ;OBSOLETE???
-(defmethod! time-map-fun ((markers list) fun &optional (exp 1.0))
-            :indoc '("List of times or time segments" "Stretching bpf or chroma fun" "Exponent")
-            :initvals '(((0 1) (1 1.4) (2 2.1)) 2.0 (simple-bpf-from-list (0 1 2) (0.0 1.0 10.0) bpf 5) 1.0)
-            :numouts 1
-            :doc "Multiply all the times or time segments by the value coming from sampling the table from the beginning to the end."
-            :icon 658
+(defmethod time-map-fun ((markers list) fun &optional (exp 1.0))
+  ;:indoc '("List of times or time segments" "Stretching bpf or chroma fun" "Exponent")
+  ;:initvals '(((0 1) (1 1.4) (2 2.1)) 2.0 (simple-bpf-from-list (0 1 2) (0.0 1.0 10.0) bpf 5) 1.0)
+  ;:numouts 1
+  ;:doc "Multiply all the times or time segments by the value coming from sampling the table from the beginning to the end."
+  ;:icon 658
   (let ((fun2 (copy-list (if (cr::is_fun fun) fun (bpf->fun fun))))
         (markers2 (copy-list markers))
         new-durs)
@@ -264,19 +279,19 @@ Negative times are eliminated (with warning message)."
 
 
 ;ms_1205 (new)
-(defmethod! time-map ((segs list) timefun &key (exp 0.0) (durmin (cr::get-gbl 'cr::durmin)) (durmode t) (sortflag ()) (mapmode 'rel) (apply 'all))
-            :indoc '("List of onsets or time segments [(<beg-onset i> <end-onset i>)]"
-                     "Time map [bpf or chroma fun]"
-                     "Exponent [0.0=linear]" "Minimum allowed duration [0.01]" "Behaviour if too small dur" )
-            :initvals '(((0 0.5) (1 1.5) (2 2.5) (3 3.5) (4 4.5)) (simple-bpf-from-list '(0 1) '(1.0 2.0) 'bpf 5))
-            :numouts 1
-            :doc "Multiply all the times or time segments by the value coming from sampling the timefun
-from the beginning to the end (mapmode=rel), or absolutely (not yet implemented).
-Apply the timemap depending on the value of :apply: 'all (onsets and durations), 'dur (only durations), 'at (only onsets).
-After the mapping, if the duration is too little:
-   if durmode=(), eliminate the segment, and send a warning,
-      otherwise set the segment's dur to durmin and send a warning."
-            :icon 658
+(defmethod time-map ((segs list) timefun &key (exp 0.0) (durmin (cr::get-gbl 'cr::durmin)) (durmode t) (sortflag ()) (mapmode 'rel) (apply 'all))
+  ;:indoc '("List of onsets or time segments [(<beg-onset i> <end-onset i>)]"
+  ;         "Time map [bpf or chroma fun]"
+  ;         "Exponent [0.0=linear]" "Minimum allowed duration [0.01]" "Behaviour if too small dur" )
+  ;:initvals '(((0 0.5) (1 1.5) (2 2.5) (3 3.5) (4 4.5)) (simple-bpf-from-list '(0 1) '(1.0 2.0) 'bpf 5))
+  ;:numouts 1
+  ;:doc "Multiply all the times or time segments by the value coming from sampling the timefun
+;from the beginning to the end (mapmode=rel), or absolutely (not yet implemented).
+;Apply the timemap depending on the value of :apply: 'all (onsets and durations), 'dur (only durations), 'at (only onsets).
+;After the mapping, if the duration is too little:
+;   if durmode=(), eliminate the segment, and send a warning,
+;      otherwise set the segment's dur to durmin and send a warning."
+  ;:icon 658
   (let ((fun2 (copy-list (if (cr::is_fun timefun) timefun (bpf->fun timefun))))
         (segs2 (copy-list (segs->durs segs)))
         (result))
@@ -325,11 +340,10 @@ After the mapping, if the duration is too little:
 ;---------------------------------------------------------------;
 ;ms_1205
 (defmethod onsets->timestruct (lonsets) 
-  :icon '(141)
-  :indoc '("A list of onsets or time segments [(<beg-onset i> <end-onset i>)]")
-  :initvals '('(0 1 2 3))
-  :doc "Generate a list of time segments (<beg-onset i> <end-onset i>).
-"
+ ; :icon '(141)
+ ; :indoc '("A list of onsets or time segments [(<beg-onset i> <end-onset i>)]")
+ ; :initvals '('(0 1 2 3))
+;  :doc "Generate a list of time segments (<beg-onset i> <end-onset i>)."
   (onsetsmrk2seg lonsets))
 ;(onsets->timestruct '(0 1 2 3))
 ;(onsets->timestruct '((0 1) (2 3) (4 5)))
@@ -440,7 +454,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(durs->durstruct '(1 2 3 10))
 
 
-(defmethod! onsets->durstruct (lonsets) 
+(defmethod onsets->durstruct (lonsets) 
             :icon '(141)
             :indoc '("a list of onsets or time segments [(<beg-onset i> <end-onset i>)]")
             :initvals '('(0 1 2 3))
@@ -451,7 +465,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(onsets->durstruct '(0 1 2 3 5))
 ;(onsets->durstruct '((0 1) (2 5) (6 10)))
 
-(defmethod! durs->onsets (ldurs &key (begtime 0.0)) 
+(defmethod durs->onsets (ldurs &key (begtime 0.0)) 
             :icon '(141)
             :indoc '("a list of durations or time segments [(<time i> <dur i>)]" "starting time")
             :initvals '('(0 1 2 3))
@@ -463,7 +477,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(durs->onsets '(1 1 1 1) :begtime 0.1)
 ;(durs->onsets '((0 1) (2 1) (4 1)))
 
-(defmethod! onsets->ioi (time-struct)
+(defmethod onsets->ioi (time-struct)
             :icon '(141)
             :indoc '("lonsets or time structure")
             :initvals '('(0 1 2 3))
@@ -476,7 +490,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(onsets->ioi '((0 1) (2 1) (4 1)))
 ;(onsets->ioi '((0 0.5) (1.1 1.5) (2.0 2.5) (3.3 3.5)))
 
-(defmethod! get-onsets (time-struct)
+(defmethod get-onsets (time-struct)
             :icon '(141)
             :indoc '("lonsets or time structure")
             :initvals '('(0 1 2 3))
@@ -488,7 +502,7 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 ;(get-onsets '(0 1 2 3))
 ;(get-onsets '((0 0.5) (1.1 1.5) (2.2 2.5) (3.3 3.5)))
 
-(defmethod! get-second (time-struct)
+(defmethod get-second (time-struct)
             :icon '(141)
             :indoc '("lonsets or time structure")
             :initvals '('(0 1 2 3))
@@ -522,8 +536,8 @@ into a list of time segments (<onset-beg i> <onset-end i>)."
 
 ;---------------------------------------------------------------;
 ;ms_1205
-(defmethod! durs->segs (ldurs  &key (begtime 0.0) (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
-            :icon '(141)
+(defmethod durs->segs (ldurs  &key (begtime 0.0) (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
+  :icon '(141)
   :indoc '("a list of durations or time segments [(ti duri)]" "initial time (only for ldurs)"
            "factor [0.0]" "operator [+]" "minimum allowed duration [0.01]" "behaviour if too small dur")
   :initvals '('(0 1 2 3) 0.0)
@@ -561,8 +575,8 @@ Negative times are eliminated (with warning message). *** STILL TO DO!"
 ;(durs->segs '(1 1 1 1 1) 0.0 :fact 0.01 :op '* :durmin 0.1)
 
 
-(defmethod! segs->durs (lonsets &key (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
-            :icon '(141)
+(defmethod segs->durs (lonsets &key (fact ()) (op '+) (durmin (cr::get-gbl 'cr::durmin)) (durmode t))
+  :icon '(141)
   :indoc '("a list of onsets or time segments [(<beg-onset i> <end-onset i>)]"
            "factor [0.0]" "operator [+]" "minimum allowed duration" "behaviour if too small dur")
   :initvals '('(0 1 2 3))

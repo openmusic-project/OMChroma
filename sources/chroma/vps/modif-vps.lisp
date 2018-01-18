@@ -1,8 +1,30 @@
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa
+;=====================================================
+
 ; MODIFICATIONS TO VPS'S.
 ; IMPLEMENTED BY SERGE LEMOUTON, IRCAM, APRIL 1997.
 ; MODIFIED AND EXTENDEND BY MARCO STROPPA, MAY 1998.
 
-(in-package chroma)
+(in-package :cr)
 
 ;---------------------------------------------------------------------------------
 ; (revert spl [starting-pitch])
@@ -12,8 +34,6 @@
 ; Ex: (DO3 MI3 SOL4 SIb3 RE4)  ->  (RE3 SIb3 SOL4 MI5 DO6)
 
 (defmethod revert ((x spl) &optional start &key (end nil))
-;(om::defmethod! revert ((x spl) &optional start &key (end nil))
-;  :icon 130
   (let* ((oct (octave (car (sp-list x))))
          (vps (make-instance
                 'spl :the-list
@@ -26,7 +46,6 @@
       vps)))
 
 (defmethod revert ((x vps) &optional start &key (end nil))
-;(om::defmethod! revert ((x vps) &optional start &key (end nil))
   (declare (ignore start end))
   (error "I'M ONLY ACTIVE WITH SPL'S. SORRY: ~a" x))
 
@@ -45,8 +64,6 @@
  REMARK: the intervals of perfect IV and V are to be written as (4 0) and (5 0),
             otherwise the system will take the argument for a ratio.
 "
-;(om::defmethod! transpose ((x spl) (interval number))
-;  :icon 130
   (make-instance
     'spl :the-list 
     (mapcar #'(lambda (p)
@@ -55,7 +72,6 @@
             (sp-list x))))
 
 (defmethod transpose ((x spl) (interval t))
-;(om::defmethod! transpose ((x spl) (interval t))
   (if (interval-p interval)
     (make-instance
       'spl :the-list 
@@ -66,7 +82,6 @@
     (error "WANNA A REAL INTERVAL OR A RATIO, BUT NOT THIS SHITTY ARGUMENT:~a" interval)))
 
 (defmethod transpose ((x fql) (ratio number))
-;(om::defmethod! transpose ((x fql) (ratio number))
   (if (and (get-amp x) (bwl x))
     (make-instance 'fql :the-list 
                    (mapcar #'(lambda (f) (* ratio f)) (fql x))
@@ -89,7 +104,6 @@
                  :amp_funs (amp_funs x)))
  
 (defmethod transpose ((x fql) (ratio t))
-;(om::defmethod! transpose ((x fql) (ratio t))
   (if (interval-p ratio)
     (if (and (get-amp x) (bwl x))
       (make-instance 'fql :the-list 
@@ -126,7 +140,6 @@
            ratio)))
 
 (defmethod transpose ((x vps) (interval t))
-;(om::defmethod! transpose ((x vps) (interval t))
   (declare (ignore interval))
   (error "IF YOU DON'T GIVE ME AN SPL OR A FQL, I'LL GO ON STRIKE: ~a" x))
 ;---------------------------------------------------------------------------------
@@ -139,13 +152,10 @@
 ; Symmetric VPS's will yield the same result!
 
 (defmethod mirror ((x cil) &optional start &key (end nil))
-;(om::defmethod! mirror ((x cil) &optional start &key (end nil))
-;  :icon 130
   (declare (ignore start end))
   (make-instance 'cil :the-list (reverse (the-list x))))
 
 (defmethod mirror ((x spl)  &optional start &key (end nil))
-;(om::defmethod! mirror ((x spl)  &optional start &key (end nil))
   (let* ((base (car (get-spl x)))
          (vps
           (make-instance
@@ -160,7 +170,6 @@
       vps)))
 
 (defmethod mirror ((x vps) &optional start  &key (end nil))
-;(om::defmethod! mirror ((x vps) &optional start  &key (end nil))
   (declare (ignore start end))
   (error "WANNA A SPL OR A CIL, MISTER: ~a" x))
 ;---------------------------------------------------------------------------------
@@ -168,8 +177,6 @@
 
 ;---------------------------------------------------------------------------------
 (defmethod merge_vps ((x spl) (y spl) &optional (tolerance 1))
-;(om::defmethod! merge_vps ((x spl) (y spl) &optional (tolerance 1))
-;  :icon 130
   (make-instance 'spl :the-list
                  (spl-remove-unissons
                   (sort (copy-list
@@ -178,7 +185,6 @@
   )
 
 (defmethod merge_vps ((x fql) (y fql) &optional (threshold 1.0001))
-;(om::defmethod! merge_vps ((x fql) (y fql) &optional (threshold 1.0001))
   (if (null(amplitudes x))
     (make-instance 'fql :the-list
                    (fql-remove-unissons
@@ -235,8 +241,6 @@
 
 ;---------------------------------------------------------------------------------
 (defmethod remove-octaves ((x spl) &key (tolerance 1) (from-bottom nil))
-;(om::defmethod! remove-octaves ((x spl) &key (tolerance 1) (from-bottom nil))
-;  :icon 130
   (if (octave-p_vps x)
     (let ((l (get-spl x))
           (result nil))
@@ -264,10 +268,8 @@
 ;    including the value of the threshold.
 
 (defmethod octave-p_vps ((x vps) &optional (seuil 0.05))
-;(om::defmethod! octave-p_vps ((x vps) &optional (seuil 0.05))
 " Return nil if there are no octaves in the VPS
   Seuil is in semitones "
-;  :icon 130
   (member-if (lambda (y) (<= (abs (mod y 12)) seuil))
              (get-gil x :midi t) ))
 
@@ -282,8 +284,6 @@
 ; The testing interval should be inferior to one octave.
 
 (defmethod itvl-mod-p_vps ((x vps) itvl &optional (seuil 0.05))
-;(om::defmethod! itvl-mod-p_vps ((x vps) itvl &optional (seuil 0.05))
-;  :icon 130
   " Return nil if the interval does not appear in the VPS even if octaves apart"
   (let ((itvl (if (interval-p itvl)
                 
@@ -308,8 +308,6 @@
 ; The testing interval can be any interval in intervallic notation or in semitones.
 
 (defmethod itvl-p_vps ((x vps) itvl-list &optional (seuil 0.05 ))
-;(om::defmethod! itvl-p_vps ((x vps) itvl-list &optional (seuil 0.05 ))
-;  :icon 130
   " Return t if any of the intervals appears in the VPS "
   (let* ((curr-itvl (car itvl-list))
          (itvl (if (interval-p curr-itvl)
@@ -336,8 +334,6 @@
 ;            the following ways: '6+, '(6+ 0) or '(6+ 0 5) or in semitones.
 
 (defmethod itvl-cil-p_vps ((x vps) itvl &optional (seuil 0.05 ))
-;(om::defmethod! itvl-cil-p_vps ((x vps) itvl &optional (seuil 0.05 ))
-;:icon 130
 " Return nil if the interval does not appear in the VPS's CIL"
   (let ((itvl (if (interval-p itvl)
 
@@ -376,9 +372,6 @@
 
 (defmethod stretch_vps ((x spl) &key (reference (first (get-fql x)))
                          (offset 0) (stretching 2) (random 0))
-;(om::defmethod! stretch_vps ((x spl) &key (reference (first (get-fql x)))
-;                         (offset 0) (stretching 2) (random 0))
-; :icon 130
  (let ((result 
         (get-spl (stretch_vps
                   (make-instance 'arl
@@ -437,11 +430,8 @@
 
 (defmethod main-partials ((x spectrum) &key reference diapason
                              (max-nn *MAX-NN*)(threshold nil)&allow-other-keys)
-;(om::defmethod! main-partials ((x spectrum) &key reference diapason
-;                                  (max-nn *MAX-NN*)(threshold nil)&allow-other-keys)
   ;threshold : lineaire et absolu
   ;thresholdB : en dB et relatif ˆ max-amp (doit etre negatif) MANQUE!!!!
-;  :icon 130
   (declare(ignore reference))
   (if (null (fql x))(error "MISSING ABSOLUTE FREQUENCY in ~a~%"(class-of x)))
   (let((fq-and-amps nil)

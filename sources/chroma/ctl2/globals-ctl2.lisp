@@ -1,5 +1,28 @@
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa, S. Lemouton
+;=====================================================
+
+
 ;;CTL2 GLOBALS
-(in-package chroma)
+(in-package :cr)
 
 (defvar ctl2-def-fun1 (make_fun '(0 0 1 1)))
 (defvar ctl2-def-fun2 (make_fun '(1 0 0 1)))

@@ -1,7 +1,29 @@
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+;=====================================================
+
+
 ;to deal with data from additive analysis (from AddAn or AudioSculpt)
 ;internal format (data) = ((n t)(1 f1 amp1 phi1)...(n fn ampn phin))
 
-(in-package chroma)
+(in-package :cr)
 
 
 (defclass additive-data
@@ -41,9 +63,10 @@
   (setf (data x) (get-partials-data (om::load-sdif-file file)))
   )
 
+;; Returns a list of partials data (pitch onset offset velocity) 
+;; from an sdif file ( 1TRC frames)"
+  
 (defmethod get-partials-data ((self om::sdiffile))
-  :doc "Return a list of partials data (pitch onset offset velocity) from an sdif file ( 1TRC frames)"
-  :icon 639
   (let ((res nil) (res1 nil)
         mlist bmat emat pmat time
         (ptrfile (om::dynamic-open self)))

@@ -1,8 +1,29 @@
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+;=====================================================
+
 ;to deal with data from spectral envelope analysis
 ; see : http://www.ircam.fr/equipes/analyse-synthese/DOCUMENTATIONS/additive/estimate.html
 ;data format ((n SR/2 X)(T1 a1 a2 ..)(T2 a1 a2 ..)...)
 
-(in-package chroma)
+(in-package :chroma)
 
 
 (defclass specenv-data

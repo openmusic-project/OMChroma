@@ -80,7 +80,8 @@
                                                              xpose-begin xpose-end
                                                              revert-vps mirror-vps) nil)
                       ("Conversions" nil nil (pch->fq fq->pch fq->ratio) nil))
-                     (cr::fql cr::ptl cr::crl cr::arl cr::spl cr::cil cr::ail) nil nil)
+                     nil
+                     nil nil)
                     ("Models" 
                      (("Inspect" nil nil (model-max-amp model-max-freq model-min-freq model-nb-evts) nil)
                       ("Tools" nil nil (make-cr-fun time-map-fun add-random) nil))
