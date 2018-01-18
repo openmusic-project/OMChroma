@@ -9,7 +9,7 @@
   (
    (source-code :initform
                  (load-buffer-textfile
-                  (get-orc-source (get-orc "stereo-1" :local))
+                  (get-orc-source (get-orc "stereo-1"))
                   'textfile "append")
                  :allocation :class :type textfile :accessor source-code)
    (numchan :initform (or (get-orc-channels (get-orc "stereo-1")) 2) :allocation :class  :accessor numchan)

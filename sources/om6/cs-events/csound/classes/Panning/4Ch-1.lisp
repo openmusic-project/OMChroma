@@ -9,7 +9,7 @@
   (
    (source-code :initform
                  (load-buffer-textfile
-                  (get-orc-source (get-orc "4Ch-1" :local))
+                  (get-orc-source (get-orc "4Ch-1"))
                   'textfile "append")
                  :allocation :class :type textfile :accessor source-code)
    (numchan :initform (or (get-orc-channels (get-orc "4Ch-1")) 2) :allocation :class  :accessor numchan)

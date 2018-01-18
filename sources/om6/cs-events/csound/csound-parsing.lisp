@@ -331,7 +331,7 @@
     (if name
         (with-open-file (file name)
           (setf channel (third (parse-csound-head file)) ))
-      (om-beep-msg "ORC file not found..."))
+      (om-beep-msg (format nil "ORC file not found...")))
   channel))
 
 (defun get-orc-macros (name)

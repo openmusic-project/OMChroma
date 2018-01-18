@@ -17,7 +17,6 @@ Returns the a csound orchestra called <name>.orc if found in the <folder> and su
     (when (probe-file real-folder)
       (loop for file in (om-directory real-folder :files t :directories nil)
             while (not result) do
-            (print file)
             (when (and  name
                         (pathname-name file)
                         (pathname-type file)
