@@ -51,7 +51,7 @@
     (om::om-print (format nil "- Defining CS class: ~A" class-name) "OMCHROMA")
     
     (eval 
-     `(defclass! ,class-name (cs-evt)
+     `(om::defclass! ,class-name (cs-evt)
         ,(append 
           '((om::elts :initarg :elts :accessor om::elts :initform 1 :documentation "number of elements (csound 'notes')")
             (action-time :initarg :action-time :accessor action-time :initform 0 :documentation "an offset used to time several events together")
