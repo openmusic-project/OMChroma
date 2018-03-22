@@ -85,7 +85,7 @@
 ;;; see Model Processing for tranformations
 (defmethod! model-data ((self list) &optional modif-func args)
   :icon 654
-  (let ((rep (loop for elt in self collect (if elt (clone elt) nil))))
+  (let ((rep (loop for elt in self do (cr::the-list elt) collect (copy-instance elt))))
     (when modif-func
       (loop for i = 0 then (+ i 1)
          while (< i (length rep))

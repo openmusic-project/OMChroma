@@ -429,11 +429,11 @@
 ;REMARK: this only works when the ampitudes are specified
 
 (defmethod main-partials ((x spectrum) &key reference diapason
-                             (max-nn *MAX-NN*)(threshold nil)&allow-other-keys)
+                          (max-nn *MAX-NN*)(threshold nil) &allow-other-keys)
   ;threshold : lineaire et absolu
   ;thresholdB : en dB et relatif ˆ max-amp (doit etre negatif) MANQUE!!!!
   (declare(ignore reference))
-  (if (null (fql x))(error "MISSING ABSOLUTE FREQUENCY in ~a~%"(class-of x)))
+  (if (null (fql x))(error "MISSING ABSOLUTE FREQUENCY in ~a~%" (class-of x)))
   (let((fq-and-amps nil)
        (max-nn (round max-nn))) ;ms_1109, allow floating pointers
     (if(and(<=(length (fql x)) max-nn)(null threshold))

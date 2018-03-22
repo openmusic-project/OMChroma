@@ -68,14 +68,14 @@ pch-class   *   *   *     *     *    *      *           \
 (defmethod fq->midi ((f list))
   (mapcar #'fq-to-midi f))
 
-(defmethod fq->midi (f)
+(defmethod fq->midi ((f number))
   (fq-to-midi f))
 
 (defmethod fq->midi ((f t))
-  (error "CANNOT CALCULATE THE MIDI OF ~a, SIR ~a" f (get-gbl USER)))
+  (error "CANNOT CALCULATE THE MIDI OF ~a (of type ~a)" f (type-of f)))
 
 (defmethod fq-to-midi (f)
-  (+ 69 (/(log (/ f (get-gbl 'diapason))) (log(expt 2 (/ 1 12))) )))
+  (+ 69 (/(log (/ f (get-gbl 'diapason))) (log (expt 2 (/ 1 12))) )))
 
 (defmethod fq->midic ((f list))
  (mapcar #'fq->midic f))

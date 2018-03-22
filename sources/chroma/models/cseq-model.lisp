@@ -90,7 +90,7 @@ There are as many ranks as events in a model"
 
 (defmethod copy-model ((x model-cseq))
 "Return a copy of the model"
-  (make-instance 'model-cseq :markers (copy-tree (markers x)) :fql-list (mapcar #'copy-instance (fql-list x))))
+  (make-instance 'model-cseq :markers (copy-tree (markers x)) :fql-list (mapcar #'om::copy-instance  (fql-list x))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;
