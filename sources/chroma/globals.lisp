@@ -88,7 +88,7 @@
 (set-gbl 'GBLAMP 1000.0)		; GLOBAL AMPLITUDE FOR LOCAL EVENT
 
 (set-gbl 'SR om::*audio-sr*)		; SAMPLING RATE
-(set-gbl 'SR/2 (/ (get-gbl SR) 2))		; NYQUIST FREQUENCY
+(set-gbl 'SR/2 '(/ (get-gbl SR) 2))		; NYQUIST FREQUENCY
 (set-gbl 'KR '(get-gbl SR))		; CONTROL RATE FOR CSOUND
 (set-gbl 'NCH 1)		; NUMBER OF CHANNELS
 (set-gbl 'DURMIN 0.01)		; MINIMUM DURATION FOR A NOTE

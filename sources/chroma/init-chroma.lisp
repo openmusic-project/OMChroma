@@ -9,6 +9,7 @@
 (defvar *cr-userfun-dir* nil)
 (defvar *cr-tmp-dir* nil)
 
+; (defparameter *cr-root* (make-pathname :directory (butlast (pathname-directory *load-pathname*) 2)))
 
 (defun get-cr-path (dir &key name type subdirs)
   (let ((root (case dir 
@@ -21,6 +22,11 @@
                  (t nil))))
     (make-pathname :directory (append (pathname-directory root) subdirs)
                    :name name :type type)))
+
+
+;(make-pathname :directory (append (pathname-directory *cr-root*) '("eee" "dff"))
+;               :name "fghjk" :type "aiff")
+
 
 ;vps/pitch-conversions
 (export '(fq->pch fq->midi fq->ratio fq->midic  fq->itvl fq->semitones
@@ -35,3 +41,4 @@
 
 ;vps/vps
 (export '(fql ptl ail spl cil crl arl rpl) :chroma)
+
