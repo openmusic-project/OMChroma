@@ -152,14 +152,14 @@
 (defclass! GEN07 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
-   (id :initform nil :initarg :id :accessor id))
+   (id :initform nil :initarg :id :accessor id :documentation "a table ID, leave NIL to set automatically"))
   (:icon 605))
 (defmethod gen-num ((self Gen07)) 7)
 
 (defclass! GEN-07 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
-   (id :initform nil :initarg :id :accessor id))
+   (id :initform nil :initarg :id :accessor id :documentation "a table ID, leave NIL to set automatically"))
   (:icon 605))
 (defmethod gen-num ((self Gen-07)) -7)
 
@@ -351,11 +351,15 @@
                     (when (and type ;; if no type, the rest of the tests will be wrong
                                (or (subtypep type 'cs-table)
                                    (subtypep type 'multi-cs-table)))
-                      (mapcar 
-                       #'(lambda (table) (coerce-table-type table type def-val))
-                       (om::get-field array n))
+                      (remove nil
+                              (mapcar 
+                               #'(lambda (table) (unless (integerp table) ;;; the case where just a table number is given here (e.g. associated with a global table)
+                                                   (coerce-table-type table type def-val)))
+                               (om::get-field array n))
+                              )
                       ))
-                  )))))
+                  ))
+           )))
 
 
 (defun coerce-table-type (table type def)
