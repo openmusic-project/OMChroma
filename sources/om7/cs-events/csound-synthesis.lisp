@@ -65,7 +65,9 @@
              (path-sco (om::handle-new-file-exists (om::tmpfile cs-basename :type "sco")))
              (global-tables (csound-load-tables tables)))
         
-        ;;; Write the .ORC (if needed)
+        (unless (source-code self) (error "CS-ARRAY has no source code!"))
+
+         ;;; Write the .ORC (if needed)
         (unless (pathnamep (source-code self))
           
           (with-open-file (f path-orc :direction :output)
@@ -73,7 +75,7 @@
           
           (when run (om::add-tmp-file path-orc))
           )
-        
+
         ;;; Write the .SCo from tables and matrix data
         (with-open-file (out path-sco :direction :output)
       
@@ -91,7 +93,8 @@
               (format out "~%;------ local tables in array ------~%~%")
                 (loop for table in local-tables do 
                       (prepare-table table)
-                      (write-line (cs-table-string table) out))
+                      (write-line (cs-table-string table) out)
+                      )
                 )
             
             (format out "~%;------ lines for event ------~%~%")
