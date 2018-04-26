@@ -15,8 +15,6 @@
   
   (:pathname (:directory (:relative "sources")) (:name "package"))
   
-  (:pathname (:directory (:relative "sources" "chroma")) (:name "load"))
-
   (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-parser"))
   (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-array"))
   (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-tables"))
