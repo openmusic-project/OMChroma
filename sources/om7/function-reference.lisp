@@ -27,7 +27,7 @@
 
 ;;; EVALUATE THIS TO GENERATE THE REFERENCE PAGES
 ; (gen-omchroma-reference)
-; (om::gen-package-entries (om::find-om-library "OMChroma"))
+; (om::gen-package-entries (om::find-library "OMChroma"))
 
 ;;;==========================================
 ;;; GENERAL, HARD-CODED DOC INFO
@@ -178,7 +178,7 @@
 ;;; gen-lib-reference thanks to the naming convention
 ;;;=========================
 (defun om::gen-omchroma-reference ()
-  (let ((lib (om::find-om-library "OMChroma")))
+  (let ((lib (om::find-library "OMChroma")))
     (gen-chroma-reference-pages (om::gen-package-entries lib :exclude-packages '("classes" "Test"))
                                 (om::gen-package-entries (om::get-subpackage lib "classes"))
                                 (om::get-lib-reference-pages-folder lib)
@@ -410,7 +410,7 @@
                                              (string-downcase (string symbol)))
                                       :type "html"))
         (class (find-class symbol nil))
-        (lib (om::find-om-library (om::library class)))
+        (lib (om::find-library (om::library class)))
         (dummy-instance (make-instance symbol))
         (doc (om::get-documentation-info symbol)))
     

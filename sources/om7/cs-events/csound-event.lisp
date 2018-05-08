@@ -92,7 +92,7 @@
   (om::om-print-dbg "Defining classes from: ~A" (list folder) "OMCHROMA")
 
   (let ((package (om::AddPackage2Pack (or name (car (last (pathname-directory folder))))
-                                      (or inPackage (om::find-om-library "OMChroma")))))
+                                      (or inPackage (om::find-library "OMChroma")))))
 
   (let ((files (om-api:om-directory folder :type "orc" :directories nil))
         (subfolders (om-api:om-directory folder :files nil :directories t)))
