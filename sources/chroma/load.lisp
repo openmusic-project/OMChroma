@@ -23,7 +23,7 @@
 (in-package :cl-user)
   
 ;;; clean-sources is defined in OM load utils
-(clean-sources (make-pathname :directory (pathname-directory *load-pathname*)))
+; (clean-sources (make-pathname :directory (pathname-directory *load-pathname*)))
 
 ;;; requires compile&load defined in OM
 (mapc
@@ -45,7 +45,7 @@
    "pls/ve"
    "pls/wt"
    "pls/wt-frz"
-                        
+                      
         ;DG
    "dg/utils-dg"
    "dg/df"
@@ -90,6 +90,7 @@
    "ctl2/globals-ctl2"
    "ctl2/ctl2001"
    "ctl2/utils-ctl2001"
+
    )
  )
      
