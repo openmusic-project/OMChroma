@@ -28,7 +28,7 @@
 ;;; (macros, user-defined opcodes, channels declarations and global variables)
 ;;;================================================================ 
 
-(defclass! cs-init ()
+(om::defclass! cs-init ()
   ((init-type :initform :global :accessor init-type :initarg :init-type)
    (name :initform nil :accessor name :initarg :name)
    (params :initform nil :accessor params :initarg :params)

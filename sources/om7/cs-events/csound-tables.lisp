@@ -53,7 +53,7 @@
 ;================================================
 ; JUST A STRING (FREE)
 ;================================================
-(defclass! text-cs-table (cs-table)
+(om::defclass! text-cs-table (cs-table)
   ((id :initform nil :initarg :id :accessor id)
    (csstring :initform nil :initarg :csstring :accessor csstring)))
 
@@ -83,7 +83,7 @@
 ;================================================
 ; GENRAL/TEXT-BASED FORMAT FOR GENs
 ;================================================
-(defclass! gen-cs-table (standard-cs-table) 
+(om::defclass! gen-cs-table (standard-cs-table) 
   ((gen-num :initform 1 :initarg :gen-num :type integer :accessor gen-num)
    (param-list :initform nil :initarg :param-list :type list :accessor param-list))
   (:icon 605))
@@ -149,42 +149,42 @@
 ; GEN TABLES SUBCLASSES OF BPF-CS-TABLE
 ;================================================
 
-(defclass! GEN07 (bpf-cs-table) 
+(om::defclass! GEN07 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
    (id :initform nil :initarg :id :accessor id :documentation "a table ID, leave NIL to set automatically"))
   (:icon 605))
 (defmethod gen-num ((self Gen07)) 7)
 
-(defclass! GEN-07 (bpf-cs-table) 
+(om::defclass! GEN-07 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
    (id :initform nil :initarg :id :accessor id :documentation "a table ID, leave NIL to set automatically"))
   (:icon 605))
 (defmethod gen-num ((self Gen-07)) -7)
 
-(defclass! GEN05 (bpf-cs-table) 
+(om::defclass! GEN05 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
    (id :initform nil :initarg :id :accessor id))
   (:icon 605))
 (defmethod gen-num ((self Gen05)) 5)
 
-(defclass! GEN-05 (bpf-cs-table) 
+(om::defclass! GEN-05 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
    (id :initform nil :initarg :id :accessor id))
   (:icon 605))
 (defmethod gen-num ((self Gen-05)) -5)
 
-(defclass! GEN02 (bpf-cs-table) 
+(om::defclass! GEN02 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
    (id :initform nil :initarg :id :accessor id))
  (:icon 605))
 (defmethod gen-num ((self Gen02)) 2)
 
-(defclass! GEN-02 (bpf-cs-table)
+(om::defclass! GEN-02 (bpf-cs-table)
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
    (id :initform nil :initarg :id :accessor id))
@@ -195,7 +195,7 @@
 ;================================================
 ; FILE-CS-TABLE: tables loaded from a file
 ;================================================
-(defclass file-cs-table (cs-table)
+(om::defclass file-cs-table (cs-table)
   ((file :accessor file :initform "" :initarg :file)
    (skiptime :accessor skiptime :initform 0 :initarg :skiptime)))
 
@@ -211,10 +211,12 @@
 ; GEN TABLES SUBCLASSES OF FILE-CS-TABLE
 ;================================================
 
-(defclass! GEN01 (file-cs-table) () (:icon 605))
+(om::defclass! GEN01 (file-cs-table) () (:icon 605))
+
 (defmethod gen-num ((self Gen01)) 1)
 
-(defclass! GEN-01 (file-cs-table) () (:icon 605))
+(om::defclass! GEN-01 (file-cs-table) () (:icon 605))
+
 (defmethod gen-num ((self Gen-01)) -1)
 
 
@@ -224,7 +226,7 @@
 ; (typically for 2D 3D trajectories)
 ;================================================
 
-(defclass! multi-cs-table () 
+(om::defclass! multi-cs-table () 
   ((tables :accessor tables :initform nil :initarg :tables)))
 
 #|

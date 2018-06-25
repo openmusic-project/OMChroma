@@ -5,5 +5,4 @@
   (:nicknames "CR"))
 
 ;;; :chroma must not :use :om because it redefines the class CHORD
-
-(use-package :chroma :om)
+;;; (use-package :chroma :om)

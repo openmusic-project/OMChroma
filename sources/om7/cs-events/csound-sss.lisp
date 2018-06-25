@@ -212,7 +212,7 @@
           :documentation (om::doc self)
           :accessor (intern name (slot-package self)))))
      
-(defmethod! chroma-spat-defclass (classname (synth cs-evt) (spat cs-spat-evt))
+(om::defmethod! chroma-spat-defclass (classname (synth cs-evt) (spat cs-spat-evt))
   :icon 322
   (let ((orc (merge-orchestras synth spat))
         (nout (numchan spat))
@@ -262,7 +262,7 @@
 
 
 
-(defmethod! chroma-prisma ((synth cs-evt) (spat cs-spat-evt) &key name force-redefine)
+(om::defmethod! chroma-prisma ((synth cs-evt) (spat cs-spat-evt) &key name force-redefine)
   :icon 322
   (let ((classname (or name 
                        (intern (concatenate 'string 

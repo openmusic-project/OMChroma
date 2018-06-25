@@ -24,7 +24,7 @@
 (in-package :cr)
  
 
-(defclass! cs-array (om::class-array)
+(om::defclass! cs-array (om::class-array)
   ((source-code :initarg :source-code :accessor source-code :initform nil)
    (cs-instr :accessor cs-instr :initform nil)
    (instr-num :initarg :instr-num :accessor instr-num :initform 1)
