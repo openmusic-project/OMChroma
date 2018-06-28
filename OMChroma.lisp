@@ -122,7 +122,7 @@
 
 (unless (fboundp 'om::set-lib-release) (defmethod om::set-lib-release (version &optional lib) nil))
 
-(om::set-lib-release 5.0 (find-library "OMChroma"))
+(om::set-lib-release 5.01 (find-library "OMChroma"))
 
 
 (print "
