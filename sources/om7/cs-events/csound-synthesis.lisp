@@ -53,6 +53,8 @@
 
 (defmethod cs-synthesize ((self cs-array) &key (name "my-synt") tables (run t) (format "aiff") 
                           (channels nil) (inits nil) sr kr)
+  
+  (declare (ignore channels inits sr kr))
 
   (unwind-protect 
   
@@ -106,7 +108,7 @@
                                          for pn from 2 to (num-csound-fields self) ;;; prevents collecting the additional control fields
                                          collect (nth i (om::array-field-data field)))))
                       (write-line 
-                       (format-csound-line id 0 element field-precision-list) 
+                       (format-csound-line id (om::ms->sec (om::onset self)) element field-precision-list) 
                        out)
                       )
                     ))
@@ -284,14 +286,14 @@
                         ;;; tables have been assigned an ID and can still be referenced inside the array components
                         (format out "~%;------ lines for event ------~%")
                         
-                        (let ((offset (action-time evt))
+                        (let ((offset (+ (om::ms->sec (om::onset evt)) (action-time evt)))
                               (id (instr-num evt))
                               (n-fields-minus-1 (1- (num-csound-fields evt)))
                               (field-precision-list (mapcar 'om::array-field-decimals (om::data evt))))
                           
                           (loop for c in (om::attached-components evt) do
                                 (write-line 
-                                 (format-csound-line id offset (first-n (om::component-vals c) n-fields-minus-1) field-precision-list)
+                                 (format-csound-line id offset (om::first-n (om::component-vals c) n-fields-minus-1) field-precision-list)
                                  out)
                                 )
                           )
