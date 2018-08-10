@@ -46,8 +46,8 @@
 ; @PARAM 7 "fmod" number 100.0 "N2"
 ; @PARAM 8 "imax" number 5 "max index"
 ; @PARAM 9 "imin" number 0 "min index"
-; @PARAM 10 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 2048 100 4096 0) "amplitude envelope [GEN table]"
-; @PARAM 11 "ienv" cr::cs-table (:cs-table cr::gen07 0 0 2048 100 4096 0) "index envelope [GEN]"
+; @PARAM 10 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (2048 100) (4096 0))) "amplitude envelope [GEN table]"
+; @PARAM 11 "ienv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (2048 100) (4096 0))) "index envelope [GEN]"
 ;
 ; COMPULSORY GEN FUNCTIONS :
 ; @GEN ; carrier

@@ -46,8 +46,8 @@
 ; @PARAM 7 "n2" number 7 "N2"
 ; @PARAM 8 "imax" number 10 "max index"
 ; @PARAM 9 "imin" number 1 "min index"
-; @PARAM 10 "aenv" cr::cs-table (:cs-table cr::gen05 0 1 4096 0.0001) "amp envelope [GEN, exponential]"
-; @PARAM 11 "ienv" cr::cs-table (:cs-table cr::gen05 0 1 4096 0.1) "index envelope [GEN, exponential]]"
+; @PARAM 10 "aenv" cr::cs-table (:cs-table cr::gen05 :points ((0 1) (4096 0.0001))) "amp envelope [GEN, exponential]"
+; @PARAM 11 "ienv" cr::cs-table (:cs-table cr::gen05 :points ((0 1) (4096 0.1))) "index envelope [GEN, exponential]]"
 ;
 ; COMPULSORY GEN FUNCTIONS :
 ; @GEN ; carrier

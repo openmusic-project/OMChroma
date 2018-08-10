@@ -39,9 +39,9 @@
 ; @PARAM 3 "durs" number 1.0 "duration [sec]"
 ; @PARAM 4 "amp" number 500.0 "maximum amplitude [linear (0.0,1000.0) or dB (-INF,0.0)]"
 ; @PARAM 5 "freq" number 440.0 "reference frequency [Hz]"
-; @PARAM 6 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 32768 100 65537 0) "amplitude envelope [GEN]"
+; @PARAM 6 "aenv" cr::cs-table (:cs-table cr::gen07 ((0 0) (32768 100) (65537 0))) "amplitude envelope [GEN]"
 ; @PARAM 7 "fdev" number 1.0 "maximum frequency deviation [semitones]"
-; @PARAM 8 "fenv" cr::cs-table (:cs-table cr::gen07 0 0 32768 100 65537 0) "amplitude envelope [GEN]"
+; @PARAM 8 "fenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (32768 100) (65537 0))) "amplitude envelope [GEN]"
 ;
 ; COMPULSORY GEN FUNCTIONS :
 ; @GEN ; audio wave

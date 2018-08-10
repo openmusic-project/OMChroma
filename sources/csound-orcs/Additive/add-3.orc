@@ -44,7 +44,7 @@
 ; @PARAM 6 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 2048 100 4096 0) "amplitude envelope [GEN table]"
 ; @PARAM 7 "fdev" number 0.06 "decay time of the amp envlp [sec]"
 ; @PARAM 8 "vfq" number 1.0 "spectral scaler for the fund freq"
-; @PARAM 9 "fenv" cr::cs-table (:cs-table cr::gen07 0 0 4096 1) "vibrato envelope [GEN table]"
+; @PARAM 9 "fenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (4096 1))) "vibrato envelope [GEN table]"
 ;
 ; COMPULSORY GEN FUNCTIONS :
 ; @GEN ; audio wave
