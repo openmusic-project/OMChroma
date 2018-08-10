@@ -37,7 +37,7 @@
 ; @PARAM 4 "amp" number -6.0 "maximum amplitude [linear (0.0,1000.0) or dB (-INF,0.0)]"
 ; @PARAM 5 "freq" number 2000.0 "center frequency [Hz]"
 ; @PARAM 6 "bw" number 0.01 "bandwidth [% of centre freq, 0->1]"
-; @PARAM 7 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 2048 100 4096 0) "amplitude envelope [GEN table]"
+; @PARAM 7 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (2048 100) (4096 0))) "amplitude envelope [GEN table]"
 ;-----------------------------------------------------------------------------
 
 sr	= 96000

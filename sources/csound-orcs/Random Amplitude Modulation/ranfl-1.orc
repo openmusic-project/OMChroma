@@ -40,7 +40,7 @@
 ; @PARAM 5 "f0" number 263.8 "freq of the noise [Hz]"
 ; @PARAM 6 "freq" number 1600.0 "centre freq of both filters [Hz]"
 ; @PARAM 7 "bw" number 500.0 "bandwidth of the reson [Hz]"
-; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 2048 1 4096 0) "amplitude envelope [GEN]"
+; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (2048 1) (4096 0))) "amplitude envelope [GEN]"
 ; @PARAM 9 "win" number 0.03 "impulse response attack time of the fofilter [sec]"
 ; @PARAM 10 "wout" number 0.5 "impulse response decay time of the fofilter [sec]"
 ;-----------------------------------------------------------------------------

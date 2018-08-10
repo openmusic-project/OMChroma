@@ -48,7 +48,7 @@
 ; @PARAM 5 "f0" number 2.0 "fundamental frequency [Hz]"
 ; @PARAM 6 "freq" number 880.0 "formant freq [Hz]"
 ; @PARAM 7 "bw" number 1.5 "bandwidth [Hz]"
-; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 0 1 512 1) "amplitude envelope [GEN table]"
+; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 1) (512 1))) "amplitude envelope [GEN table]"
 ; @PARAM 9 "win" number 0.1 "tex or krise [sec]"
 ; @PARAM 10 "wdur" number 1.0 "total duration of the burst, see debatt [sec]"
 ; @PARAM 11 "wout" number 0.2 "atten (decay of the FOF) [sec]"

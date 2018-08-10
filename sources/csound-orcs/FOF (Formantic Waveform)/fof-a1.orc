@@ -52,7 +52,7 @@
 ; @PARAM 5 "f0" number 220.0 "fundamental frequency [Hz]"
 ; @PARAM 6 "freq" number 609.0 "formant frequency [Hz]"
 ; @PARAM 7 "bw" number 77.0 "bandwidth [Hz]"
-; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 1600 1 7200 1 65536 0) "amplitude envelope [GEN]"
+; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (1600 1) (7200 1) (65536 0))) "amplitude envelope [GEN]"
 ; @PARAM 9 "win" number 0.003 "rise time of the grain envelope [sec]"
 ; @PARAM 10 "wdur" number 0.02 "duration of the grain [sec]"
 ; @PARAM 11 "wout" number 0.007 "decay time of the grain envelope [sec]"

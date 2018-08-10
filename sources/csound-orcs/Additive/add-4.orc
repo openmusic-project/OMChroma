@@ -49,7 +49,7 @@
 ; @PARAM 4 "amp" number -6.0 "maximum amplitude [linear (0.0,1000.0) or dB (-INF,0.0)]"
 ; @PARAM 5 "freq" number 440.0 "frequency [Hz]"
 ; @PARAM 6 "aenv" cr::cs-table (:cs-table cr::gen-07 :points ((0 0.0) (1000 1.0) (3000 1.0) (4096 0.0))) "amplitude envelope (GEN table)"
-; @PARAM 7 "fenv" cr::cs-table (:cs-table cr::gen-07 ((0 440.0) (4096 880.0))) "vibrato envelope (GEN table)"
+; @PARAM 7 "fenv" cr::cs-table (:cs-table cr::gen-07 :points ((0 440.0) (4096 880.0))) "vibrato envelope (GEN table)"
 ; @PARAM 8 "atk" number 0.01 "attack time of the amp envlp [sec]"
 ; @PARAM 9 "dec" number 0.01 "decay time of the amp envlp [sec]"
 ; @PARAM 10 "phs" number 0.0 "initial phase [rad]"

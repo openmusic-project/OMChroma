@@ -44,7 +44,7 @@
 ; @PARAM 5 "f0" number -1.0 "transposition factor [1=same as original]"
 ; @PARAM 6 "afil" t "santuri.aiff" "sound file [name]"
 ; @PARAM 7 "skip" number 1.0 "starting point in file [% / if < 0: adds -(SKIP/XPF) seconds]"
-; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 2048 100 4096 0) "amplitude envelope [GEN]"
+; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (2048 100) (4096 0))) "amplitude envelope [GEN]"
 ; @PARAM 9 "win" number 0.01 "duration of the local attack/decay [sec]"
 ; @PARAM 10 "wrap" number 1 "wrap [0: locations beyond the file produce silence / other: locations wrapped to the duration of the sound]"
 ;

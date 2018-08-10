@@ -47,13 +47,13 @@
 ; @PARAM 4 "amp" number 0.0 "maximum amplitude [linear (0.0,1000.0) or dB (-INF,0.0)]"
 ; @PARAM 5 "f0" number 1.0 "min transposition factor [1=same as original]"
 ; @PARAM 6 "f0max" t 2.0 "max transposition factor [1=same]"
-; @PARAM 7 "f0env" cr::cs-table (:cs-table cr::gen07 0 0 4096 100) "envelope for the transposition factor [GEN]"
+; @PARAM 7 "f0env" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (4096 100))) "envelope for the transposition factor [GEN]"
 ; @PARAM 8 "f0jta" number 0.1 "jitter amplitude for the transposition factor [0-1]"
 ; @PARAM 9 "f0dur" number 1.0 "duration of the transposition envelope [sec]"
 ; @PARAM 10 "jta" number 0.5 "jitter amplitude for the max amplitude [0-1]"
 ; @PARAM 11 "afil" number 31 "sound file [GEN01]"
 ; @PARAM 12 "skip" number 0.0 "starting point in file [sec]"
-; @PARAM 13 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 2048 100 4096 0) "amplitude envelope [GEN]"
+; @PARAM 13 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (2048 100) (4096 0))) "amplitude envelope [GEN]"
 ; @PARAM 14 "win" number 0.01 "duration of the local attack/decay [sec]"
 ;
 ; COMPULSORY GEN FUNCTIONS :

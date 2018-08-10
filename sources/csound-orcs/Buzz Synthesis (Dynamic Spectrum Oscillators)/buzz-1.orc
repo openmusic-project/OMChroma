@@ -40,11 +40,11 @@
 ; @PARAM 3 "durs" number 1.0 "duration [sec]"
 ; @PARAM 4 "amp" number -6.0 "maximum amplitude [linear (0.0,1000.0) or dB (-INF,0.0)]"
 ; @PARAM 5 "f0" number 220.0 "fundamental frequency [Hz]"
-; @PARAM 6 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 2048 1 4096 0) "amplitude envelope [GEN table]"
+; @PARAM 6 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (2048 1) (4096 0))) "amplitude envelope [GEN table]"
 ; @PARAM 7 "bzl" number 1 "lowest harmonic in the buzz [int]"
 ; @PARAM 8 "bzh" number 1.0 "% of maximum possible harmonic [0-1]"
 ; @PARAM 9 "bzm" number 0.95 "multiplier in the series of amp coeff [0-1]"
-; @PARAM 10 "bzmenv" cr::cs-table (:cs-table cr::gen07 0 0 2048 1 4096 0) "amplitude envelope [GEN table]"
+; @PARAM 10 "bzmenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (2048 1) (4096 0))) "amplitude envelope [GEN table]"
 ;
 ; COMPULSORY GEN FUNCTIONS :
 ; @GEN ; single cosine(!) wave for the buzz

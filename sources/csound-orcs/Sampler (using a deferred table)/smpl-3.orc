@@ -42,7 +42,7 @@
 ; @PARAM 5 "f0" number 1.0 "transposition factor [1=same as original]"
 ; @PARAM 6 "afil" t 31 "sound file [GEN01]"
 ; @PARAM 7 "skip" number 0.0 "starting point in file [sec]"
-; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 0 1 4096 1) "amplitude envelope [GEN]"
+; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 1) (4096 1))) "amplitude envelope [GEN]"
 ; @PARAM 9 "win" number 0.01 "duration of the local attack/decay [sec]"
 ; 
 ; GEN FUNCTIONS :

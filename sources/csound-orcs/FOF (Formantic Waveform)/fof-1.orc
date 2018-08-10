@@ -44,7 +44,7 @@
 ; @PARAM 5 "f0" number 220.0 "fundamental frequency [Hz]"
 ; @PARAM 6 "freq" number 609.0 "formant freq [Hz]"
 ; @PARAM 7 "bw" number 77.0 "bandwidth [Hz]"
-; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 0 0 80 1 3600 1 4096 0) "amplitude envelope [GEN table]"
+; @PARAM 8 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 0) (80 1) (3600 1) (4096 0))) "amplitude envelope [GEN table]"
 ;
 ; COMPULSORY GEN FUNCTIONS :
 ; @GEN ; large non interpolating sine tone
