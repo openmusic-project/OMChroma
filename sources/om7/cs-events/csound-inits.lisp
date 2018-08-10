@@ -52,7 +52,7 @@
 ;;; => MUST RETURN ONE OR LIST OF CS-INITS
 
 (defmethod format-inits (inits cs-events)
-  (flat 
+  (om::flat 
    (mapcar #'(lambda (init) 
                (format-init init cs-events))
            inits)))
