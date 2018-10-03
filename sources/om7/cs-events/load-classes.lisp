@@ -24,7 +24,7 @@
 (in-package :cr)
 
 (let ((cs-dir (om-api:om-make-pathname
-                 :directory (append (butlast (pathname-directory *load-pathname*) 2) '("csound-orcs")))))
+                 :directory (append (butlast (pathname-directory *load-pathname*) 3) '("Csound")))))
     
     ;;; => DEFINE CLASSES FROM .ORC FILES 
     (def-all-cs-classes cs-dir :name "Classes")

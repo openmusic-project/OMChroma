@@ -87,7 +87,7 @@
 
 ; (defclass-from-cs-orc #P"/Users/bresson/SRC/OM7/ircam/LIBRARIES/omchroma/sources/cs-events/classes/basic/add-a1.orc")
   
-(defun def-all-cs-classes (folder &key name inPackage)
+(defun def-all-cs-classes (folder &key name inpackage)
 
   (om::om-print-dbg "Defining classes from: ~A" (list folder) "OMCHROMA")
 
