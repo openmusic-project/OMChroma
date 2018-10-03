@@ -112,7 +112,7 @@
        (spacepack (find "Multi Channels" (subpackages cspack) :key 'name :test 'string-equal)))
 
   
-  (setq *cs-orc-folder* (om-relative-path '("sources" "csound-orcs") nil))
+  (setq *cs-orc-folder* (om-relative-path '("Csound") nil))
   
   (load-chroma-classes (om-relative-path '("sources" "om6" "cs-events" "csound" "classes" "Basic") nil) basicpack)
   (load-chroma-classes (om-relative-path '("sources" "om6" "cs-events" "csound" "classes" "Advanced") nil) advpack)

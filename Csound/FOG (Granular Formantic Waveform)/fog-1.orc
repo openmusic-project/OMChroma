@@ -54,7 +54,7 @@
 ; @PARAM 7 "bw" number 0.0 "bandwidth -> exponential decay [Hz]"
 ; @PARAM 8 "afil" cr::cs-table 31 "sound file [name, sound, string, pathname or GEN01]"
 ; @PARAM 9 "spd" number 1.0 "speed of the starting pointer in the file [1=same as original]"
-; @PARAM 10 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 1) (4096 1)) "amplitude envelope [GEN]"
+; @PARAM 10 "aenv" cr::cs-table (:cs-table cr::gen07 :points ((0 1) (4096 1))) "amplitude envelope [GEN]"
 ; @PARAM 11 "win" number 0.01 "rise time of the grain envelope [sec]"
 ; @PARAM 12 "wdur" number 0.1 "total duration of the grain [sec]"
 ; @PARAM 13 "wout" number 0.05 "decay time of the grain envelope [sec]"

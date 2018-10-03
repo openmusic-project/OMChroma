@@ -1,0 +1,16 @@
+
+
+
+;; FROM PRISMA-EVENT
+; @PARAM 2 "soundfile" t nil ""
+; @PARAM 3 "gain" number 0.0 ""
+; @PARAM 4 "gain-evn" cr::cs-table (:cs-table cr::gen07 :points ((0 1) (512 1))) ""
+; @PARAM 5 "start-pos" number 0.0 ""
+
+
+
+;; FROM PRISMA-DISCRETE
+
+; @PARAM X "xpos" number 0.0 ""
+; @PARAM X "ypos" number 0.0 ""
+; @PARAM X "zpos" number 0.0 ""
