@@ -42,6 +42,24 @@
    ))
 
 
+;;; AUTO-STES THE DURATION FROM SOUND
+(defmethod om::om-init-instance ((self cs-evt) &optional initargs)
+  
+  (call-next-method)
+  
+  (when (and initargs (not (find :durs initargs :key 'car))) ;;; we're initializing (not copying) but no dur is specified
+
+    (let ((durfield (find "durs" (om::data self) :key 'om::array-field-name :test 'string-equal))
+          (soundfield (find-if #'(lambda (field) (member (om::array-field-name field) '("afil" "soundfile") :test 'string-equal))
+                               (om::data self))))
+      
+      (when (and soundfield (om::array-field-data soundfield))
+        (setf (om::array-field-data durfield)
+              (mapcar 'om::sound-dur (om::array-field-data soundfield)))
+        ))
+    )
+  
+  self)
 
 
 (defun defclass-from-cs-orc (pathname)
