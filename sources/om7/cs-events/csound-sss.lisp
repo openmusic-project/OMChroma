@@ -28,96 +28,10 @@
 (in-package :cr)
 
 
-;;; PFIELDS TO IGNORE WHEN DOING SPATIAL SOUND SYNTH
+;;; PFIELDS TO IGNORE (in addition to p2-p3-p4) WHEN DOING SPATIAL SOUND SYNTH
 (defmethod ignore-pfields ((self cs-evt)) nil)
-             
-(defmethod merge-orchestras ((synth cs-evt) (spat cs-evt))
-  (let* ((synthorc (source-code synth))
-         (spatorc (source-code spat))
-         (p-index (length (class-direct-instance-slots (class-of synth)))) ;;; nb params (from p4)
-         (intername "asound")
-         (spatvars '("p4"))
-         (ignore-fields (ignore-pfields spat))
-         (ignore-aux nil)
-         (continue t)
-         (synthlines nil) (spatlines nil))
-    (setf synthlines 
-          (loop for sline in (om-buffer-lines (buffer-text synthorc))
-                collect 
-                (let ((srep (and (not (string-equal "" (delete-spaces sline)))
-                                 (let ((firstword (string (read-from-string sline nil nil))))
-                                   (when (and (>= (length firstword) 3) 
-                                              (string-equal "out" (subseq firstword 0 3)))
-                                     (search "out" firstword :test 'string-equal)
-                                     )))))
-                  (if srep 
-                      (multiple-value-bind (outword ll) (read-from-string sline nil nil :start srep)
-                        (let ((outval (subseq sline ll (position #\, sline))))
-                          (string+ intername "  =  " outval)))
-                    sline)
-                  )))
-    (setf spatlines 
-          (loop for sline in (om-buffer-lines (buffer-text spatorc))
-                collect 
-                (let ((tokens (start-at-first (tokenize-line sline))))
-                  ;(print (list tokens spatvars ignore-aux))
-                  (loop for spatvar in spatvars do
-                        (when (find spatvar tokens :test 'string-equal)
-                          ;;; one of the variables containing input is in this line
-                          (let ((pos (position spatvar tokens :test 'string-equal)))
-                            ;(print tokens)
-                            (if (> pos 0) 
-                                ;; something is probably set using a "spatvar"
-                                (let* ((oppos (if (string-equal (delete-spaces (nth (- pos 1) tokens)) "") 2 1))
-                                       (op (nth (- pos oppos) tokens))
-                                       (varpos (if (string-equal (delete-spaces (nth (- pos oppos 1) tokens)) "")
-                                                   (+ oppos 2) (+ oppos 1)))
-                                       (var (nth (- pos varpos) tokens)))
+;;(defmethod ignore-pfields ((self om::dbap.discrete)) '("p5" "p6" "p7"))
 
-                                  (if (and continue 
-                                           (or (string-equal op "=")
-                                               (search "diskin" op :test 'string-equal)))
-                                      (setf spatvars (append spatvars (list var))
-                                            tokens nil)
-                                    (setf tokens (substitute intername spatvar tokens :test 'string-equal))
-                                    )
-                                  (when (search "diskin" op :test 'string-equal)
-                                    (setf continue nil))
-                                  )
-                              ;; the spatvar is set to something else
-                              ;(setf (nth pos tokens) intername)
-                              (setf tokens (substitute intername spatvar tokens :test 'string-equal))
-                              ))
-                          ))
-                  ;(print (list ignore-fields ignore-aux))
-                  (loop for ig in (append ignore-fields ignore-aux)
-                        while tokens do
-                        (when (find ig tokens :test 'string-equal)
-                          ;(print (list ig tokens))
-                          (let ((pos (position ig tokens :test 'string-equal))
-                                (vvv nil))
-                            (when (> pos 0) 
-                              (loop for spatvar in spatvars while (not vvv) do
-                                    (setf vvv (find spatvar tokens :test 'string-equal)))
-                              (if vvv 
-                                  (push (car tokens) spatvars)
-                                (unless (or (member (car tokens) (cons intername spatvars) :test 'string-equal)
-                                            (member (car tokens) *csound-separators* :test 'string-equal :key 'string))
-                                  (push (car tokens) ignore-aux)))
-                                (setf tokens nil)))
-                          ))
-                  
-                  (when tokens (loop for pfield in (find-pn tokens) do
-                                     (when (> (cadr pfield) 3) 
-                                       (setf (nth (car pfield) tokens) 
-                                             (format nil "p~D" (- (+ p-index (cadr pfield)) 
-                                                                  (length ignore-fields) 
-                                                                  1)))))) ;; -1 because p4 disappears
-                  (reduce 'string+ tokens :initial-value "")
-                  )))
-
-    (append synthlines spatlines)
-    ))
 
 
 (defparameter *csound-separators* '(#\) #\( #\[ #\] #\{ #\} #\, #\* #\+ #\- #\/ #\? #\: #\< #\> #\= #\;))
@@ -155,7 +69,7 @@
 
 
 (defun start-at-first (token) 
-  (if (string-equal (delete-spaces (car token)) "")
+  (if (string-equal (om::delete-spaces (car token)) "")
       (cdr token)
     token))
 
@@ -166,20 +80,117 @@
           (when (and (char-equal (elt item 0) #\p)
                      (> (length item) 1)
                      (numberp (read-from-string (subseq item 1))))
-            (pushr (list pos (read-from-string (subseq item 1))) rep)))
-    rep))
+            (push (list pos (read-from-string (subseq item 1))) rep)))
+    (reverse rep)))
+
+
+
+(defmethod merge-orchestras ((synth cs-evt) (spat cs-evt))
+
+  (let* ((synth-lines (cs-description-body-lines (cs-instr synth)))
+         (spat-lines (cs-description-body-lines (cs-instr spat)))
+         (p-index (- (length (cs-description-params (cs-instr synth))) 2)) ;;; nb params (from p4)
+         (intername "asound")
+         (spatvars '("p4"))      ;; by convention p4 is the audio input 
+         (ignore-fields (ignore-pfields spat))
+         (ignore-aux nil)
+         (continue t))
+    
+    (append  
+     
+     (loop for sline in synth-lines
+           collect 
+           (let ((srep (and (not (string-equal "" (om::delete-spaces sline)))
+                            (let ((firstword (string (read-from-string sline nil nil))))
+                              (when (and (>= (length firstword) 3) 
+                                         (string-equal "out" (subseq firstword 0 3)))
+                                (search "out" firstword :test 'string-equal)
+                                )))))
+             (if srep 
+                 ;;; replace the "outX" var by an intermediate var
+                 (multiple-value-bind (outword ll) (read-from-string sline nil nil :start srep)
+                   (let ((outval (subseq sline ll (position #\, sline))))
+                     (concatenate 'string intername "  =  " outval)))
+               sline)
+             ))
+
+     (loop for sline in spat-lines
+           collect 
+           (let ((tokens (start-at-first (tokenize-line sline))))
+             ;(print (list tokens spatvars ignore-aux))
+             (loop for spatvar in spatvars do
+                   (when (find spatvar tokens :test 'string-equal)
+                     ;;; one of the variables containing input is in this line
+                     (let ((pos (position spatvar tokens :test 'string-equal)))
+                            ;(print tokens)
+                       (if (> pos 0) 
+                           ;; something is probably set using a "spatvar"
+                           (let* ((oppos (if (string-equal (om::delete-spaces (nth (- pos 1) tokens)) "") 2 1))
+                                  (op (nth (- pos oppos) tokens))
+                                  (varpos (if (string-equal (om::delete-spaces (nth (- pos oppos 1) tokens)) "")
+                                              (+ oppos 2) (+ oppos 1)))
+                                  (var (nth (- pos varpos) tokens)))
+
+                             (if (and continue 
+                                      (or (string-equal op "=")
+                                          (search "diskin" op :test 'string-equal)))
+                                 (setf spatvars (append spatvars (list var))
+                                       tokens nil)
+                               (setf tokens (substitute intername spatvar tokens :test 'string-equal))
+                               )
+                             (when (search "diskin" op :test 'string-equal)
+                               (setf continue nil))
+                             )
+                         ;; the spatvar is set to something else
+                         ;(setf (nth pos tokens) intername)
+                         (setf tokens (substitute intername spatvar tokens :test 'string-equal))
+                         ))
+                     ))
+
+            
+             (loop for ig in (append ignore-fields ignore-aux)
+                   while tokens do
+                   (when (find ig tokens :test 'string-equal)
+                     (let ((pos (position ig tokens :test 'string-equal))
+                           (vvv nil))
+                       (when (> pos 0) 
+                         (loop for spatvar in spatvars while (not vvv) do
+                               (setf vvv (find spatvar tokens :test 'string-equal)))
+                         (if vvv 
+                             (push (car tokens) spatvars)
+                           (unless (or (member (car tokens) (cons intername spatvars) :test 'string-equal)
+                                       (member (car tokens) *csound-separators* :test 'string-equal :key 'string))
+                             (push (car tokens) ignore-aux)))
+                         (setf tokens nil)))
+                     ))
+                  
+             (when tokens (loop for pfield in (find-pn tokens) do
+                                (when (> (cadr pfield) 3) 
+                                  (setf (nth (car pfield) tokens) 
+                                        (format nil "p~D" (- (+ p-index (cadr pfield))
+                                                             (length ignore-fields)
+                                                             1)) ;; -1 because p4 disappears
+                                        ))))
+             (apply 'concatenate (cons 'string tokens))
+             ))
+     )
+     
+    ))
+
+
+
 
 
 (defparameter *prisma-spat-classes* nil)
 
 (defmethod merged-class-superclass (class)
-  (let ((clist (mapcar 'class-name (get-class-precedence-list class))))
+  (let ((clist (mapcar 'class-name (om::class-precedence-list class))))
     (or (remove nil 
                 (list (find-if #'(lambda (class) (find class *prisma-spat-classes*)) clist)
                       (find 'spat-trajectory-evt-3D clist)
                       (find 'spat-trajectory-evt-2D clist)
                       (find 'cs-spat-evt clist)))
-        'cs-evt)))
+        '(cs-evt))))
 
 
 ;;; ADD e-dels, durs, and soundfile/afil
@@ -198,108 +209,103 @@
           :accessor (intern name (slot-package self)))))
    
   
-(om::defmethod! chroma-spat-defclass (classname (synth cs-evt) (spat cs-evt))
-  
-  :icon 322
-  
-  (let ((orc (merge-orchestras synth spat))
-        (nout (numchan spat))
-        (inits (append (cs-inits synth) (cs-inits spat)))
-        (gens (append (orc-header synth) (orc-header spat)))
-        (superclasses (merged-class-superclass (class-of spat)))
-        classdef class)
-    
-      (let ((newinits (solve-init-duplicates inits)))
-            
-        (setf classdef
-              (print `(defclass! ,classname (,.superclasses)
-                          ((source-code :initform 
-                                       (let ((orcbuffer (make-instance 'textfile)))
-                                         (add/replace-to-buffer orcbuffer ',orc)
-                                         orcbuffer)
-                                       :allocation :class :type textfile :accessor source-code)
-                          (numchan :initform ,nout :allocation :class  :accessor numchan)
-                          (cs-inits :initform ',newinits :allocation :class :type list :accessor cs-inits)
-                          (orc-header :initform ',gens :allocation :class :type list :accessor orc-header)
-                          (InstID :initform 1  :allocation :class  :accessor InstID)
-                          ,.(mapcar #'(lambda (slot) `(,(slot-name slot) :accessor ,(slot-name slot) :initarg ,(slot-name slot) 
-                                                                         :type ,(slot-definition-type slot) :initform ,(slot-definition-initform slot)))
-                                    (class-direct-instance-slots (class-of synth)))
 
-                          ,.(mapcar #'(lambda (slot) 
-                                        (let ((newname (name slot)))
-                                          (loop while (find newname (class-direct-instance-slots (class-of synth)) :test 'string-equal :key 'slot-name) do
-                                                (setf newname (string+ newname "_+")))
-                                          (merge-get-define-slot slot newname)))
-                                    (nthcdr (number-of-ignored-slots-in-merge spat)
-                                            (get-all-instance-initargs (type-of spat))
-                                            ))
-                          
-                          ))))
-        (setf class (eval classdef))
-        (let ((instance (make-instance class)))
-          (setf (source-code instance) (let ((orcbuffer (make-instance 'textfile)))
-                                         (add/replace-to-buffer orcbuffer orc)
-                                         orcbuffer))
-          (setf (numchan instance) nout)
-          (setf (cs-inits instance) newinits)
-          (setf (orc-header instance) gens)
-          )
+#|
+ ,.(mapcar #'(lambda (slot) `(,(slot-name slot) :accessor ,(slot-name slot) :initarg ,(slot-name slot) 
+                                                :type ,(slot-definition-type slot) :initform ,(slot-definition-initform slot)))
+           (class-direct-instance-slots (class-of synth)))
+                
+ ,.(mapcar #'(lambda (slot) 
+               (let ((newname (name slot)))
+                 (loop while (find newname (class-direct-instance-slots (class-of synth)) :test 'string-equal :key 'slot-name) do
+                       (setf newname (string+ newname "_+")))
+                 (merge-get-define-slot slot newname)))
+           (nthcdr (number-of-ignored-slots-in-merge spat)
+                   (get-all-instance-initargs (type-of spat))
+                   ))
+|#
+
+
+(defmethod chroma-spat-defclass (classname (synth cs-evt) (spat cs-evt))  
+  
+  (let* ((inits (solve-init-duplicates (append (get-all-inits synth) (get-all-inits spat))))
+         (instr-desc (make-cs-description  ;;; generate a "fake" cs orc description...
+                      :body-lines (merge-orchestras synth spat) 
+                      :channels (cs-description-channels (cs-instr spat))
+                      :gens (append (cs-description-gens (cs-instr synth)) (cs-description-gens (cs-instr spat)))
+                      :num-pfields (+ (cs-description-num-pfields (cs-instr synth)) (cs-description-num-pfields (cs-instr spat)) -4) 
+                      :global-vars (solve-init-duplicates (append (cs-description-global-vars (cs-instr synth))
+                                                                  (cs-description-global-vars (cs-instr spat))))
+                      :macros (solve-init-duplicates (append (cs-description-macros (cs-instr synth))
+                                                             (cs-description-macros (cs-instr spat))))
+                      :opcodes (solve-init-duplicates (append (cs-description-opcodes (cs-instr synth)) 
+                                                              (cs-description-opcodes (cs-instr spat))))
+                      :params (append (cs-description-params (cs-instr synth))
+                                      (loop for param in (nthcdr 3 (cs-description-params (cs-instr spat)))
+                                            for n = (+ (length (cs-description-params (cs-instr synth))) 2) ;;; we start at p2
+                                            then (+ n 1) 
+                                            collect
+                                            (make-cs-param-description :num n 
+                                                                       :name (cs-param-description-name param) 
+                                                                       :type (cs-param-description-type param) 
+                                                                       :defval (cs-param-description-defval param) 
+                                                                       :doc (cs-param-description-doc param))))
+                      ))
+         
+         (superclasses (merged-class-superclass (class-of spat)))
+         
+         (class
+          (eval `(om::defclass! ,classname (,.superclasses)
+                   ((om::elts :initarg :elts :accessor om::elts :initform 1 :type integer 
+                              :documentation "number of elements (components) for the event")
+                    (action-time :initarg :action-time :accessor action-time :type number :initform 0 
+                                 :documentation "start time of the whole event (in sec)")
+                    (user-fun :initarg :user-fun :accessor user-fun :initform nil 
+                              :documentation "a lambda patch or function to process internal elements at synthesis time (lambda/fun-name)")
+                    (cs-instr :accessor cs-instr :allocation :class :initform nil)
+                    (instr-num :accessor instr-num :initform 1 :allocation :class)))                    
+                )))
+    
+    (setf (slot-value (make-instance classname) 'cs-instr) instr-desc)
+    
+    class))
         
-        class)))
 
 
 
 (om::defmethod! merge-cs-events ((synth cs-evt) (spat cs-evt) &key name force-redefine)
-  
-  :icon 322
-  
+    
   (let ((classname (or name 
                        (intern (concatenate 'string 
                                             (string (om::name (class-of synth))) 
                                             "-to-"
                                             (string (om::name (class-of spat))))
                                :om)))
-        (ncols (max (om::elts synth) (om::elts spat)))
-        (onset (action-time synth))
-        (pfun (or (and (user-fun synth) (user-fun spat)
+        (elts (max (om::elts synth) (om::elts spat)))
+        (at (action-time synth))
+        (uf (or (and (user-fun synth) (user-fun spat)
                        #'(lambda (self i)
                            (when (functionp (user-fun synth))
                              (funcall (user-fun synth) self i))
                            (when (functionp (user-fun spat))
                              (funcall (user-fun spat) self i))))
                   (user-fun synth)
-                  (user-fun spat)))
-        (instance nil))
+                  (user-fun spat))))
     
     (when (or (not (find-class classname nil)) force-redefine)
       (chroma-spat-defclass classname synth spat))
 
-    (setf instance (make-instance classname :elts ncols))
-    #|
-    (setf rep (cons-array instance 
-                    (list nil ncols onset pfun)
-                    (append 
-                      (list 'e-dels (slot-value synth 'e-dels)
-                            'durs (slot-value synth 'durs))
-                      (loop for s1 in (class-direct-instance-slots (class-of synth)) append
-                            (list (slot-name s1) (slot-value synth (slot-name s1))))
-                      (loop for s2 in 
-                             (nthcdr (number-of-ignored-slots-in-merge spat)
-                                    (get-all-instance-initargs (type-of spat)))
-                            append
-                            (let ((sl-name (internp (name s2) (slot-package s2))))
-                              (list sl-name (slot-value spat sl-name)))
-                            )
-                      )
-                     ))
-    (setf (Lcontrols rep) (clone (append (Lcontrols synth) (Lcontrols spat))))
-    (setf (precision rep) (max (list-max (list! (precision synth))) (list-max (list! (precision spat)))))
-    (set-data rep)
-    rep
-    |#
-    instance
-    ))
+    (let ((instance (om::om-init-instance 
+                     (make-instance classname 
+                                    :elts elts
+                                    :action-time at
+                                    :user-fun uf))))
+        
+      (setf (om::data instance) (append (om::data synth)
+                                        (nthcdr 3 (om::data spat))))
+
+      instance)))
+
 
 
 
