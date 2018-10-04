@@ -32,7 +32,7 @@
   (:packages 
    (:package 
     (:name "cs-events")
-    (:functions "cr::cs-synthesize") 
+    (:functions "cr::cs-synthesize" "cr::merge-cs-events") 
     (:classes "cr::cs-array" "cr::cs-init")
     (:packages 
      (:package 
