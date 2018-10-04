@@ -1,5 +1,5 @@
 <html>
-<head><title>OMChroma 5.0 Reference: 4CH-2</title>
+<head><title>OMChroma 5.02 Reference: 4CH-2</title>
 <STYLE TYPE="text/css"><!--  
 
 body, html {
@@ -86,7 +86,7 @@ TH {
 <table align=center width=100% cellpadding=20>
 <th width=10%>&nbsp;</th>
 <th>
-<H1><font size=+3>OMChroma 5.0</font> <br>Reference pages</H1>
+<H1><font size=+3>OMChroma 5.02</font> <br>Reference pages</H1>
 <p style="text-align: right;"><a class="dark" href=index.html>Main Index</a> | <a class="dark" href=ind-alpha.html>Alphabetical Index</a></p>
 </th>
 <th width=10%>&nbsp;</th>
@@ -107,27 +107,79 @@ TH {
 <tr><td colspan=3><b><font color=882222>CLASS SLOTS:</font></b></td></tr>
 <table width=100% border=0>
 <tr>
-<td width=100> - <font color=333366><b><a href=class-slots.html#ELTS>elts</a></b></font></td>
-<td>number of elements (csound 'notes')</td>
+<td width=100> - <font color=333366><b>elts</b></font></td>
+<td>number of elements (components) for the event [int]</td>
 <td>[default = 1]</td>
 </tr>
 <tr>
-<td width=100> - <font color=333366><b><a href=class-slots.html#ACTION-TIME>action-time</a></b></font></td>
-<td>an offset used to time several events together</td>
+<td width=100> - <font color=333366><b>action-time</b></font></td>
+<td>start time of the whole event [sec]</td>
 <td>[default = 0]</td>
 </tr>
 <tr>
-<td width=100> - <font color=333366><b><a href=class-slots.html#USER-FUN>user-fun</a></b></font></td>
-<td>a lambda patch or function to process internal elements at synthesis time</td>
+<td width=100> - <font color=333366><b>user-fun</b></font></td>
+<td>a lambda patch or function to process internal elements at synthesis time [lambda/fun-name]</td>
 <td>[default = nil]</td>
 </tr>
 <tr>
 <td colspan=3><br><i><b>Optional:</b></i></td>
 </tr>
 <tr>
-<td width=100> - <font color=333366><b><a href=class-slots.html#PRECISION>precision</a></b></font></td>
-<td></td>
+<td width=100> - <font color=333366><b>precision</b></font></td>
+<td>float precision in the Csound score</td>
 <td>[default = 4]</td>
+</tr>
+</table>
+<tr><td colspan=3><br><b><font color=882222>CSOUND PARAMS (KEYWORDS):<br></font></b></td></tr>
+<table width=100% border=0>
+<tr>
+<td class=top>- <b>e-dels</b></td>
+<td class=top>
+action time [sec]
+</td>
+<td class=top>[default = 0.0]</td>
+</tr>
+<tr>
+<td class=top>- <b>durs</b></td>
+<td class=top>
+duration [sec]
+</td>
+<td class=top>[default = 1.0]</td>
+</tr>
+<tr>
+<td class=top>- <b>afil</b></td>
+<td class=top>
+sound input
+</td>
+<td class=top>[default = nil]</td>
+</tr>
+<tr>
+<td class=top>- <b>channel1</b></td>
+<td class=top>
+amplitude [0.0-1.0]
+</td>
+<td class=top>[default = 1.0]</td>
+</tr>
+<tr>
+<td class=top>- <b>channel2</b></td>
+<td class=top>
+amplitude [0.0-1.0]
+</td>
+<td class=top>[default = 0.0]</td>
+</tr>
+<tr>
+<td class=top>- <b>channel3</b></td>
+<td class=top>
+amplitude [0.0-1.0]
+</td>
+<td class=top>[default = 0.0]</td>
+</tr>
+<tr>
+<td class=top>- <b>channel4</b></td>
+<td class=top>
+amplitude [0.0-1.0]
+</td>
+<td class=top>[default = 0.0]</td>
 </tr>
 </table>
 <br><font color=882222><b>DESCRIPTION:</b></font>
@@ -137,7 +189,7 @@ TH {
  INDEPENDENT PANNING, 1 SLOT/CHANNEL <br>
 =============================================================================<br>
 </p>
-<br><br><br><center><center><font size=-2>Auto doc generation by OM7 0.1 - 2018/06/25 23:15:36</font></center></center>
+<br><br><br><center><center><font size=-2>Auto doc generation by OM7 0.1 - 2018/10/04 14:49:21</font></center></center>
 </td>
 <td width=10%>&nbsp;</td>
 </tr></table>
