@@ -27,26 +27,11 @@
 
 (in-package :cr)
 
-(defclass cs-spat-evt (cs-evt) ())
-
-
-(defmethod om::om-init-instance ((self cs-spat-evt) &optional initargs)
-  (call-next-method)
-  (unless (find :durs intargs :key 'car)
-    (let ((durfield (find "durs" (om::data self) :key 'om::array-field-name :test 'string-equal))
-          (soundfield (find "soundfile" (om::data self) :key 'om::array-field-name :test 'string-equal)))
-      (when (om::array-field-data soundfield)
-        (setf (om::array-field-data durfield)
-              (mapcar 'om::sound-dur (om::array-field-data soundfield)))
-        )
-      ))
-  )
-
 
 ;;; PFIELDS TO IGNORE WHEN DOING SPATIAL SOUND SYNTH
-(defmethod ignore-pfields ((self cs-spat-evt)) nil)
+(defmethod ignore-pfields ((self cs-evt)) nil)
              
-(defmethod merge-orchestras ((synth cs-evt) (spat cs-spat-evt))
+(defmethod merge-orchestras ((synth cs-evt) (spat cs-evt))
   (let* ((synthorc (source-code synth))
          (spatorc (source-code spat))
          (p-index (length (class-direct-instance-slots (class-of synth)))) ;;; nb params (from p4)
@@ -197,8 +182,8 @@
         'cs-evt)))
 
 
-;;; ADD e-dels, durs, and soundfile
-(defmethod number-of-ignored-slots-in-merge ((self cs-spat-evt))
+;;; ADD e-dels, durs, and soundfile/afil
+(defmethod number-of-ignored-slots-in-merge ((self cs-evt))
   (+ (length (ignore-pfields self)) 3))
 
 
@@ -211,9 +196,12 @@
           :allocation (om::alloc self) 
           :documentation (om::doc self)
           :accessor (intern name (slot-package self)))))
-     
-(om::defmethod! chroma-spat-defclass (classname (synth cs-evt) (spat cs-spat-evt))
+   
+  
+(om::defmethod! chroma-spat-defclass (classname (synth cs-evt) (spat cs-evt))
+  
   :icon 322
+  
   (let ((orc (merge-orchestras synth spat))
         (nout (numchan spat))
         (inits (append (cs-inits synth) (cs-inits spat)))
@@ -262,26 +250,33 @@
 
 
 
-(om::defmethod! chroma-prisma ((synth cs-evt) (spat cs-spat-evt) &key name force-redefine)
+(om::defmethod! merge-cs-events ((synth cs-evt) (spat cs-evt) &key name force-redefine)
+  
   :icon 322
+  
   (let ((classname (or name 
                        (intern (concatenate 'string 
-                                            (string (name (class-of synth))) 
-                                            ">>"
-                                            (string (name (class-of spat)))) :om)))
-        (ncols (max (numcols synth) (numcols spat)))
+                                            (string (om::name (class-of synth))) 
+                                            "-to-"
+                                            (string (om::name (class-of spat))))
+                               :om)))
+        (ncols (max (om::elts synth) (om::elts spat)))
         (onset (action-time synth))
-        (pfun (or (and (get-parsing-fun synth) (get-parsing-fun spat)
-                                          #'(lambda (self i)
-                                              (when (functionp (get-parsing-fun synth))
-                                                (funcall (get-parsing-fun synth) self i))
-                                              (when (functionp (get-parsing-fun spat))
-                                                (funcall (get-parsing-fun spat) self i))))
-                  (get-parsing-fun synth) (get-parsing-fun spat)))
+        (pfun (or (and (user-fun synth) (user-fun spat)
+                       #'(lambda (self i)
+                           (when (functionp (user-fun synth))
+                             (funcall (user-fun synth) self i))
+                           (when (functionp (user-fun spat))
+                             (funcall (user-fun spat) self i))))
+                  (user-fun synth)
+                  (user-fun spat)))
         (instance nil))
+    
     (when (or (not (find-class classname nil)) force-redefine)
       (chroma-spat-defclass classname synth spat))
-    (setf instance (make-instance classname :numcols ncols))
+
+    (setf instance (make-instance classname :elts ncols))
+    #|
     (setf rep (cons-array instance 
                     (list nil ncols onset pfun)
                     (append 
@@ -302,6 +297,8 @@
     (setf (precision rep) (max (list-max (list! (precision synth))) (list-max (list! (precision spat)))))
     (set-data rep)
     rep
+    |#
+    instance
     ))
 
 
