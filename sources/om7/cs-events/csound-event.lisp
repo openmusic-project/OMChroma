@@ -53,11 +53,12 @@
           (soundfield (find-if #'(lambda (field) (member (om::array-field-name field) '("afil" "soundfile") :test 'string-equal))
                                (om::data self))))
       
-      (when (and soundfield (om::array-field-data soundfield))
-        (setf (om::array-field-data durfield)
-              (mapcar 'om::sound-dur (om::array-field-data soundfield)))
-        ))
-    )
+      (when soundfield 
+        (loop for snd in (om::array-field-data soundfield)
+              for i = 0 then (+ i 1) 
+              when snd 
+              do (setf (nth i (om::array-field-data durfield)) (om::sound-dur snd))))
+      ))
   
   self)
 
@@ -116,6 +117,7 @@
   (let ((files (om-api:om-directory folder :type "orc" :directories nil))
         (subfolders (om-api:om-directory folder :files nil :directories t)))
       (loop for cs-file in (sort files 'string< :key 'namestring) do 
+            
             (let ((class (defclass-from-cs-orc cs-file)))
               (om::addclass2pack class package)
               ))

@@ -33,13 +33,13 @@ sr	= 96000
 kr	= 96000
 ksmps	= 1
 nchnls	= 16
-
-0dbfs = 8388697 ; 24 bits
+	
+0dbfs = 8388607 ; 24 bits
 
 instr 1 ; -------------------------------------------------------------
  isp_dur		= p3
  isp_file		= p4
- isp_bal		= p5 % 360 ;reduce to 0-360º
+ isp_bal		= p5 % 360 ;reduce to 0-360
  isp_bal		= (isp_bal < 0.0 ? (360+isp_bal) : isp_bal) ; turn negative vals into positive ones
  isp_mode		= 0 ; equal power (harmonic) panning
  isp_pch		= 1 ; no transposition
