@@ -137,67 +137,85 @@
       nil)))
 
 
-;;; NOT TESTED !!
+
 (defun init-duplicates-dialog (initdup-list type)
+  
   (let* ((typename (cond ((equal type :global) "Global Variable")
                          ((equal type :macro) "Macro")
                          ((equal type :opcode) "UDO")
-                         (t "??")))
+                         (t "init declaration")))
                          
-         (thedialog (om-make-window 'om-dialog  
-                                    :window-title (string+ typename " conflicts")
-                                    :size (om-make-point 500 450) 
-                                    :close nil :resizable nil :maximize nil))
-         (scrol (om-make-view 'om-scroller
-                  :owner thedialog
-                  :size (om-make-point 480 300)
-                  :scrollbars :v
-                  :field-size (om-make-point 270 (* 70 (length initdup-list)))
-                  :position (om-make-point 10 80))) 
-         tablelist)
-    (loop for duplicates in initdup-list
-          for i = 0 then (+ 1 i) do
-          (let ((table (om-make-dialog-item 'om-single-item-list 
-                                            (om-make-point 120 (+ 6 (* 65 i))) 
-                                            (om-make-point 300 60) ""
-                                         :font (om-make-font "Courier" 12)
-                                         :scrollbars :v
-                                         :range (loop for init in duplicates collect (flat-string (value init))))))
-            (push table tablelist)
-            (om-select-item-index table 0)
-            (om-add-subviews scrol (om-make-dialog-item 'om-static-text
-                                                        (om-make-point 5 (+ 18 (* 65 i))) (om-make-point 70 20)
-                                                        (name (car duplicates))
-                                                        :font (om-make-font "Courier" 13 :style '(:bold)))
-                             table)
-          ))
+         (win (oa::om-make-window 'oa::om-dialog  
+                                  :title (concatenate 'string typename " conflicts")
+                                  :size (oa::om-make-point 420 (+ 100 (* 60 (length initdup-list)))) 
+                                  :close nil :resizable nil :maximize nil))
+         
+         (tablelist nil))
+
+    (oa::om-add-subviews 
+     win
+     (oa:om-make-layout 
+      'oa:om-column-layout 
+      :subviews (cons 
+                 (oa::om-make-di 'oa:om-multi-text
+                                 :size (oa::om-make-point 400 40)
+                                 :text (concatenate 'string "Some conflicting " typename
+                                                "s were detected between the different classes. Please choose one for each declared "
+                                                typename ".")
+                                 :font (oa:om-def-font :font1)
+                                 :wrap t)
+                 
+                 (append 
+                  
+                  (loop for duplicates in initdup-list collect
+                        (oa:om-make-layout 
+                         'oa:om-row-layout 
+                         :subviews (list 
+                                    (oa::om-make-di 'oa:om-simple-text
+                                                    :size (oa::om-make-point 70 20)
+                                                    :text (name (car duplicates))
+                                                    :font (oa:om-def-font :font1b))
+                                    (let ((list (oa::om-make-di 'oa::om-single-item-list 
+                                                                :size (oa::om-make-point 300 60)
+                                                                :font (oa:om-def-font :font1)
+                                                                :scrollbars :v
+                                                                :items (loop for init in duplicates collect (value init)))))
+                                      (push list tablelist)
+                                      list))
+                         ))
+                 
+                  (list 
+                   
+                   (oa:om-make-layout 
+                    'oa:om-row-layout 
+                    :subviews (list 
+                               NIL
+                               (oa::om-make-di 'oa::om-button 
+                                               :size (oa::om-make-point  80 24) 
+                                               :text "Cancel" 
+                                               :di-action #'(lambda (item)
+                                                              (declare (ignore item)) 
+                                                                   (oa::om-return-from-modal-dialog win nil)))
+                               (oa::om-make-di 'oa::om-button 
+                                               :size (oa::om-make-point  80 24) 
+                                               :text "OK" 
+                                               :di-action #'(lambda (item) 
+                                                              (declare (ignore item)) 
+                                                              (oa::om-return-from-modal-dialog 
+                                                               win
+                                                               (loop for item in initdup-list
+                                                                     for cel in tablelist
+                                                                     collect (nth (oa::om-get-selected-item-index cel) item))))
+                                               :default-button t :focus t)))
+                   )))
+      ))
     
-    
-    (om-add-subviews thedialog
-                     (om-make-dialog-item 'om-static-text
-                                          (om-make-point 10 10) (om-make-point 400 60)
-                                          (string+ "Some conflicting " typename
-                                                   "s were detected between the different classes. Please choose one for each declared "
-                                                   typename ".")
-                                          :font *controls-font*
-                                          )
-      (om-make-dialog-item 'om-button (om-make-point 250 390) (om-make-point  80 24) "Cancel" 
-                        :di-action (om-dialog-item-act item
-                                     (declare (ignore item)) 
-                                     (om-return-from-modal-dialog thedialog nil)))
-     (om-make-dialog-item 'om-button (om-make-point 350 390) (om-make-point  80 24) "OK" 
-                        :di-action (om-dialog-item-act item
-                                    (declare (ignore item)) 
-                                     (om-return-from-modal-dialog thedialog (loop for item in initdup-list
-                                                                                  for cel in tablelist
-                                                                                  collect (nth (om-get-selected-item-index cel) item)))) 
-                        :default-button t :focus t))
-    
-    (om-modal-dialog thedialog)
+    (oa::om-modal-dialog win)
     ))
 
 
 (defun solve-init-duplicates (init-list &optional type)
+
   (let* ((original (remove-duplicates init-list :test 'init-equal))
          (copy (copy-list original)))
     
@@ -220,7 +238,7 @@
       
       (when duplicatas
         (or (setf duplicatas (init-duplicates-dialog (reverse duplicatas) type))
-            (om-abort)))
+            (om::om-abort)))
         
       (let ((finalista (append autosolve duplicatas)))
         (loop for item in finalista do
