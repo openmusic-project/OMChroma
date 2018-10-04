@@ -32,14 +32,13 @@
   ((init-type :initform :global :accessor init-type :initarg :init-type)
    (name :initform nil :accessor name :initarg :name)
    (params :initform nil :accessor params :initarg :params)
-   (value :initform nil :accessor value :initarg :value))
-  )
+   (value :initform nil :accessor value :initarg :value)))
  
 ;;; (("global variable" :global) ("macro" :macro) ("user-defined opcode" :opcode) ("num channels" :channels))
 
 (defmethod print-object ((self cs-init) stream)
-  (format stream "#<cs-init>~A: ~A [~A] ~A" 
-          (init-type self) (name self) (params self) (value self)))
+  (format stream "<CS-INIT [~A]: ~A>" 
+          (init-type self) (name self)))
 
 (defun get-inits-of-type (inits type)
   (loop for item in inits 
@@ -51,34 +50,44 @@
 ;;; SEE FOR INSTANCE OMPRISMA PRISMA-INIT
 ;;; => MUST RETURN ONE OR LIST OF CS-INITS
 
-(defmethod format-inits (inits cs-events)
-  (om::flat 
-   (mapcar #'(lambda (init) 
-               (format-init init cs-events))
-           inits)))
+(defmethod prepare-inits (init-list cs-events)
+  
+  (let ((formatted-inits ;;; reformat inits according to the class of event
+                         (om::flat 
+                          (loop for init in init-list
+                                collect (format-init init cs-events))))
+        (events-inits ;;; get inits for CS-EVENTS (parsed from the .orc) 
+                      (loop for evt in cs-events append (get-all-inits evt))))
 
-;;; to be redefined for specific pairs of init/event
-(defmethod format-init (inits cs-events) inits)
+    ;;; handle duplicates
+    (overwrite-cs-inits events-inits formatted-inits)
+    
+    ))
 
 
-;;; WRITING CS-INITS
+;;; to be redefined for specific init/events
+(defmethod format-init (init cs-events) init)
 
-;;; CS-INITS CAN COME FROM CS-EVT CLASSES OR FROM SYNTHESIS PARAMS
 
 
-;;; THE SYNTHESIS HAVE PRIORITY AND CAN REDEFINE THE CS-INITS FROM THE CS-EVTS
- 
-(defun overwrite-cs-inits (originals news)
-  (mapcar #'(lambda (new) (setf (name new) (string-simplify (name new)))) news)
-  (let ((not-redefined nil))
-    (loop for item in originals do 
-          (let ((redefined (find item news 
-                                 :test #'(lambda (a b) 
-                                           (and (equal (init-type a) (init-type b))
-                                                (string-equal (string-simplify (name a))
-                                                              (string-simplify (name b))))))))
-            (unless redefined (push item not-redefined))))
-    (append (reverse not-redefined) news)))
+;;; CS-INITS CAN COME FROM CS-EVT CLASSES OR FROM SYNTHESIZE PARAMS
+;;; In case of duplicates, user-inits (specified in SYNTHESIZE) have prority over class inits 
+(defun overwrite-cs-inits (event-inits user-inits)
+  
+  ;;; try to minimize the name string for easier comparison
+  (loop for init in user-inits do 
+        (setf (name init) (string-simplify (name init))))
+  
+  (let ((not-redefined-event-inits 
+         (remove-if #'(lambda (item) 
+                        (find item user-inits 
+                              :test #'(lambda (a b) 
+                                        (and (equal (init-type a) (init-type b))
+                                             (string-equal (string-simplify (name a))
+                                                           (string-simplify (name b)))))))
+                    event-inits)))
+        
+    (append not-redefined-event-inits user-inits)))
 
 
 ;;; UTILS TO SIMPLIFY / COMPARE / SOLVE DUPLICATES
@@ -128,6 +137,7 @@
       nil)))
 
 
+;;; NOT TESTED !!
 (defun init-duplicates-dialog (initdup-list type)
   (let* ((typename (cond ((equal type :global) "Global Variable")
                          ((equal type :macro) "Macro")
@@ -186,15 +196,11 @@
     (om-modal-dialog thedialog)
     ))
 
-#|
-
-(init-duplicates-dialog )
-
-|#
 
 (defun solve-init-duplicates (init-list &optional type)
   (let* ((original (remove-duplicates init-list :test 'init-equal))
-        (copy (copy-list original)))
+         (copy (copy-list original)))
+    
     (let (duplicatas autosolve)
       (loop while copy do
             (let ((first (pop copy)) dup)
@@ -211,6 +217,7 @@
               (when dup 
                 (push first dup)
                 (push dup duplicatas))))
+      
       (when duplicatas
         (or (setf duplicatas (init-duplicates-dialog (reverse duplicatas) type))
             (om-abort)))
@@ -219,6 +226,7 @@
         (loop for item in finalista do
               (setf original (remove (name item) original :key 'name :test 'string-equal)))
         (setf original (append original finalista)))
+      
       original)))
 
 
@@ -253,16 +261,10 @@
         ))))
 
 
-(defun get-all-inits (instlist &optional type)
-  (loop for item in instlist append 
-        (if type (get-inits-type (cs-inits item) type)
-          (cs-inits item))))
-
 ;;; main function called from synthesize
-(defun write-cs-inits (outstream instlist inits)
-  (let ((new-list (overwrite-cs-inits (get-all-inits instlist) inits)))
-    (write-cs-globals outstream (get-inits-type new-list :global))
-    (write-cs-macros outstream (get-inits-type new-list :macro))
-    (write-cs-opcodes outstream (get-inits-type new-list :opcode))))
+(defun write-cs-inits (outstream inits)
+  (write-cs-globals outstream (get-inits-of-type inits :global))
+  (write-cs-macros outstream (get-inits-of-type inits :macro))
+  (write-cs-opcodes outstream (get-inits-of-type inits :opcode)))
 
 

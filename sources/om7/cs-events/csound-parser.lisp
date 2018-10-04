@@ -91,7 +91,8 @@
                 (setf value (concatenate 'string (subseq value 0 (- (length value) 1)) 
                                      " " 
                                      (oa:om-clean-line (om::delete-spaces (read-line fileptr))))))
-          (setf rep (list name value))
+          ;; (setf rep (list name value))
+          (setf rep (make-instance 'cs-init :init-type :global :name name :value value))
           )))
     rep))
 
@@ -146,7 +147,9 @@
               (print (format nil "Error in MACRO ~S: no end # found" name))
               (setf body nil))))
 
-        (setf rep (list name args body))
+        ; (setf rep (list name args body))
+        (setf rep (make-instance 'cs-init :init-type :macro :name name :params args :value body))
+
         ))
     rep))
 
@@ -177,7 +180,9 @@
             (unless endfound
               (print (format nil "Error in UDO ~S: no 'endop' found" name))
               (setf body nil)))
-          (list name (list in out) body))
+          ;(list name (list in out) body)
+          (make-instance 'cs-init :init-type :opcode :name name :params (list in out) :value body)
+          )
         ))))
 
 ;;; param = (num name type defval doc)
