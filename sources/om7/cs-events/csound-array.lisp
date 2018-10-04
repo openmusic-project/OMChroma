@@ -30,7 +30,7 @@
    (instr-num :initarg :instr-num :accessor instr-num :initform 1)
    ;;; repeat this slot from OM superclass, so that it appears on the box
    (om::elts :initarg :elts :accessor om::elts :initform 1 :type integer :documentation "number of elements (components) for the event")
-   (orc-gens :accessor orc-gens :initform nil)
+   ;;; (orc-gens :accessor orc-gens :initform nil)
    (precision :accessor precision :initform 4 :documentation "float precision in the Csound score")))
 
 
@@ -125,7 +125,7 @@
     (setf (om::field-names self) (mapcar 'om::array-field-name (om::data self)))
               
     ;;; the gen-tables from the orc-header
-    (setf (orc-gens self) gens)
+    ;;; (setf (orc-gens self) gens)
              
     ))
 

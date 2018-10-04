@@ -85,8 +85,10 @@
         (with-open-file (out path-sco :direction :output)
       
          (format out "; Score header defined in orchestra:~%")
-         (loop for table in (orc-gens self) do (write-line table out))
-      
+         ;;;(loop for table in (orc-gens self) do (write-line table out))
+         (loop for table in (cs-description-gens (cs-instr self)) do (write-line table out))
+         
+         
           (format out "~%; global tables:~%")
           (loop for item in (om::list! global-tables) do (format out "~A~%" (cs-table-string item)))
       
