@@ -33,13 +33,14 @@
    (instr-num :accessor instr-num :initform 1 :allocation :class)
    
    ;;; repeat this slot so that it appears on the box
-   (om::elts :initarg :elts :accessor om::elts :initform 1 :documentation "number of elements (csound 'notes')")
+   (om::elts :initarg :elts :accessor om::elts :initform 1 :type integer :documentation "number of elements (csound 'notes')")
  
    ;;; specific slots of cs-evt
    (action-time :initarg :action-time :accessor action-time :initform 0 :documentation "an offset used to time several events together")
    (user-fun :initarg :user-fun :accessor user-fun :initform nil 
              :documentation "a lambda patch or function to process internal elements at synthesis time")
    ))
+
 
 
 
@@ -53,10 +54,10 @@
     (eval 
      `(om::defclass! ,class-name (cs-evt)
         ,(append 
-          '((om::elts :initarg :elts :accessor om::elts :initform 1 :documentation "number of elements (csound 'notes')")
-            (action-time :initarg :action-time :accessor action-time :initform 0 :documentation "an offset used to time several events together")
+          '((om::elts :initarg :elts :accessor om::elts :initform 1 :type integer :documentation "number of elements (components) for the event")
+            (action-time :initarg :action-time :accessor action-time :type number :initform 0 :documentation "start time of the whole event (in sec)")
             (user-fun :initarg :user-fun :accessor user-fun :initform nil 
-                      :documentation "a lambda patch or function to process internal elements at synthesis time")
+                      :documentation "a lambda patch or function to process internal elements at synthesis time (lambda/fun-name)")
             ;;; class-allocates the orc data with the first instrument in the file
             (cs-instr :accessor cs-instr :allocation :class :initform nil)
             (instr-num :accessor instr-num :initform 1 :allocation :class))

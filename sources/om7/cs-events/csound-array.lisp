@@ -29,9 +29,9 @@
    (cs-instr :accessor cs-instr :initform nil)
    (instr-num :initarg :instr-num :accessor instr-num :initform 1)
    ;;; repeat this slot from OM superclass, so that it appears on the box
-   (om::elts :initarg :elts :accessor om::elts :initform 1 :documentation "number of elements (csound 'notes')")
+   (om::elts :initarg :elts :accessor om::elts :initform 1 :type integer :documentation "number of elements (components) for the event")
    (orc-gens :accessor orc-gens :initform nil)
-   (precision :accessor precision :initform 4)))
+   (precision :accessor precision :initform 4 :documentation "float precision in the Csound score")))
 
 
 ;; will appear as a keyword input (must be a valid slot)
@@ -57,6 +57,13 @@
   ;(om::fields self)
   (cs-description-num-pfields (cs-instr self)))
 
+(defmethod get-all-inits ((self cs-array))
+  (append 
+   (cs-description-global-vars (cs-instr self))
+   (cs-description-macros (cs-instr self))
+   (cs-description-opcodes (cs-instr self))
+   ))
+
 (defmethod get-cs-descriptions ((source string))
   (with-open-stream (s (make-string-input-stream source))
     (parse-csound-instruments s)))
@@ -75,7 +82,7 @@
   (let ((num-pfields (cs-description-num-pfields instr-data))
         (params (cs-description-params instr-data))
         (gens (cs-description-gens instr-data)))
-              
+   
     ;;; set the fields from csound instrument (will rule data filling in class-array)
     (when (integerp num-pfields)
       (setf (om::data self) 
@@ -90,7 +97,7 @@
                                       (precision self)))
                           (name (if param (cs-param-description-name param)
                                   (format nil "p~D" pn))))
-                     
+
                      ;;; pre-set the data with meta-info in the orc files
                      ;;; the actual data will be completed/filled in the next-method call (class-array)
                      (om::make-array-field :name name 
