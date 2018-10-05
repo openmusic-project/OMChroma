@@ -33,7 +33,6 @@
 ;;(defmethod ignore-pfields ((self om::dbap.discrete)) '("p5" "p6" "p7"))
 
 
-
 (defparameter *csound-separators* '(#\) #\( #\[ #\] #\{ #\} #\, #\* #\+ #\- #\/ #\? #\: #\< #\> #\= #\;))
 
 (defun tokenize-line (line)
@@ -73,6 +72,7 @@
       (cdr token)
     token))
 
+
 (defun find-pn (tokens)
   (let ((rep nil))
     (loop for item in tokens 
@@ -82,7 +82,6 @@
                      (numberp (read-from-string (subseq item 1))))
             (push (list pos (read-from-string (subseq item 1))) rep)))
     (reverse rep)))
-
 
 
 (defmethod merge-orchestras ((synth cs-evt) (spat cs-evt))
@@ -146,8 +145,7 @@
                          (setf tokens (substitute intername spatvar tokens :test 'string-equal))
                          ))
                      ))
-
-            
+    
              (loop for ig in (append ignore-fields ignore-aux)
                    while tokens do
                    (when (find ig tokens :test 'string-equal)
@@ -173,12 +171,8 @@
                                         ))))
              (apply 'concatenate (cons 'string tokens))
              ))
-     )
-     
+     )  
     ))
-
-
-
 
 
 (defparameter *prisma-spat-classes* nil)
@@ -207,23 +201,6 @@
           :allocation (om::alloc self) 
           :documentation (om::doc self)
           :accessor (intern name (slot-package self)))))
-   
-  
-
-#|
- ,.(mapcar #'(lambda (slot) `(,(slot-name slot) :accessor ,(slot-name slot) :initarg ,(slot-name slot) 
-                                                :type ,(slot-definition-type slot) :initform ,(slot-definition-initform slot)))
-           (class-direct-instance-slots (class-of synth)))
-                
- ,.(mapcar #'(lambda (slot) 
-               (let ((newname (name slot)))
-                 (loop while (find newname (class-direct-instance-slots (class-of synth)) :test 'string-equal :key 'slot-name) do
-                       (setf newname (string+ newname "_+")))
-                 (merge-get-define-slot slot newname)))
-           (nthcdr (number-of-ignored-slots-in-merge spat)
-                   (get-all-instance-initargs (type-of spat))
-                   ))
-|#
 
 
 (defmethod chroma-spat-defclass (classname (synth cs-evt) (spat cs-evt))  
@@ -271,8 +248,6 @@
     class))
         
 
-
-
 (om::defmethod! merge-cs-events ((synth cs-evt) (spat cs-evt) &key name force-redefine)
     
   (let ((classname (or name 
@@ -305,9 +280,4 @@
                                         (nthcdr 3 (om::data spat))))
 
       instance)))
-
-
-
-
-
 
