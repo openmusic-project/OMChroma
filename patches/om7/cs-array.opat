@@ -5,8 +5,8 @@
  (:doc "")
  (:info
   (:created "2017/11/09 15:28:47")
-  (:modified "2018/06/25 23:35:08"))
- (:window (:size (1513 1090)) (:position (810 23)))
+  (:modified "2018/10/04 21:58:37"))
+ (:window (:size (1513 1090)) (:position (407 23)))
  (:grid nil)
  (:lock nil)
  (:boxes
@@ -28,6 +28,7 @@
    (:showname nil)
    (:group-id nil)
    (:lock :locked)
+   (:lambda nil)
    (:inputs
     (:input
      (:type :standard)
@@ -94,7 +95,7 @@
      (:add-slots ((:input-mode :lines-cols)))))
    (:id 0))
   (:box
-   (:library "OMChroma")
+   (:library "omchroma")
    (:reference (:symbol "CS-ARRAY" "CHROMA"))
    (:type :object)
    (:group-id nil)
@@ -112,6 +113,7 @@
    (:showname nil)
    (:group-id nil)
    (:lock nil)
+   (:lambda nil)
    (:inputs
     (:input
      (:type :standard)
@@ -133,11 +135,11 @@
      (:name "ELTS")
      (:value 1)
      (:reactive nil))
-    (:input (:type :key) (:name "E-DELS") (:value nil) (:reactive nil))
-    (:input (:type :key) (:name "DURS") (:value nil) (:reactive nil))
-    (:input (:type :key) (:name "FREQ") (:value nil) (:reactive nil))
-    (:input (:type :key) (:name "AENV") (:value nil) (:reactive nil))
-    (:input (:type :key) (:name "AMP") (:value nil) (:reactive nil)))
+    (:input (:type :key) (:name "e-dels") (:value nil) (:reactive nil))
+    (:input (:type :key) (:name "durs") (:value nil) (:reactive nil))
+    (:input (:type :key) (:name "freq") (:value nil) (:reactive nil))
+    (:input (:type :key) (:name "aenv") (:value nil) (:reactive nil))
+    (:input (:type :key) (:name "amp") (:value nil) (:reactive nil)))
    (:outputs
     (:output (:name "SELF") (:reactive nil))
     (:output (:name "SOURCE-CODE") (:reactive nil))
@@ -154,7 +156,8 @@
     (:object
      (:class (:symbol "CS-ARRAY" "CHROMA"))
      (:slots
-      ((:elts 10)
+      ((:onset 0)
+       (:elts 10)
        (:field-names (:list "e-dels" "durs" "amp" "freq" "aenv"))
        (:source-code
         ";;=============================================================================
@@ -204,32 +207,33 @@ endin
         (:list
          (:array-field
           (:name "e-dels")
-          (:doc nil)
+          (:doc "action time (sec)")
           (:type number)
           (:decimals 4)
           (:default 0.0)
           (:data
            (:list
-            1.4110851
-            1.7581644
-            3.8533473
-            2.8172429
-            3.5180662
-            3.5023012
-            3.5102198
-            3.81375
-            1.2700245
-            2.6480978)))
+            3.412269
+            1.5435405
+            3.6699357
+            5.3336663
+            5.372811
+            3.1777218
+            1.9866207
+            0.8898282
+            2.924695
+            1.0663562)))
          (:array-field
           (:name "durs")
-          (:doc nil)
+          (:doc "duration (sec)")
           (:type number)
           (:decimals 4)
           (:default 1.0)
           (:data (:list 0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8)))
          (:array-field
           (:name "amp")
-          (:doc nil)
+          (:doc
+           "maximum amplitude (linear ]0.0,1000.0] or dB ]-INF,0.0])")
           (:type number)
           (:decimals 4)
           (:default -6.0)
@@ -247,15 +251,15 @@ endin
             23.69)))
          (:array-field
           (:name "freq")
-          (:doc nil)
+          (:doc "frequency (Hz)")
           (:type number)
           (:decimals 4)
           (:default 440.0)
           (:data (:list 400 500 200 400 500 200 400 500 200 400)))
          (:array-field
           (:name "aenv")
-          (:doc nil)
-          (:type (:list :symbol "CS-TABLE" "CHROMA"))
+          (:doc "amplitude envelope (GEN table)")
+          (:type (:symbol "CS-TABLE" "CHROMA"))
           (:decimals 4)
           (:default
            (:object
@@ -679,12 +683,12 @@ endin
      (:name "SELF")
      (:value nil)
      (:reactive nil))
-    (:input (:type :key) (:name "TABLES") (:value nil) (:reactive nil))
-    (:input (:type :key) (:name "RUN") (:value nil) (:reactive nil)))
+    (:input (:type :key) (:name "tables") (:value nil) (:reactive nil))
+    (:input (:type :key) (:name "run") (:value nil) (:reactive nil)))
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 6))
   (:box
-   (:library "OMChroma")
+   (:library "omchroma")
    (:reference (:symbol "GEN07" "CHROMA"))
    (:type :object)
    (:group-id nil)
@@ -703,6 +707,7 @@ endin
    (:show-markers t)
    (:group-id nil)
    (:lock :locked)
+   (:lambda nil)
    (:inputs
     (:input
      (:type :standard)
@@ -754,79 +759,6 @@ endin
        (:stime 0)))))
    (:id 7))
   (:box
-   (:reference textbuffer)
-   (:type :object)
-   (:group-id nil)
-   (:name nil)
-   (:x 351)
-   (:y 771)
-   (:w 293)
-   (:h 320)
-   (:color (:color 0.9 0.9 0.9 1.0))
-   (:border 1.5)
-   (:roundness nil)
-   (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
-   (:name nil)
-   (:display :mini-view)
-   (:showname nil)
-   (:group-id nil)
-   (:lock nil)
-   (:inputs
-    (:input
-     (:type :standard)
-     (:name "SELF")
-     (:value nil)
-     (:reactive t))
-    (:input
-     (:type :standard)
-     (:name "CONTENTS")
-     (:value nil)
-     (:reactive nil)))
-   (:outputs
-    (:output (:name "SELF") (:reactive nil))
-    (:output (:name "CONTENTS") (:reactive nil)))
-   (:window (:size (784 799)) (:position (184 95)))
-   (:edition-params (:read-mode :text))
-   (:value
-    (:object
-     (:class textbuffer)
-     (:slots
-      ((:contents
-        (:list
-         "; Score header defined in orchestra:"
-         "f1 0 65537 10 10"
-         ""
-         "; global tables:"
-         "f 12 0 4097 7  9.78 62.00 43.60 728.00 45.96 587.00 26.27 946.00 13.19 1773.00 2.93"
-         ""
-         ";------ local tables in array ------"
-         ""
-         "f 1000 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         "f 1001 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         "f 1002 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         "f 1003 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         "f 1004 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         "f 1005 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         "f 1006 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         "f 1007 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         "f 1008 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         "f 1009 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
-         ""
-         ";------ lines for event ------"
-         ""
-         "i1 0.2759 0.8000 0.0000 400 1000 "
-         "i1 1.0892 0.8000 28.4300 500 1001 "
-         "i1 2.0162 0.8000 23.6900 200 1002 "
-         "i1 4.8979 0.8000 385.9000 400 1003 "
-         "i1 1.5780 0.8000 284.4700 500 1004 "
-         "i1 3.0792 0.8000 146.5400 200 1005 "
-         "i1 2.0675 0.8000 0.0000 400 1006 "
-         "i1 3.4039 0.8000 0.0000 500 1007 "
-         "i1 5.5700 0.8000 28.4300 200 1008 "
-         "i1 3.3752 0.8000 23.6900 400 1009 "))))
-     (:add-slots ((:input-mode :lines-cols)))))
-   (:id 8))
-  (:box
    (:reference symbol)
    (:type :value)
    (:group-id nil)
@@ -844,7 +776,7 @@ endin
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value t)
-   (:id 9))
+   (:id 8))
   (:box
    (:reference sound)
    (:type :object)
@@ -864,6 +796,7 @@ endin
    (:show-markers t)
    (:group-id nil)
    (:lock nil)
+   (:lambda nil)
    (:inputs
     (:input
      (:type :standard)
@@ -883,7 +816,7 @@ endin
        (:default-frame-type marker-frame)
        (:frames nil)
        (:buffer nil)
-       (:n-samples 274073)
+       (:n-samples 272220)
        (:n-channels 1)
        (:sample-rate 44100)
        (:smpl-type :float)
@@ -894,28 +827,15 @@ endin
         (:pathname
          (:directory (:absolute "Users" "bresson" "OM" "out-files"))
          (:device :unspecific)
-         (:host nil)
+         (:host :unspecific)
          (:name "my-synt")
          (:type "aiff")))
        (:sample-rate 44100)
        (:n-channels 1)
-       (:n-samples 274073)
+       (:n-samples 272220)
        (:gain 1.0)
        (:access-from-file nil)))))
-   (:id 10))
-  (:comment
-   (:x 452)
-   (:y 745)
-   (:w 139)
-   (:h 19)
-   (:fgcolor nil)
-   (:bgcolor nil)
-   (:border nil)
-   (:roundness nil)
-   (:text-font nil)
-   (:align nil)
-   (:text "generated Csound score")
-   (:id 11))
+   (:id 9))
   (:box
    (:reference om-random)
    (:type :function)
@@ -940,7 +860,7 @@ endin
      (:value 1)
      (:reactive nil)))
    (:outputs (:output (:name "out") (:reactive nil)))
-   (:id 12))
+   (:id 10))
   (:box
    (:reference single-float)
    (:type :value)
@@ -959,9 +879,9 @@ endin
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 0.0)
-   (:id 13))
+   (:id 11))
   (:box
-   (:library "OMChroma")
+   (:library "omchroma")
    (:reference (:symbol "GEN07" "CHROMA"))
    (:type :object)
    (:group-id nil)
@@ -980,6 +900,7 @@ endin
    (:show-markers t)
    (:group-id nil)
    (:lock :locked)
+   (:lambda nil)
    (:inputs
     (:input
      (:type :standard)
@@ -999,7 +920,7 @@ endin
     (:input (:type :standard) (:name "ID") (:value 12) (:reactive nil))
     (:input
      (:type :key)
-     (:name "DECIMALS")
+     (:name "decimals")
      (:value 2)
      (:reactive nil)))
    (:outputs
@@ -1032,7 +953,7 @@ endin
        (:name "GEN07")
        (:size 4097)
        (:stime 0)))))
-   (:id 14))
+   (:id 12))
   (:box
    (:reference single-float)
    (:type :value)
@@ -1051,7 +972,7 @@ endin
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 6.0)
-   (:id 15))
+   (:id 13))
   (:box
    (:reference sound-normalize)
    (:type :function)
@@ -1075,7 +996,7 @@ endin
      (:value nil)
      (:reactive nil)))
    (:outputs (:output (:name "out") (:reactive nil)))
-   (:id 16))
+   (:id 14))
   (:box
    (:reference sound)
    (:type :object)
@@ -1095,6 +1016,7 @@ endin
    (:show-markers t)
    (:group-id nil)
    (:lock nil)
+   (:lambda nil)
    (:inputs
     (:input
      (:type :standard)
@@ -1127,7 +1049,7 @@ endin
        (:n-samples 280904)
        (:gain 1.0)
        (:access-from-file nil)))))
-   (:id 17))
+   (:id 15))
   (:box
    (:reference list)
    (:type :function)
@@ -1151,14 +1073,14 @@ endin
      (:value nil)
      (:reactive nil)))
    (:outputs (:output (:name "out") (:reactive nil)))
-   (:id 18))
+   (:id 16))
   (:box
    (:reference textbuffer)
    (:type :object)
    (:group-id nil)
    (:name nil)
-   (:x 44)
-   (:y 771)
+   (:x 122)
+   (:y 763)
    (:w 293)
    (:h 171)
    (:color (:color 0.9 0.9 0.9 1.0))
@@ -1170,6 +1092,7 @@ endin
    (:showname nil)
    (:group-id nil)
    (:lock nil)
+   (:lambda nil)
    (:inputs
     (:input
      (:type :standard)
@@ -1192,48 +1115,39 @@ endin
      (:slots
       ((:contents
         (:list
-         ";;============================================================================="
-         ";; SIMPLE ADDITIVE SYNTHESIS (FROM ACCCI, 02_01_3.ORC) / MONO"
-         ";; AMPLITUDE ENVELOPE WITH OSCILI"
-         ";;============================================================================="
-         ";; Timbre:    gong"
-         ";; Synthesis: additive same units (02)"
-         ";;            basic instrument( 01)"
-         ";; Source:    #420, Gong-like Sounds, Risset(1969)"
-         ";"
-         "; @PARAM 2 \"e-dels\"	number 		0.0 	\"action time (sec)\"  "
-         "; @PARAM 3 \"durs\"	number 		1.0   	\"duration (sec)\""
-         "; @PARAM 4 \"amp\"	number 		-6.0 	\"maximum amplitude (linear ]0.0,1000.0] or dB ]-INF,0.0])\" "
-         "; @PARAM 5 \"freq\"	number 		440.0 	\"frequency (Hz)\"  "
-         "; @PARAM 6 \"aenv\"	cr::cs-table 	(:cs-table cr::gen07 0 0 2048 100 4096 0) 	\"amplitude envelope (GEN table)\"  "
-         ";"
-         "; @GEN f1 0 65537 10 10"
+         "; Score header defined in orchestra:"
+         "f1 0 65537 10 10"
          ""
+         "; global tables:"
+         "f 12 0 4097 7  9.78 62.00 43.60 728.00 45.96 587.00 26.27 946.00 13.19 1773.00 2.93"
          ""
-         "sr = 44100"
-         "kr = 44100"
-         "ksmps = 1"
-         "nchnls = 1"
-         " "
-         "; GLOBAL VARIABLES"
-         "0dbfs   = 8388607 ; 24 bits"
+         ";------ local tables in array ------"
          ""
-         "instr 1"
+         "f 1000 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
+         "f 1001 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
+         "f 1002 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
+         "f 1003 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
+         "f 1004 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
+         "f 1005 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
+         "f 1006 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
+         "f 1007 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
+         "f 1008 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
+         "f 1009 0 4097 7  0.00 1296.00 28.43 640.00 23.69 18.00 385.90 568.00 284.47 767.00 146.54 807.00 0.00"
          ""
-         "idur		= p3"
-         "idurosc		= 1/idur"
-         "iamp 		= (p4 > 0.0 ? (p4*0.001*0dbfs) : (ampdbfs(p4)))"
-         "ifq		= p5"
-         "iaenv		= p6"
-         "iaudiofun	= 1"
+         ";------ lines for event ------"
          ""
-         "a2    poscil  iamp, idurosc, iaenv"
-         "a1    poscil  a2, ifq, iaudiofun"
-         "out     a1"
-         ""
-         "endin"))))
+         "i1 2.0351 0.8000 0.0000 400 1000 "
+         "i1 3.4715 0.8000 28.4300 500 1001 "
+         "i1 0.1126 0.8000 23.6900 200 1002 "
+         "i1 4.3362 0.8000 385.9000 400 1003 "
+         "i1 4.3680 0.8000 284.4700 500 1004 "
+         "i1 0.2861 0.8000 146.5400 200 1005 "
+         "i1 3.3278 0.8000 0.0000 400 1006 "
+         "i1 0.6508 0.8000 0.0000 500 1007 "
+         "i1 1.9886 0.8000 28.4300 200 1008 "
+         "i1 1.6963 0.8000 23.6900 400 1009 "))))
      (:add-slots ((:input-mode :lines-cols)))))
-   (:id 19))
+   (:id 17))
   (:box
    (:reference (:symbol "CS-SYNTHESIZE" "CHROMA"))
    (:type :function)
@@ -1256,10 +1170,10 @@ endin
      (:name "SELF")
      (:value nil)
      (:reactive nil))
-    (:input (:type :key) (:name "TABLES") (:value nil) (:reactive nil))
-    (:input (:type :key) (:name "RUN") (:value nil) (:reactive nil)))
+    (:input (:type :key) (:name "tables") (:value nil) (:reactive nil))
+    (:input (:type :key) (:name "run") (:value nil) (:reactive nil)))
    (:outputs (:output (:name "out") (:reactive t)))
-   (:id 20))
+   (:id 18))
   (:box
    (:reference null)
    (:type :value)
@@ -1278,7 +1192,7 @@ endin
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value nil)
-   (:id 21))
+   (:id 19))
   (:box
    (:reference (:symbol "GET-ARRAY-TABLES" "CHROMA"))
    (:type :function)
@@ -1302,7 +1216,7 @@ endin
      (:value nil)
      (:reactive nil)))
    (:outputs (:output (:name "out") (:reactive nil)))
-   (:id 22))
+   (:id 20))
   (:box
    (:reference fields)
    (:type :function)
@@ -1326,7 +1240,7 @@ endin
      (:value nil)
      (:reactive nil)))
    (:outputs (:output (:name "out") (:reactive nil)))
-   (:id 23))
+   (:id 21))
   (:box
    (:reference get-field-type)
    (:type :function)
@@ -1355,7 +1269,7 @@ endin
      (:value 5)
      (:reactive nil)))
    (:outputs (:output (:name "out") (:reactive nil)))
-   (:id 24))
+   (:id 22))
   (:box
    (:reference textbuffer)
    (:type :object)
@@ -1374,6 +1288,7 @@ endin
    (:showname nil)
    (:group-id nil)
    (:lock :locked)
+   (:lambda nil)
    (:inputs
     (:input
      (:type :standard)
@@ -1478,33 +1393,7 @@ endin
          "endin"
          ""))))
      (:add-slots ((:input-mode :lines-cols)))))
-   (:id 25))
-  (:box
-   (:reference split)
-   (:type :function)
-   (:group-id nil)
-   (:name "split")
-   (:x 223)
-   (:y 717)
-   (:w 59)
-   (:h 30)
-   (:color nil)
-   (:border nil)
-   (:roundness nil)
-   (:text-font nil)
-   (:align nil)
-   (:lock nil)
-   (:lambda nil)
-   (:inputs
-    (:input
-     (:type :standard)
-     (:name "LIST")
-     (:value nil)
-     (:reactive nil)))
-   (:outputs
-    (:output (:name "out") (:reactive nil))
-    (:output (:name "out1") (:reactive t)))
-   (:id 26))
+   (:id 23))
   (:box
    (:reference (:symbol "SOURCE-CODE" "CHROMA"))
    (:type :function)
@@ -1528,7 +1417,7 @@ endin
      (:value nil)
      (:reactive nil)))
    (:outputs (:output (:name "out") (:reactive nil)))
-   (:id 27)))
+   (:id 24)))
  (:connections
   (:connection
    (:from (:box 0 :out 1))
@@ -1540,7 +1429,15 @@ endin
    (:attributes (:color nil :style nil :modif (0 -14/61))))
   (:connection
    (:from (:box 1 :out 0))
+   (:to (:box 18 :in 0))
+   (:attributes (:color nil :style nil :modif nil)))
+  (:connection
+   (:from (:box 1 :out 0))
    (:to (:box 20 :in 0))
+   (:attributes (:color nil :style nil :modif nil)))
+  (:connection
+   (:from (:box 1 :out 0))
+   (:to (:box 21 :in 0))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
    (:from (:box 1 :out 0))
@@ -1548,15 +1445,7 @@ endin
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
    (:from (:box 1 :out 0))
-   (:to (:box 23 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 1 :out 0))
    (:to (:box 24 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 1 :out 0))
-   (:to (:box 27 :in 0))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
    (:from (:box 2 :out 0))
@@ -1572,7 +1461,7 @@ endin
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
    (:from (:box 6 :out 0))
-   (:to (:box 10 :in 0))
+   (:to (:box 9 :in 0))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
    (:from (:box 7 :out 0))
@@ -1580,57 +1469,49 @@ endin
    (:attributes (:color nil :style nil :modif (0 9/73))))
   (:connection
    (:from (:box 7 :out 0))
-   (:to (:box 20 :in 1))
+   (:to (:box 18 :in 1))
    (:attributes (:color nil :style nil :modif (0 9/46))))
   (:connection
-   (:from (:box 9 :out 0))
+   (:from (:box 8 :out 0))
    (:to (:box 6 :in 2))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
-   (:from (:box 10 :out 0))
-   (:to (:box 16 :in 0))
+   (:from (:box 9 :out 0))
+   (:to (:box 14 :in 0))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
-   (:from (:box 12 :out 0))
+   (:from (:box 10 :out 0))
    (:to (:box 1 :in 4))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
-   (:from (:box 13 :out 0))
-   (:to (:box 12 :in 0))
+   (:from (:box 11 :out 0))
+   (:to (:box 10 :in 0))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
-   (:from (:box 14 :out 0))
-   (:to (:box 18 :in 0))
+   (:from (:box 12 :out 0))
+   (:to (:box 16 :in 0))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
-   (:from (:box 14 :out 2))
+   (:from (:box 12 :out 2))
    (:to (:box 1 :in 8))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
-   (:from (:box 15 :out 0))
-   (:to (:box 12 :in 1))
+   (:from (:box 13 :out 0))
+   (:to (:box 10 :in 1))
+   (:attributes (:color nil :style nil :modif nil)))
+  (:connection
+   (:from (:box 14 :out 0))
+   (:to (:box 15 :in 0))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
    (:from (:box 16 :out 0))
-   (:to (:box 17 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 18 :out 0))
    (:to (:box 1 :in 7))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
-   (:from (:box 20 :out 0))
-   (:to (:box 26 :in 0))
+   (:from (:box 18 :out 0))
+   (:to (:box 17 :in 0))
    (:attributes (:color nil :style nil :modif nil)))
   (:connection
-   (:from (:box 21 :out 0))
-   (:to (:box 20 :in 2))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 26 :out 0))
-   (:to (:box 19 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 26 :out 1))
-   (:to (:box 8 :in 0))
+   (:from (:box 19 :out 0))
+   (:to (:box 18 :in 2))
    (:attributes (:color nil :style nil :modif nil)))))
