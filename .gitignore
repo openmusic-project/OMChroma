@@ -12,5 +12,5 @@ codesign
 ehthumbs.db
 Thumbs.db
 *~
-**/reference-pages/**/
-**/reference/**/
+**/reference-pages/**
+**/reference/**
