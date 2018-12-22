@@ -35,7 +35,7 @@
 ; to write a full path in the score file
                           "; audio file"
                           (format nil "f31  0  524288  1 ~s  0 0 0"
-                                  (om-path2cmdpath (infile "basmba.aiff")))
+                                  (namestring (infile "basmba.aiff")))
                           "; sigmoid rise/decay"
                           "f19 0  8192  19 .5 .5 270 .5"
                           

@@ -32,7 +32,7 @@
                           "; GEN functions **********************************************************"
                           "; audio file"
                           (format nil "f31  0  0  -1 ~s  0 0 0"
-                                  (om-path2cmdpath (infile "santuri.aiff")))
+                                  (namestring (infile "santuri.aiff")))
                           "; sigmoid rise/decay"
                           "f19 0  65537  19 .5 .5 270 .5"
                           ) 

@@ -34,7 +34,7 @@
                           "; short grain"
                           (format ()
                                   "f32 0  65536  1 ~s 0 0 0"
-                                  (om-path2cmdpath
+                                  (namestring
                                    (infile "short.aiff")))
                          ) 
                :allocation :class :type list :accessor orc-header)

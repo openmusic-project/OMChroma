@@ -478,7 +478,7 @@
 
 
 (defmethod save-model ((self cr-model) filename)
-  (let ((outfile (sdif-open-file (om-path2cmdpath (pathname filename)) 1)))
+  (let ((outfile (sdif-open-file (namestring (pathname filename)) 1)))
     (sdif-write-header outfile (list (make-instance 'sdiftype 
                                        :struct 'F :signature "1MRK" 
                                        :description '(("1TRC" "model_data")))))

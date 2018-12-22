@@ -81,7 +81,7 @@
 (defun load-markers-file (&optional file)
   (if(null file)(setf file (choose-file-dialog)))
   (if (probe-file file)
-    (if (om::sdif-check-file (om::om-path2cmdpath file))
+    (if (om::sdif-check-file (namestring file))
       (load-markers-file-sdif file)
       (load-markers-file-text file))
     (om::om-beep-msg "this file does not exist"))

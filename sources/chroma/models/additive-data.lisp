@@ -35,7 +35,7 @@
 (defmethod initialize-instance :after ((x additive-data)  &rest initargs &key file asfile)
   (declare (ignore initargs))
   (cond 
-  (file (if (sdif-check-file (om::om-path2cmdpath file))
+  (file (if (sdif-check-file (namestring file))
           (load-add-sdif-file x file)
           (setf (data x)(load-add-file file))))
   (asfile (setf (data x)(load-as-file asfile)))

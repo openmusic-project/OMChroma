@@ -135,7 +135,7 @@
 (defmethod tnum ((self Gen-01)) -1)
 
 (defmethod cs-table-string ((self gen01))
-  (format nil "f ~D ~D ~D ~D ~s ~D 0 0" (id self) (stime self) (size self) (tnum self) (om-path2cmdpath (file self)) (skiptime self)))
+  (format nil "f ~D ~D ~D ~D ~s ~D 0 0" (id self) (stime self) (size self) (tnum self) (namestring (file self)) (skiptime self)))
 
 
 ;================================================

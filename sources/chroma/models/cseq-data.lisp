@@ -33,7 +33,7 @@
 (defmethod initialize-instance :after ((x cseq-data)  &rest initargs &key file)
   (declare (ignore initargs))
   (if (probe-file file)
-    (if (om::sdif-check-file (om::om-path2cmdpath file))
+    (if (om::sdif-check-file (namestring file))
       (load-cseq-sdif-file x file)
       (load-cseq-file x file))
     (om::om-beep-msg "this file does not exist"))
