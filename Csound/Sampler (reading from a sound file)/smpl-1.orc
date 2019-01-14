@@ -82,7 +82,7 @@ ixoff	= 0 ; index offset
 ixrap	= 0 ; no wraparound in table reading
 iwrap	= p10
 
-iformat		= 8 ; 24-bit int, ignored if the sound file has a header
+iformat		= 0 ; 24-bit int, ignored if the sound file has a header
 iwsize		= 512 ; the bigger, the better the quality of the transposition
 ibufsize	= 262144	; maximum = 1048576, higher makes less disk access
 iskipinit	= 0 ; do not skip initialization
