@@ -5,6 +5,8 @@ The library contains a set of classes corresponding to numerous synthesis proces
 
 ![OMChroma Logo](/images/omchroma.png)
 
+<img src="/images/omchroma.png" width=60 align=right>
+
 Latest update : March 27, 2019
 
 
