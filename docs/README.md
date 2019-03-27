@@ -1,3 +1,3 @@
 # OM Chroma Documentation
 
-[Chapter 1](./03ruok)
+[Chapter 1](./03ruok.md)
