@@ -3,7 +3,7 @@ OMChroma is an OpenMusic library for the high-level control of sound synthesis w
 
 The library contains a set of classes corresponding to numerous synthesis processes and Csound orchestras to be parameterized and controlled in OpenMusic.
 
-![OMChroma Logo](/images/omchroma.png)
+![OMChroma Logo](./images/omchroma.png)
 
 <img src="./images/omchroma.png" width="60" align="right">
 
