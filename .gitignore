@@ -14,3 +14,6 @@ Thumbs.db
 *~
 **/reference-pages/**
 **/reference/**
+
+docs/_site/**
+docs/Gemfile.lock
