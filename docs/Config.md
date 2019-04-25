@@ -16,7 +16,7 @@ Once the OM2Csound library is loaded in OM, you might be able to check the Csoun
 
 This manual will assume the reader has a good knowledge of OpenMusic and knows how to manage the OM Workspace. For any problems with OpenMusic consult the [OM User Manual](http://support.ircam.fr/docs/om/om6-manual/).
 
-Some knowledge of Csound may also be useful (see below).
+Some knowledge of Csound may also be useful (see [below](#csound)).
 
 ## Audio settings
 
