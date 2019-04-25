@@ -10,7 +10,7 @@ The library contains a set of classes corresponding to numerous synthesis proces
 ### User Manual Sections
 
 - [Foreword / System Configuration](Config)
-- [Load the library](Load)
+- [Load the Library](Load)
 - [Getting Started](GettingStarted)
 
 
