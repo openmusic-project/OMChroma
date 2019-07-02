@@ -120,6 +120,7 @@
             
             (let ((class (defclass-from-cs-orc cs-file)))
               (om::addclass2pack class package)
+              (import class :om) ;;; allows to load from old patches, when this name was in :om
               ))
       (loop for dir in (sort subfolders 'string< :key 'namestring) do 
             (def-all-cs-classes dir :inPackage package))

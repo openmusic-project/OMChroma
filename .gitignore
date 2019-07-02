@@ -2,7 +2,7 @@
 *.zip
 codesign
 
-*.64xfasl
+*.*fasl
 
 .DS_Store
 .DS_Store?
