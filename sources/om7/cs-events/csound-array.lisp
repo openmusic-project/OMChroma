@@ -99,7 +99,7 @@
                                   (format nil "p~D" pn))))
 
                      ;;; pre-set the data with meta-info in the orc files
-                     ;;; the actual data will be completed/filled in the next-method call (class-array)
+                     ;;; the actual data will be completed/filled in the class-array's initialization
                      (om::make-array-field :name name 
                                            :type (and param (cs-param-description-type param))
                                            ;; loading text-formated cs-tables require om::omng-load

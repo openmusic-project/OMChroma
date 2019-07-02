@@ -323,7 +323,7 @@
 
 
 (defmethod csound-load-tables ((self string)) 
-  (let ((str (delete-spaces self)))
+  (let ((str (om::delete-spaces self)))
     (cond
      ((equal (elt str 0) #\f) (SCsT str))
      ((probe-file str) (csound-load-tables (pathname str))))))
@@ -428,7 +428,11 @@
 ; Insput tables in array box
 ;=======================================
 
-(defmethod om::get-array-data-from-input ((input cs-table) n)
+(defmethod om::get-array-data-from-input ((input cs-table) n type)
   (make-list n :initial-element (om::om-copy input)))
+
+(defmethod om::get-array-data-from-input ((input om::bpf) n (type (eql 'cs-table)))
+  (make-list n :initial-element (om::om-copy input)))
+
 
 
