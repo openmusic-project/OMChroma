@@ -42,7 +42,7 @@
    ))
 
 
-;;; AUTO-STES THE DURATION FROM SOUND
+;;; AUTO-SET THE DURATION FROM SOUND
 (defmethod om::om-init-instance ((self cs-evt) &optional initargs)
   
   (call-next-method)
@@ -73,7 +73,9 @@
     (eval 
      `(om::defclass! ,class-name (cs-evt)
         ,(append 
-          '((om::elts :initarg :elts :accessor om::elts :initform 1 :type integer :documentation "number of elements (components) for the event")
+          '((om::elts :initarg :elts 
+                      :initarg :numcols ;;; also accepts :numcols as initargs (for compatibility) 
+                      :accessor om::elts :initform 1 :type integer :documentation "number of elements (components) for the event")
             (action-time :initarg :action-time :accessor action-time :type number :initform 0 :documentation "start time of the whole event (in sec)")
             (user-fun :initarg :user-fun :accessor user-fun :initform nil 
                       :documentation "a lambda patch or function to process internal elements at synthesis time (lambda/fun-name)")

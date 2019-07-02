@@ -85,7 +85,7 @@
    
     ;;; set the fields from csound instrument (will rule data filling in class-array)
     (when (integerp num-pfields)
-      (setf (om::data self) 
+      (setf (slot-value self 'om::data) 
             (append 
              ;;; csound orc fields
              (loop for i from 0 to (- num-pfields 2) ;; 'useful' pfields start at p2 (p1 = instr num) 

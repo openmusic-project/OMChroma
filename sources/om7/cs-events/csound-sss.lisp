@@ -276,8 +276,9 @@
                                     :action-time at
                                     :user-fun uf))))
         
-      (setf (om::data instance) (append (om::data synth)
-                                        (nthcdr 3 (om::data spat))))
+      (setf (slot-value instance 'om::data) 
+            (append (om::data synth)
+                    (nthcdr 3 (om::data spat))))
 
       instance)))
 

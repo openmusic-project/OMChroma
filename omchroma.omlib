@@ -12,19 +12,17 @@
 
  ;;; SOURCE FILES TO LOAD
  (:source-files
-  
-  (:pathname (:directory (:relative "sources")) (:name "package"))
-  
-  (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-parser"))
-  (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-array"))
-  (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-tables"))
-  (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-inits"))
-  (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-event"))
-  (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-synthesis"))
-  (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "csound-sss"))
-  (:pathname (:directory (:relative "sources" "om7" "cs-events")) (:name "load-classes"))
-
-  (:pathname (:directory (:relative "sources" "om7")) (:name "function-reference"))
+  "sources/package"
+  "sources/om7/cs-events/csound-parser"
+  "sources/om7/cs-events/csound-array"
+  "sources/om7/cs-events/csound-tables"
+  "sources/om7/cs-events/csound-inits"
+  "sources/om7/cs-events/csound-event"
+  "sources/om7/cs-events/csound-synthesis"
+  "sources/om7/cs-events/csound-sss"
+  "sources/om7/cs-events/load-classes"
+  "sources/om7/cs-events/compatibility"
+  "sources/om7/function-reference"
   )
 
  ;;; DECLARED SYMBOLS VISIBLE AND ACCESSIBLE THROUGH THE OM PACKAGE TREE

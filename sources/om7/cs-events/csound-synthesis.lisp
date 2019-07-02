@@ -124,7 +124,7 @@
         (when run (om::add-tmp-file path-sco))
         
         (if run   
-            (om:csound-synth path-orc path-sco :out path-aiff :format format)
+            (om::csound-synth path-orc path-sco :out path-aiff :format format)
           (probe-file path-sco))
         )
     
