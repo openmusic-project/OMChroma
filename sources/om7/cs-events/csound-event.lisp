@@ -56,7 +56,7 @@
       (when soundfield 
         (loop for snd in (om::array-field-data soundfield)
               for i = 0 then (+ i 1) 
-              when snd 
+              when (and snd (om::get-sound-file snd)) ;;; checks whether this is a valid sound-compatible object
               do (setf (nth i (om::array-field-data durfield)) (om::sound-dur snd))))
       ))
   
