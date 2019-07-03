@@ -84,7 +84,10 @@
 ; GENRAL/TEXT-BASED FORMAT FOR GENs
 ;================================================
 (om::defclass! gen-cs-table (standard-cs-table) 
-  ((gen-num :initform 1 :initarg :gen-num :type integer :accessor gen-num)
+  ((id :initform nil :initarg :id :accessor id)
+   (size :initarg size :initform nil :type integer :accessor size)
+   (stime :initarg stime :initform 0 :type number :accessor stime)
+   (gen-num :initform 1 :initarg :gen-num :type integer :accessor gen-num)
    (param-list :initform nil :initarg :param-list :type list :accessor param-list))
   (:icon 605))
 
@@ -99,12 +102,12 @@
 (defclass bpf-cs-table (standard-cs-table om::BPF) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
+   (om::decimals :initform 0 :initarg :decimals)
    (id :initform nil :initarg :id :accessor id)
    (size :initform nil :type integer :accessor size)
    (stime :initform 0 :type number :accessor stime)))
 
-
-(defmethod om::additional-class-attributes ((self bpf-cs-table)) '(om::decimals om::color om::name size stime))
+(defmethod om::additional-class-attributes ((self bpf-cs-table)) '(om::color om::name size stime))
 
 
 ;;; ID can be NIL
@@ -152,6 +155,7 @@
 (om::defclass! GEN07 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
+   (om::decimals :initform 0 :initarg :decimals)
    (id :initform nil :initarg :id :accessor id :documentation "a table ID, leave NIL to set automatically"))
   (:icon 605))
 (defmethod gen-num ((self Gen07)) 7)
@@ -159,6 +163,7 @@
 (om::defclass! GEN-07 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
+   (om::decimals :initform 0 :initarg :decimals)
    (id :initform nil :initarg :id :accessor id :documentation "a table ID, leave NIL to set automatically"))
   (:icon 605))
 (defmethod gen-num ((self Gen-07)) -7)
@@ -166,6 +171,7 @@
 (om::defclass! GEN05 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
+   (om::decimals :initform 0 :initarg :decimals)
    (id :initform nil :initarg :id :accessor id))
   (:icon 605))
 (defmethod gen-num ((self Gen05)) 5)
@@ -173,6 +179,7 @@
 (om::defclass! GEN-05 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
+   (om::decimals :initform 0 :initarg :decimals)
    (id :initform nil :initarg :id :accessor id))
   (:icon 605))
 (defmethod gen-num ((self Gen-05)) -5)
@@ -180,6 +187,7 @@
 (om::defclass! GEN02 (bpf-cs-table) 
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
+   (om::decimals :initform 0 :initarg :decimals)
    (id :initform nil :initarg :id :accessor id))
  (:icon 605))
 (defmethod gen-num ((self Gen02)) 2)
@@ -187,6 +195,7 @@
 (om::defclass! GEN-02 (bpf-cs-table)
   ((om::x-points :initform '(0 256 512) :initarg :x-points)
    (om::y-points :initform '(0 100 0) :initarg :y-points)
+   (om::decimals :initform 0 :initarg :decimals)
    (id :initform nil :initarg :id :accessor id))
   (:icon 605))
 (defmethod gen-num ((self Gen-02)) -2)
@@ -211,11 +220,23 @@
 ; GEN TABLES SUBCLASSES OF FILE-CS-TABLE
 ;================================================
 
-(om::defclass! GEN01 (file-cs-table) () (:icon 605))
+(om::defclass! GEN01 (file-cs-table) 
+  ((id :initarg :id :accessor id :initform nil)
+   (size :initarg :size :accessor size :initform nil :type integer)
+   (stime :initarg :stime :accessor stime :initform 0 :type number )
+   (file :initarg :file :accessor file :initform "" )
+   (skiptime :accessor skiptime :initform 0 :initarg :skiptime))
+  (:icon 605))
 
 (defmethod gen-num ((self Gen01)) 1)
 
-(om::defclass! GEN-01 (file-cs-table) () (:icon 605))
+(om::defclass! GEN-01 (file-cs-table) 
+  ((id :initarg :id :accessor id :initform nil)
+   (size :initarg :size :accessor size :initform nil :type integer)
+   (stime :initarg :stime :accessor stime :initform 0 :type number )
+   (file :initarg :file :accessor file :initform "" )
+   (skiptime :accessor skiptime :initform 0 :initarg :skiptime))
+  (:icon 605))
 
 (defmethod gen-num ((self Gen-01)) -1)
 
