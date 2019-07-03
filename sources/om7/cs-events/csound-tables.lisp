@@ -214,7 +214,13 @@
     (setf (file self) (om::file-pathname (file self)))))
 
 (defmethod cs-table-string ((self file-cs-table))
-  (format nil "f ~D ~D ~D ~D ~s ~D 0 0" (get-table-id self) (stime self) (size self) (gen-num self) (namestring (file self)) (skiptime self)))
+  (format nil "f ~D ~D ~D ~D ~s ~D 0 0" 
+          (get-table-id self) 
+          (stime self) 
+          (size self) 
+          (gen-num self) 
+          (namestring (file self)) 
+          (skiptime self)))
 
 ;================================================
 ; GEN TABLES SUBCLASSES OF FILE-CS-TABLE
