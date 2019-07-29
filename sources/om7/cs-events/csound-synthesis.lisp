@@ -177,17 +177,20 @@
 ;;; - Events and their contents are DEEP-COPIED because the parsing might modify them and be applied in sequence (if several functions)
 ;;; - Components operations must therefore modify the event in place in order to be propagated
 ;;; - (also for tables to be collected correctly)
-(defmethod cs-synthesize ((self list) &key (name "my-synt") tables (run t) (format "aiff") 
-                          (inits nil) sr kr)
+(defmethod cs-synthesize ((self list) &key (name "my-synt") (run t) (format :aiff) 
+                          tables (inits nil) 
+                          resolution normalize
+                          sr kr)
   
   (if (not (om::list-subtypep self 'cs-evt))
       (om::om-beep-msg "CS-SYNTHESIZE requires only subtypes of CR:CS-EVT")
    
     (unwind-protect 
   
-        (let* ((path-aiff (if (equal :rt name) name
+        (let* ((format-str (string-downcase format))
+               (path-aiff (if (equal :rt name) name
                             (if (pathnamep name) name 
-                              (om::outfile name :type format))))
+                              (om::outfile name :type format-str))))
 
                (cs-basename (if (equal :rt name) "cs_temp" (pathname-name path-aiff)))
                (path-csd (om::handle-new-file-exists (om::tmpfile cs-basename :type "csd")))
@@ -220,7 +223,7 @@
                 
             (format out "~A ~A ~%" 
                     (om::get-pref-value :externals :csound-flags)
-                    (if format (concatenate 'string "--format=" format) ""))
+                    (if format (concatenate 'string "--format=" format-str) ""))
                 
             (format out "</CsOptions>~%")
 
@@ -337,7 +340,7 @@
     ))
 
 
-(defmethod cs-synthesize ((self cs-evt) &key (name "my-synt") tables (run t) (format "aiff") inits sr kr)
+(defmethod cs-synthesize ((self cs-evt) &key (name "my-synt") tables (run t) (format :aiff) inits sr kr)
   (cs-synthesize (list self) :name name :tables tables :run run :format format :inits inits :sr sr :kr kr))
 
 ;;; .. to make it work with the generic OM 'synthesize' method
