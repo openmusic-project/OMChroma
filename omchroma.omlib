@@ -1,5 +1,5 @@
 ;;;===========================================================================
-;;; OMChroma lib for om7
+;;; OMChroma lib for om7o
 ;;;===========================================================================
 
 (:om-lib
@@ -36,7 +36,7 @@
      (:package 
       (:name "tables")
       (:functions) 
-      (:classes "cr::text-cs-table" "cr::gen-cs-table" "cr::gen01" "cr::gen01" "cr::gen02" "cr::gen-02" "cr::gen05" "cr::gen-05" "cr::gen07" "cr::gen-07")
+      (:classes "cr::text-cs-table" "cr::gen-cs-table" "cr::gen01" "cr::gen-01" "cr::gen02" "cr::gen-02" "cr::gen05" "cr::gen-05" "cr::gen07" "cr::gen-07")
       ))
     )))
 )
