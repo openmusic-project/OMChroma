@@ -98,8 +98,8 @@ my-nev : ...
 (defun get-model-amp-db ()
   (declare (special my-fql my-ptl))
   (if my-ptl
-    (lin->db (get-amp my-ptl))
-   (lin->db (get-amp my-fql))))
+    (lintodB (get-amp my-ptl))
+   (lintodB (get-amp my-fql))))
 
 (defun get-model-norm-amp ()
   (declare (special my-model my-rank))
@@ -297,21 +297,21 @@ my-nev : ...
 ;---------------------------------------------------------------;
 (defun get-model-bw-to-index ()                 ; WRITE YOUR OWN
 (declare (special  my-fql))
-(if (null (get-bw my-fql))(error "MISSING BANDWIDTH IN ~a" my-fql)
+(if (null (get-bw my-fql)) (error "MISSING BANDWIDTH IN ~a" my-fql)
 (mapcar (lambda (y) (/ y 10)) (get-bw my-fql))))   ; RETURNS A LIST
 
 
 ;---------------------------------------------------------------;
 (defun make-ran-dB (min max)
   (declare (special my-nev))
-  (let ((pivot (/(+ max min)2))
-        (bernard (/(abs(- max min))2)))
-    (db->lin(rept my-nev (ran pivot bernard)))))
+  (let ((pivot (/ (+ max min) 2))
+        (bernard (/ (abs(- max min)) 2)))
+    (dbtolin (rept my-nev (ran pivot bernard)))))
 
 (defun make-ran (min max)
   (declare (special my-nev))
-  (let ((pivot (/(+ max min)2))
-        (bernard (/(abs(- max min))2)))
+  (let ((pivot (/ (+ max min)2))
+        (bernard (/(abs (- max min))2)))
     (rept my-nev (ran pivot bernard))))
 
 ;---------------------------------------------------------------;
