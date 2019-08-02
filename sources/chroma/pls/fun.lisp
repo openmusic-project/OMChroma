@@ -623,9 +623,10 @@
 ;	TYPE:		Expr with 2 arguments
 ;	CALL:		factor = 1 <-> maximum reduction
 ;			factor = 0 <-> reduction without loss
-;			
+;			Reduces <points> by removing all points closer than [<factor> * the amplitude range of the function] to the corresponding interpolated values.
+;                       <factor> = 1 means the maximum reduction (all intermediate points are removed)
+;                       <factor> = 0 means reduction without loss (only exact matching points are removed)
 ;	FUNCTION:	returns a reduced fun 
-
 By Serge Lemouton, July 2001
 "
   (pls-check-type 'FUN fun 'reduce_fun)
@@ -731,10 +732,10 @@ By Serge Lemouton, July 2001
     (1 fun2)
     (otherwise
      (if (equal fun1 fun2) fun1
-       (let ((result nil)
-             (itp (ifn itp 1.0 itp))
-             (fun1 (sample_fun fun1 points itp))
-             (fun2 (sample_fun fun2 points itp)))
+       (let* ((result nil)
+             (itp2 (ifn itp 0.0 itp))
+             (fun1 (sample_fun fun1 points itp2))
+             (fun2 (sample_fun fun2 points itp2)))
          (let ((x_list (x-list_fun fun1))
                (y1_list (y-list_fun fun1))
                (y2_list (y-list_fun fun2)))
@@ -781,7 +782,8 @@ By Serge Lemouton, July 2001
 
 (defun short-print_fun (fun)
    (print (pls-type fun))
-   (let ((cts (contents fun)) (newline 3) (counter 0) )
+;   (let ((cts (contents fun)) (newline 3) (counter 0) )
+   (let ((cts (contents fun)) (counter 0) )
 	(loop while cts
 		do
                 (print (format () "~a / ~a, ~a" (incf counter) (nextl cts) (nextl cts) ))

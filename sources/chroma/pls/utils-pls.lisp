@@ -23,6 +23,7 @@
 ;	prin
 ;	pwr2
 ;	rplac
+;       beep
 ;-----------------------------------------------------------------------------
 
 ; (attach el l)
@@ -111,14 +112,18 @@ Signal an error of type for function f"
     (prin_ (cdr list-args)))))
 ;-----------------------------------------------------------------------------
 ;catenate/concat
-
-(defun catenate (x y)
+;new, generalised, 1907, ms
+(defun catenate (x &rest y)
 "String any number of args"
-  (format () "~s~s" x y))
+(apply #'concatenate (cons 'string (cons (format () "~s" x) (mapcar #'(lambda (x) (format () "~s" x)) y)) )))
 
 ; does not work any longer... 1801, ms
 ;(defun concat (&rest lpname) 
 ;  (coerce (mapcan 'pname lpname) 'symbol))
+;-----------------------------------------------------------------------------
+;beep
+(defun beep ()
+   (capi::beep-pane nil))
 ;-----------------------------------------------------------------------------
 
 ;-----------------------------------------------------------------------------
@@ -316,6 +321,7 @@ specified by the environment variable LLwt"
 
 ; new version, using libsndfile, 1801, ms
 (defun get-sndinfo (&rest file-in)
+;(defun get-sndinfo (file-in)
   (let* ((l-results
          (multiple-value-bind (buffer format n-channels sample-rate sample-size size skip)
              (ifn file-in (sound-file-get-info (choose-file-dialog "Choose an audio file"))
@@ -334,7 +340,7 @@ specified by the environment variable LLwt"
           (cons 'sr sr)
           (cons 'dur dur)
           (cons 'n-ch n-ch)
-          (cons 'pk=mode pk-mode)
+          (cons 'pk-mode pk-mode)
           (cons 'smpl-type pk-mode)
           (cons 'smpl-size smpl-size)
           (cons 'n-smpl n-smpl)
@@ -389,7 +395,7 @@ specified by the environment variable LLwt"
 ;from mikhail malt:
 ;(defun decs-to-bignum (liste)
 ;"conversion d'une liste d'entiers en un bignum.
-;Le premier ÂŽlÂŽment est le plus representatif et le dernier le moins"
+;Le premier ŽlŽment est le plus representatif et le dernier le moins"
 ;(let ((long (1- (length liste))))
 ;  (cond
 ;   ((null liste) 0)
@@ -495,3 +501,4 @@ dir: directory where the file is to be written (default: value of CSfun).
                      (format out-stream "\\\"~a\\\" 0 4 1\")~%"sndfilein ))) wt-list))))
   "done")
 ;-----------------------------------------------------------------------------
+

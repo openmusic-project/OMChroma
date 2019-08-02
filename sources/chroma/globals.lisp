@@ -91,6 +91,7 @@
 (set-gbl 'KR '(get-gbl SR))		; CONTROL RATE FOR CSOUND
 (set-gbl 'NCH 1)		; NUMBER OF CHANNELS
 (set-gbl 'DURMIN 0.01)		; MINIMUM DURATION FOR A NOTE
+(set-gbl 'WINMIN 0.005)		; MINIMUM DURATION FOR A WINDOW OF A WT OBJECT
 (set-gbl 'MINFQ 13.0)		; MINIMUM FREQUENCY FOR A NOTE
 (set-gbl 'MAXSI 12.0)		; MAXIMUM SAMPLE INCREMENT WHEN READING A WT
 
@@ -103,12 +104,13 @@
                             ;    USED AT THE BEGINNING)
                             ; IF () NO CONTROL
 
+
 ;;; THESE TWO ARE REDEFINED WHEN LOADED IN OM
 (set-gbl 'SR 44100)       ; SAMPLING RATE
 (set-gbl 'DIAPASON 440.0) ; CURRENT DIAPASON
-
 (set-gbl 'USER "Chroma User")	; USER'S NAME FOR PERSONALIZED MESSAGES
 ; (get-gbl 'USER)
+
 
 ;-----------------------------------------------------------------------------
 (set-gbl 'PRT-FM 0)		; PORTAMENTO FLAG FOR FM (USED IN CIF D. BASE)
@@ -119,10 +121,10 @@
 ;				  () = PRINT ONLY ERROR AND DISCARDED PARTIALS
 ;-----------------------------------------------------------------------------
 
+;;; redefined in OM
 (set-gbl '*chroma-output* *standard-output*)	
 
-;(eval 'om::*diapason-freq*)
-;(eval DIAPASON)
+
 ;-----------------------------------------------------------------------------;-----------------------------------------------------------------------------
 ; Temporary place for the dynamically computed GENS of a WT object
 (set-gbl 'WTL ())		; A-LIST OF WT OBJECTS

@@ -67,10 +67,9 @@
 (defun is-empty_raw (data)
    (pls-check-type 'RAW data 'is-empty_raw)
    (let ((data (contents data)))
-     (if (is-tagged data)
-                    (is-empty data)
-                    data)))
-
+         (if (is-tagged data)
+             (is-empty data)
+           (null data))))
 
 ;	NAME:		sizeof_raw  (PREDICATE)
 ;	TYPE:		Expr with 1 argument
@@ -82,10 +81,9 @@
 (defun sizeof_raw (data)
    (pls-check-type 'RAW data 'sizeof_raw)
    (let ((data (contents data)))
-     (if (atom data)
-         1
-       (length data))))
-
+     (if data
+       (length data)
+       0)))
 
 ;	NAME:		print_/short-print_raw  (INFO)
 ;	TYPE:		Expr with 1 argument

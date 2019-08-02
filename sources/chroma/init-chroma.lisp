@@ -2,14 +2,15 @@
 
 (in-package :chroma)
 
-(defvar *cr-out-dir* nil)
-(defvar *cr-csfun-dir* nil)
-(defvar *cr-wt-dir* nil)
-(defvar *cr-models-dir* nil)
-(defvar *cr-userfun-dir* nil)
-(defvar *cr-tmp-dir* nil)
 
-; (defparameter *cr-root* (make-pathname :directory (butlast (pathname-directory *load-pathname*) 2)))
+(defvar *cr-root* (ensure-directories-exist (merge-pathnames "Documents/Chroma/" (user-homedir-pathname))) )
+
+(defparameter *cr-out-dir* (ensure-directories-exist (merge-pathnames "cr-out/" *cr-root*)))
+(defparameter *cr-csfun-dir* (ensure-directories-exist (merge-pathnames "cr-fun/" *cr-root*)))
+(defparameter *cr-wt-dir* (ensure-directories-exist (merge-pathnames "cr-wt/" *cr-root*)))
+(defparameter *cr-models-dir* (ensure-directories-exist (merge-pathnames "cr-models/" *cr-root*)))
+(defparameter *cr-userfun-dir* (ensure-directories-exist (merge-pathnames "cr-userfun/" *cr-root*)))
+(defparameter *cr-tmp-dir* (ensure-directories-exist (merge-pathnames "cr-tmp/" *cr-root*)))
 
 (defun get-cr-path (dir &key name type subdirs)
   (let ((root (case dir 
@@ -22,7 +23,6 @@
                 (t nil))))
     (make-pathname :directory (append (pathname-directory root) subdirs)
                    :name name :type type)))
-
 
 
 
