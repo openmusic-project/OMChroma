@@ -65,7 +65,7 @@
    ;(reference :initform nil
    ;           :initarg :reference
    ;           :accessor reference)
-   (diapason :initform (get-gbl DIAPASON) :accessor diapason))
+   (diapason :initform (get-gbl 'DIAPASON) :accessor diapason))
   (:documentation "Vertical Pitch Structure" ))
 
 ;; mixin class for AIL and ARL
@@ -180,9 +180,6 @@
           (class-of x)
           (documentation (class-name (class-of x))'type)
           (slot-value x 'the-list)))
-
-(defmethod print_vs ((x t))
-  (print_vs (make_vps x)))
 
 (defmethod number-of-notes ((x vps))
   "Number of Notes in a VPS"
