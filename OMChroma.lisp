@@ -126,6 +126,8 @@
 
 (om::set-lib-release 5.02 (find-library "OMChroma"))
 
+;(cl-user::clean-sources (make-pathname :directory (append (pathname-directory *load-pathname*) '("sources"))))
+
 
 (print "
  ==============================
