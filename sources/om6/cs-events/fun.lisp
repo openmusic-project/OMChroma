@@ -58,7 +58,7 @@
   
   (if (listp bpf)
       
-      (loop for f in bpf-list collect (bpf->fun f precision))
+      (loop for f in bpf collect (bpf->fun f precision))
     
     (make_fun
      (loop for x in (om::x-points bpf) for y in (om::y-points bpf) append (list y x))
