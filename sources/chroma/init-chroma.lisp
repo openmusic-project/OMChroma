@@ -36,12 +36,14 @@
   )
 
 
-(defun cr-beep ()
+(defun cr-beep (&optional text)
   #+lispworks
   (capi::beep-pane nil)
   #-lispworks
   (print "BIP")
-  )
+  
+  (when text (print text))
+)
 
 
 (defun sound-file-get-info (filename)
