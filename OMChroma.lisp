@@ -17,7 +17,7 @@
 ;along with this program; if not, write to the Free Software
 ;Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,10 USA.
 ;
-; (c) Ircam 2000 - 2018
+; (c) Ircam 2000 - 2019
 ;Authors: M. Stroppa, C. Agon, J. Bresson, S. Lemouton
 
 ;;;================================
@@ -30,13 +30,18 @@
 (load (merge-pathnames "sources/package" *load-pathname*))
 (load (merge-pathnames "sources/chroma/load" *load-pathname*))
 
-(defvar *OMchroma-files* nil)
-   
+(cr::set-gbl 'cr::SR om::*audio-sr*)		 ; SAMPLING RATE
+(cr::set-gbl 'cr::DIAPASON 'om::*diapason-freq*) ; CURRENT DIAPASON
+(cr::set-gbl 'cr::USER 'om::*composer-name*)	; USER'S NAME FOR PERSONALIZED MESSAGES
+
 (mapc 
+
  #'(lambda (file)
      (compile&load (merge-pathnames file *load-pathname*)))
  
- '("sources/om6/cs-events/general-parsing"
+ '(
+   "sources/om6/cs-events/fun"
+   "sources/om6/cs-events/general-parsing"
                         
    "sources/om6/cs-events/csound/cs-utils"
    "sources/om6/cs-events/csound/cs-tables"

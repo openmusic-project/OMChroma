@@ -13,32 +13,31 @@
 
 (defun get-cr-path (dir &key name type subdirs)
   (let ((root (case dir 
-                 (:out *cr-out-dir*)
-                 (:csfun *cr-csfun-dir*)
-                 (:wt *cr-wt-dir*)
-                 (:models *cr-models-dir*)
-                 (:userfun *cr-userfun-dir*)
-                 (:tmp *cr-tmp-dir*)
-                 (t nil))))
+                (:out *cr-out-dir*)
+                (:csfun *cr-csfun-dir*)
+                (:wt *cr-wt-dir*)
+                (:models *cr-models-dir*)
+                (:userfun *cr-userfun-dir*)
+                (:tmp *cr-tmp-dir*)
+                (t nil))))
     (make-pathname :directory (append (pathname-directory root) subdirs)
                    :name name :type type)))
 
 
-;(make-pathname :directory (append (pathname-directory *cr-root*) '("eee" "dff"))
-;               :name "fghjk" :type "aiff")
 
 
-;vps/pitch-conversions
-(export '(fq->pch fq->midi fq->ratio fq->midic  fq->itvl fq->semitones
-                  pch->fq pch->midi pch->midic pch->itvl pch->semitones pch->pch-class pch->ratio
-                  midi->pch midi->semitones midi->pch-class midi->midic midi->fq midi->ratio midi->itvl
-                  midic->midi midic->fq midic->pch midic->ratio midic->itvl midic->semitones midic->pch-class
-                  ratio->fq ratio->itvl ratio->semitones ratio->midi ratio->midic ratio->pch
-                  itvl->fq itvl->midi itvl->midic itvl->ratio itvl->pch itvl->semitones
-                  semitones->ratio semitones->itvl semitones->fq semitones->midi semitones->midic 
-                  pch-class->pch pch-class->midi pch-class->fq)
-        :chroma)
+;;; Definition of helper-functions with implementation-dependent or external dependencies:
 
-;vps/vps
-(export '(fql ptl ail spl cil crl arl rpl) :chroma)
+(defun choose-file-dialog (&optional (message "Select a file...")) 
+  #+lispworks
+  (capi::prompt-for-file message)
+  #-lispworks
+  (error "Sorry I can not prompt for file...")
+  )
 
+(defun sound-file-get-info (filename)
+  #+libsndfile
+  (sf::sndfile-get-info filename)
+  #-libsndfile
+  (error "Sorry I can not read sound info...")
+  )

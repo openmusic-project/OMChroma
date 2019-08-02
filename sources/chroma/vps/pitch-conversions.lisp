@@ -43,6 +43,19 @@ pch-class   *   *   *     *     *    *      *           \
 
 (in-package :cr)
 
+;;; too much ... ? :)
+(export '(fq->pch 
+          fq->midi fq->ratio fq->midic  fq->itvl fq->semitones
+          pch->fq pch->midi pch->midic pch->itvl pch->semitones pch->pch-class pch->ratio
+          midi->pch midi->semitones midi->pch-class midi->midic midi->fq midi->ratio midi->itvl
+          midic->midi midic->fq midic->pch midic->ratio midic->itvl midic->semitones midic->pch-class
+          ratio->fq ratio->itvl ratio->semitones ratio->midi ratio->midic ratio->pch
+          itvl->fq itvl->midi itvl->midic itvl->ratio itvl->pch itvl->semitones
+          semitones->ratio semitones->itvl semitones->fq semitones->midi semitones->midic 
+          pch-class->pch pch-class->midi pch-class->fq)
+        :chroma)
+
+
 ;FREQUENCY
 (defmethod fq->pch ((f number) &optional (approx 0))
   (fq-to-pch f approx))

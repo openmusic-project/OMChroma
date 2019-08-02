@@ -87,7 +87,6 @@
 (set-gbl 'MAXAMP 1000.0)		; MAXIMUM AMPLITUDE FOR SYNTHESIZER
 (set-gbl 'GBLAMP 1000.0)		; GLOBAL AMPLITUDE FOR LOCAL EVENT
 
-(set-gbl 'SR om::*audio-sr*)		; SAMPLING RATE
 (set-gbl 'SR/2 '(/ (get-gbl SR) 2))		; NYQUIST FREQUENCY
 (set-gbl 'KR '(get-gbl SR))		; CONTROL RATE FOR CSOUND
 (set-gbl 'NCH 1)		; NUMBER OF CHANNELS
@@ -103,8 +102,13 @@
                             ; USED WHEN COMPILING FUNCTIONS (= MAX - 2,
                             ;    USED AT THE BEGINNING)
                             ; IF () NO CONTROL
-(set-gbl 'DIAPASON 'om::*diapason-freq*)	; CURRENT DIAPASON
 
+;;; THESE TWO ARE REDEFINED WHEN LOADED IN OM
+(set-gbl 'SR 44100)       ; SAMPLING RATE
+(set-gbl 'DIAPASON 440.0) ; CURRENT DIAPASON
+
+(set-gbl 'USER "Chroma User")	; USER'S NAME FOR PERSONALIZED MESSAGES
+; (get-gbl 'USER)
 
 ;-----------------------------------------------------------------------------
 (set-gbl 'PRT-FM 0)		; PORTAMENTO FLAG FOR FM (USED IN CIF D. BASE)
@@ -117,11 +121,8 @@
 
 (set-gbl '*chroma-output* *standard-output*)	
 
-
-(set-gbl 'USER 'om::*composer-name*)	; USER'S NAME FOR PERSONALIZED MESSAGES
-
-(eval 'om::*diapason-freq*)
-(eval DIAPASON)
+;(eval 'om::*diapason-freq*)
+;(eval DIAPASON)
 ;-----------------------------------------------------------------------------;-----------------------------------------------------------------------------
 ; Temporary place for the dynamically computed GENS of a WT object
 (set-gbl 'WTL ())		; A-LIST OF WT OBJECTS

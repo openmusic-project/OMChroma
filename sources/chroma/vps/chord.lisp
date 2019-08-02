@@ -22,6 +22,10 @@
 
 (in-package :cr)
 
+
+(export '(spl ail cil rpl) :cr)
+
+
 (defclass CHORD 
   (VPS)
   ((sp-list :initform nil
