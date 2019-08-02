@@ -209,5 +209,74 @@ bpf to incremental x-points is correct.
 
 
 
+;-----------------------------------------------------------------------------
+; WRITE A FILE CONTAING THE CORRECT INSTRUCTION TO LOAD THE WAVE TABLES
+; THE LIST OF THE WT OBJECTS TO WRITE DOWN IS INN THE GLOBAL "WTL"
+
+
+(defun out-wt (file-name &rest dir)
+   (let ((synthi (get-gbl 'SYNTH)) )
+	(case synthi
+	    (csound
+             (out-wt-cs file-name (car dir)) )
+;	    (moon
+;		(out-wt-moon file-name (car dir)) )
+	    (t
+		(error-synth 'out-wt synthi)))) )
+
+
+;-----------------------------------------------------------------------------
+(defun out-wt-cs (file-name &optional (dir (get-gbl 'CSfun)))
+"
+New version ONLY working with omChroma.
+Older versions are below (grayed).
+filename: name of file, without extension.
+          the file will have the automatic extensions <.fun>.
+dir: directory where the file is to be written (default: value of CSfun).
+"  
+
+  (unless (equal (get-gbl 'MACHINE) 'om)
+    (error "~%For the time being I can only work with om !
+    Why did you give me this machine, eh: ~a!~%" (get-gbl 'MACHINE)))
+
+  (let ((complete-filename (merge-pathnames dir (format () "~a.fun" file-name)))
+        (wt-list (get-gbl 'WTL))
+        )
+    (when wt-list
+      (format t "~%WRITING WT TABLES FOR CSOUND IN~%   ~a~%" complete-filename)
+      (format t "   ON ")
+      (printdate)
+      (format t "~%~%")
+      (with-open-file (out-stream complete-filename :direction :output 
+                                :if-does-not-exist :create 
+                                :if-exists :supersede)
+        (format out-stream "~%;  WRITING WT TABLES FOR CSOUND ON ")
+        (printdate out-stream)
+        (format out-stream "~%~%")
+
+        (mapc (lambda (wt)
+                (let* ((name (car wt))
+                       (dir (cadr wt))
+                       (f-num (caddr wt))
+                       (n-smpls (cadddr wt))
+                       (f-size (1+ (pwr2 n-smpls)))
+                       (sndfilein (merge-pathnames dir name))
+                       )
+                     
+                     (format t "    f~a 0 ~a 1 ~%" f-num f-size)
+                     (format t "        \"~a\" 0 4 1~%" sndfilein )
+                     (when (> f-num (get-gbl 'WTFOMAX))
+                       (format t "            WARNING: function number > upper limit of ~a~%" (get-gbl 'WTFOMAX)))
+                     (format out-stream ";  Number of samples: ~a~%" n-smpls)
+                     (format out-stream "(om::ScSt \"f ~a 0 ~a 1 " f-num f-size)
+                     (format out-stream "\\\"~a\\\" 0 4 1\")~%" sndfilein ))) wt-list))))
+  "done")
+
+;; better ?:
+;; (format nil "~A" `(om::ScSt ,(format nil "f ~a 0 ~a 1 \"~a\" 0 4 1" f-num f-siz sndfilein)))
+
+;-----------------------------------------------------------------------------
+
+
 
 
