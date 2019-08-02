@@ -31,8 +31,8 @@
 
 (defmethod initialize-instance :after ((x model-f0) &rest initargs &key f0)
   (declare (ignore initargs))
-    (setf (f0 x) (make_fun(xy-echange(data f0))))
-   )
+  (setf (f0 x) (make_fun (xy-echange (data f0))))
+  )
 
 
 
@@ -61,3 +61,4 @@
           )
     (reverse result)
     ))
+

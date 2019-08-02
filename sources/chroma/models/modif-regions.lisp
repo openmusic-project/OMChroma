@@ -40,9 +40,15 @@ The function can be applied to the regions'
    :mode (0) = mode of action (see action above)
    :fun2 (fun) = optional function to be used
 "
-(let ((map-fun (copy-list fun)) new-starts new-ends)
+(let ((map-fun (copy-list fun))
+      new-starts new-ends)
+  
   (X-resc_fun fun2 (begin-time model) (end-time model))
-(case mode
-  (0 (setf new-starts (mapcar (lambda (x)(y-val_fun map-fun x))(start-list model))
-           new-ends (mapcar (lambda (x)(y-val_fun map-fun x))(end-list model))
-           (region-list model)(build-region-list (name-list model) new-starts new-ends))))))
+  
+  (case mode
+    (0 (setf new-starts (mapcar (lambda (x) (y-val_fun map-fun x)) (startlist model))
+             new-ends (mapcar (lambda (x)(y-val_fun map-fun x)) (endlist model))
+             (region-list model) (build-region-list (namelist model) new-starts new-ends))))
+  ))
+
+

@@ -33,8 +33,8 @@ Change a model's rhythm:
    start = action time
  durlist = duration's list
 "
-  (let ((size (length (markers x )))
-        (result (copy-instance x))
+  (let ((size (length (markers x)))
+        (result (copy-model x))
         (new-marker-list (durtotime start durlist)))
     (cond ((eq (length new-marker-list) size)  
            (setf (markers result) new-marker-list ))
@@ -70,7 +70,8 @@ Modify a model's tempo using a function.
 ;2.MODIFICATIONS DES FQLS
 
 (defmethod modify ((x chroma-model) 
-                         &key (fun 'insert-frequency)(args nil))
+                   &key (fun 'insert-frequency)
+                   (args nil))
 "
 Modify a model:
    apply fun with arguments args to x (chroma-model)
@@ -81,14 +82,10 @@ Modify a model:
 
 Can be very easily extended by the user.
 "
-#|
-(if (print(is-regions-partials? x))
-  (call-next-method )
 
-|#
   (let((model (copy-model x))
        result)
-;    (print model)
+
     (loop for fql in (fql-list x)
           do (if (the-list fql) 
                (push (apply fun (append (list fql) args)) result)
@@ -195,7 +192,7 @@ The AMP and TRANSP funs are also INTERPOLATED.
   (let ((result nil)(result-amp nil)(result-ed ())(result-d ())(result-tf ())(result-af ())
         (list (get-fql ptl))
         (list-amp (get-amp ptl))
-        (list-ed (entry-delays ptl))
+        (list-ed (e-dels ptl))
         (list-d (durs ptl))
         (list-tf (transp_funs ptl))
         (list-af (amp_funs ptl))
@@ -227,7 +224,7 @@ The AMP and TRANSP funs are also INTERPOLATED.
                (push val result-af)))
     (make-instance 'ptl :the-list(nreverse result)
                    :amplitudes (nreverse result-amp)
-                   :entry-delays (nreverse result-ed)
+                   :e-dels (nreverse result-ed)
                    :durs (nreverse result-d)
                    :transp_funs (nreverse result-tf)
                    :amp_funs (nreverse result-af))))
@@ -255,14 +252,14 @@ Cut all the frequencies above fq-c
     (if (null pos)(setf pos 0)(setf pos (- (length list)pos)))
     (let ((result (butlast list pos))
           (result-amp (butlast (get-amp ptl) pos))
-          (result-ed (butlast (entry-delays ptl) pos))
+          (result-ed (butlast (e-dels ptl) pos))
           (result-d (butlast (durs ptl) pos))
           (result-tf (butlast (transp_funs ptl) pos))
           (result-af (butlast (amp_funs ptl) pos)))
       (if result
         (make-instance 'ptl :the-list result
                        :amplitudes result-amp
-                       :entry-delays result-ed
+                       :e-dels result-ed
                        :durs result-d
                        :transp_funs result-tf
                        :amp_funs result-af)
@@ -293,14 +290,14 @@ Cut all the frequencies below fq-c
       (let* ((pos (-(length list)pos))
              (result (last list pos))
              (result-amp (last (get-amp ptl) pos))
-             (result-ed (last (entry-delays ptl) pos))
+             (result-ed (last (e-dels ptl) pos))
              (result-d (last (durs ptl) pos))
              (result-tf (last (transp_funs ptl) pos))
              (result-af (last (amp_funs ptl) pos)))
         (if result
           (make-instance 'ptl :the-list result
                          :amplitudes result-amp
-                         :entry-delays result-ed
+                         :e-dels result-ed
                          :durs result-d
                          :transp_funs result-tf
                          :amp_funs result-af)
@@ -335,7 +332,7 @@ Cut all the frequencies outside fq-c-list
     (if (null pos)(setf pos 0)(setf pos (-(length list)pos)))
     (let* ((result (butlast list pos))
            (result-amp (butlast (get-amp ptl) pos))
-           (result-ed (butlast (entry-delays ptl) pos))
+           (result-ed (butlast (e-dels ptl) pos))
            (result-d (butlast (durs ptl) pos))
            (result-tf (butlast (transp_funs ptl) pos))
            (result-af (butlast (amp_funs ptl) pos))
@@ -351,7 +348,7 @@ Cut all the frequencies outside fq-c-list
           (if result
             (make-instance 'ptl :the-list result
                            :amplitudes result-amp
-                           :entry-delays result-ed
+                           :e-dels result-ed
                            :durs result-d
                            :transp_funs result-tf
                            :amp_funs result-af)
@@ -398,7 +395,7 @@ Cut all the frequencies within fq-c-list
       (setf pos1 (-(length list1) pos1)))
     (setf result1 (butlast list1 pos1)
           result-amp1 (butlast (get-amp ptl) pos1)
-          result-ed1 (butlast (entry-delays ptl) pos1)
+          result-ed1 (butlast (e-dels ptl) pos1)
           result-d1 (butlast (durs ptl) pos1)
           result-tf1 (butlast (transp_funs ptl) pos1)
           result-af1 (butlast (amp_funs ptl) pos1)
@@ -408,7 +405,7 @@ Cut all the frequencies within fq-c-list
             result2 (last list2 pos2)
             result-amp2 (last (get-amp ptl) pos2)
             result-amp2 (last (get-amp ptl) pos2)
-            result-ed2 (last (entry-delays ptl) pos2)
+            result-ed2 (last (e-dels ptl) pos2)
             result-d2 (last (durs ptl) pos2)
             result-tf2 (last (transp_funs ptl) pos2)
             result-af2 (last (amp_funs ptl) pos2)
@@ -416,7 +413,7 @@ Cut all the frequencies within fq-c-list
     (if (or result1 result2)
       (make-instance 'ptl :the-list (append result1 result2)
                      :amplitudes (append  result-amp1 result-amp2)
-                     :entry-delays (append result-ed1 result-ed2)
+                     :e-dels (append result-ed1 result-ed2)
                      :durs (append result-d1 result-d2)
                      :transp_funs (append result-tf1 result-tf2)
                      :amp_funs (append result-af1 result-af2)
@@ -453,13 +450,13 @@ ms_110902
   (let ((appxl (approx-freqs (the-list ptl) approx))
         (amps (amplitudes ptl))
         (durs (durs ptl))
-        (edels (entry-delays ptl))
+        (edels (e-dels ptl))
         (tfuns (transp_funs ptl))
         (afuns (amp_funs ptl)))
     (let ((all (remove-duplicate-freqs (list appxl amps durs edels tfuns afuns))))
       (make-instance 'ptl :the-list (first all)
                      :amplitudes (second all)
-                     :entry-delays (fourth all)
+                     :e-dels (fourth all)
                      :durs (third all)
                      :transp_funs (fifth all)
                      :amp_funs (sixth all)
@@ -474,13 +471,14 @@ ms_110902
 "Lfreqs must be a list of lfreqs [lamps lbws]"
   (let ((freqs (car lfreqs))
         (amps (cadr lfreqs))
-        (bwl (caddr lfreqs)))
+        ;; (bwl (caddr lfreqs))
+        )
     (cond ((null amps) ; only freqs
            (list (remove-duplicates freqs :test #'=)))
           (t ; only amps and freqs
-           (let* ((all (om::mat-trans lfreqs)) ;place fqs and amps together
+           (let* ((all (mat-trans lfreqs)) ;place fqs and amps together
                   (sortedamps (sort all #'< :key #'cadr))) ; sort by amps, so that the last duplicate is the loudest
-             (om::mat-trans (sort (remove-duplicates sortedamps :test #'= :key #'car) #'< :key #'car))))))) ; remove and rebuild the original structure
+             (mat-trans (sort (remove-duplicates sortedamps :test #'= :key #'car) #'< :key #'car))))))) ; remove and rebuild the original structure
 
 
 #|

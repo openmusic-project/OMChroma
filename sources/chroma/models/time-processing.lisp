@@ -558,10 +558,10 @@ Negative times are eliminated (with warning message). *** STILL TO DO!"
          (final-result (check_dur result durmin durmode)))
 
     (if (null final-result)
-        (om-beep-msg
-         (format () "Empty list of segments. Check your durmin (~f), please, Sir ~a!!" durmin (cr::get-gbl 'cr::USER)))
-          (loop for seg in final-result
-               collect (list (car seg) (+ (car seg) (cadr seg)))))
+        (progn (cr-beep)
+          (print (format () "Empty list of segments. Check your durmin (~f), please, Sir ~a!!" durmin (cr::get-gbl 'cr::USER))))
+      (loop for seg in final-result
+            collect (list (car seg) (+ (car seg) (cadr seg)))))
     ))
 
 ;(durs->segs '(1 1 1 1 1) 0.0)
@@ -595,8 +595,9 @@ Negative times are eliminated (with warning message)."
          (durs (if fact (modify_durs durs fact op) durs))
          (result (mat-trans (list onsets durs)))
          (final_result (check_dur result durmin durmode)))
-    (if (null final_result) (om-beep-msg
-                             (format () "Empty list of segments. Check your durmin (~f), please, Sir ~a!!" durmin (cr::get-gbl 'cr::USER)))
+    (if (null final_result) 
+        (progn (cr-beep)
+          (print (format () "Empty list of segments. Check your durmin (~f), please, Sir ~a!!" durmin (cr::get-gbl 'cr::USER))))
          final_result)))
 
 ;(segs->durs '(0 1 2 3 4))
@@ -623,9 +624,13 @@ Negative times are eliminated (with warning message)."
          (loop for seg in lsegs
                collect (list (car seg)
                              (if (>= (cadr seg) mindur) (cadr seg)
-                               (if mode (progn (om-beep-msg (format () "Too small dur: ~f. Replaced with mindur (~f)" (cadr seg) mindur))
-                                          mindur)
-                                 (progn (om-beep-msg (format () "Too small dur: ~f (mindur=~f). Segment eliminated" (cadr seg) mindur))
+                               (if mode 
+                                   (progn 
+                                     (cr-beep) 
+                                     (print (format () "Too small dur: ~f. Replaced with mindur (~f)" (cadr seg) mindur) mindur))
+                                 (progn 
+                                   (cr-beep)
+                                   (print (format () "Too small dur: ~f (mindur=~f). Segment eliminated" (cadr seg) mindur))
                                    ())))))))
     (remove () result :key 'cadr)))
 

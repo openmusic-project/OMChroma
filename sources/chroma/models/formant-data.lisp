@@ -25,14 +25,13 @@
 (in-package :cr)
 
 
-(defclass formant-data
-  (additive-data)
+(defclass formant-data (additive-data)
   ()
   (:documentation "Formant analysis data in Ram"))
 
 (defmethod initialize-instance :after ((x formant-data)  &rest initargs &key file)
   (declare (ignore initargs))
- (setf (data x)(load-formant-file file)))
+  (setf (data x) (load-formant-file file)))
 
 
 
@@ -63,8 +62,8 @@
                                  (setf time 0)))
                         (push (list (incf n) freq amp bw) result))))))
       (push (nreverse result) result2)
-      (nombre-de-formants(cdr(nreverse result2))))
-))
+      (nombre-de-formants (cdr (nreverse result2))))
+    ))
 
 (defun nombre-de-formants (l)
   (loop for i in l collect (cons (list (1-(length i))(car i)) (cdr i))))

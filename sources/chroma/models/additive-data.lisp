@@ -26,20 +26,17 @@
 (in-package :cr)
 
 
-(defclass additive-data
-  (analysis-data)
-()
+(defclass additive-data (analysis-data)
+  ()
   (:documentation "Analysis data in Ram"))
 
 
 (defmethod initialize-instance :after ((x additive-data)  &rest initargs &key file asfile)
   (declare (ignore initargs))
   (cond 
-  (file (if (sdif-check-file (namestring file))
-          (load-add-sdif-file x file)
-          (setf (data x)(load-add-file file))))
-  (asfile (setf (data x)(load-as-file asfile)))
- ))
+   (file (setf (data x) (load-add-file file)))
+   (asfile (setf (data x)(load-as-file asfile)))
+   ))
 
 ;traverse l'analyse pour trouver l'amplitude max (normalisation ....)
 #|
@@ -47,6 +44,7 @@
   (apply #'max (remove nil(mapcar #'third(mapcar #'flat (mapcar #'cdr (data x)))))))
 
 |#
+
 ;;loop version
 
 (defmethod get-max-amp ((x additive-data))
@@ -55,52 +53,6 @@
        do (loop for l2 in l1
                 do (when (eq 4 (length l2))
                   (if (> (third l2) max)(setf max (third l2))))))max))
-
-
-(defmethod load-add-sdif-file ((x additive-data) &optional file)
-  (if(null file)(setf file (choose-file-dialog)))
-  (format t "LOADING DATA FROM SDIF ~a~%" (file x))
-  (setf (data x) (get-partials-data (om::load-sdif-file file)))
-  )
-
-;; Returns a list of partials data (pitch onset offset velocity) 
-;; from an sdif file ( 1TRC frames)"
-  
-(defmethod get-partials-data ((self om::sdiffile))
-  (let ((res nil) (res1 nil)
-        mlist bmat emat pmat time
-        (ptrfile (om::dynamic-open self)))
-    (sdif::SdifFReadGeneralHeader ptrfile)
-    (sdif::SdifFReadAllASCIIChunks ptrfile)
-    (loop for item in (om::framesdesc self) do  
-          (when (string-equal "1TRC" (car item))
-            (setf time (nth 1 item))
-            (om::sdif-set-pos ptrfile (nth 3 item))
-            (setf mlist (nth 4 item))
-            (loop for m in mlist do
-                  (when (string-equal "1TRC" (car m))
-                    (push (list (second m) time) res1)
-                    (om::sdif-read-headers ptrfile (nth 3 item) (fifth m))
-                    (loop for i = 0 then (+ i 1) while (< i (second m)) do
-                          (sdif::SdifFReadOneRow ptrfile)
-                          (let* ((ind (floor (sdif::SdifFCurrOneRowCol  ptrfile 1)))
-                                 (freq (sdif::SdifFCurrOneRowCol ptrfile 2))
-                                 (amp (sdif::SdifFCurrOneRowCol ptrfile 3))
-                                 (phi (sdif::SdifFCurrOneRowCol ptrfile 4)))
-                            (push (list ind freq amp phi) res1)
-                            ))
-                    (push (reverse res1) res)(setf res1 nil)))))
-    (reverse res)
-    )
-  )
-
-#|
-;test :
-
-(progn (setf bb(get-partials-data(om::load-sdif-file #P"PRO1133:Applications:1.SoundApplications:OM4.9:code:Projects:chroma:Data:Data_bases-ll:models:trombone-C3¶.trc.sdif")
-))(inspect bb))
-
-|#
 
 
 (defun load-add-file (&optional file)
@@ -135,8 +87,6 @@
       (setf data2 (asd_group data2))
       )))
 
-
-
 (defun asd_tripl (l)
   (loop for ll in l count ll into i
         append (loop for lll on ll by #'cdddr 
@@ -156,12 +106,11 @@
     (cdr(reverse result))))
 
 (defun asd_group2 (l)
-  (let (
-      ;  (npart (length l)) 
-        (npart  (caar l)) 
+  (let ((npart (caar l)) 
         (time (cadar l))
-        (triplets (mapcar #'(lambda (x) (list (first x)(third x)(dbtoline (fourth x)) 0.)) l)))
+        (triplets (mapcar #'(lambda (x) (list (first x) (third x) (dbtolin (fourth x)) 0.)) l)))
     (cons (list npart time) (reverse triplets))))
+
 ;(asd_group '((1 1 1 1)(2 2 2 2)(3 2 3 3)(4 4 4 4)(5 4 5 5)))
 
 (defun asd_sort ( l)
@@ -181,5 +130,45 @@
         ))
 
 ;(asd_matrice_transpose '((1 2 3 4)(4 5 6 a)(7 8 9 b)))
+
+
+#|
+; Using OpenMusic SDIF tools we can also read and convert from an SDIF file with:
+
+(make-instance 
+ 'additive-data
+ :file sdif-file
+ :data (get-partials-data (om::load-sdif-file file)))
+
+
+;; Returns a list of partials data (pitch onset offset velocity) 
+;; from an sdif file ( 1TRC frames)"
+(defmethod get-partials-data ((self om::sdiffile))
+  (let ((res nil) (res1 nil)
+        mlist time
+        (ptrfile (sdif::sdif-open-file self :ereadfile)))
+    (sdif::SdifFReadGeneralHeader ptrfile)
+    (sdif::SdifFReadAllASCIIChunks ptrfile)
+    (loop for item in (om::framesdesc self) do  
+          (when (string-equal "1TRC" (car item))
+            (setf time (nth 1 item))
+            (sdif::sdif-set-pos ptrfile (nth 3 item))
+            (setf mlist (nth 4 item))
+            (loop for m in mlist do
+                  (when (string-equal "1TRC" (car m))
+                    (push (list (second m) time) res1)
+                    (om::sdif-read-headers ptrfile (nth 3 item) (fifth m))
+                    (loop for i = 0 then (+ i 1) while (< i (second m)) do
+                          (sdif::SdifFReadOneRow ptrfile)
+                          (let* ((ind (floor (sdif::SdifFCurrOneRowCol  ptrfile 1)))
+                                 (freq (sdif::SdifFCurrOneRowCol ptrfile 2))
+                                 (amp (sdif::SdifFCurrOneRowCol ptrfile 3))
+                                 (phi (sdif::SdifFCurrOneRowCol ptrfile 4)))
+                            (push (list ind freq amp phi) res1)
+                            ))
+                    (push (reverse res1) res)(setf res1 nil)))))
+    (reverse res)
+    ))
+|#
 
 

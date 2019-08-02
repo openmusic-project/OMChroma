@@ -40,8 +40,4 @@
    )
   (:documentation "Analysis data in Ram"))
 
-(defclass analysis-stream
-  ()
-  ((file-accessor))
-  (:documentation "Streamed Sdif Analysis data (LATER)"))
 

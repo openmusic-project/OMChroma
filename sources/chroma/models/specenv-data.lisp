@@ -26,8 +26,7 @@
 (in-package :chroma)
 
 
-(defclass specenv-data
-  (analysis-data)
+(defclass specenv-data (analysis-data)
   ()
   (:documentation "enveloppe spectrale calcule par estimate"))
 
@@ -49,7 +48,7 @@
                      ti (read-from-string (format nil "(~a)" li)))
             do (if ti (push ti result))
             (when(and(listp ti)(get-gbl 'CTL2-PRINT)) (format t "~a~%" (first ti)) ))
-      (setf (data x)(nreverse  (cdr result))
+      (setf (data x) (nreverse  (cdr result))
       ))))
 
 

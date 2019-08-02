@@ -65,7 +65,8 @@
 
 (defmethod get-nth-dur ((x regions) rank)
   "get nth duration"
-  (+ (offset x) (- (second (second (nth rank (region-list x)))) (get-nth-time x rank))))
+  (- (second (second (nth rank (region-list x)))) (get-nth-time x rank)))
+
 
 (defmethod regions-from-durs (at dur name)
   "create a list of regions when giving separate start times, duration and name lists"
@@ -75,10 +76,6 @@
   "create a list of regions when giving separate start times, duration and name lists"
   (mapcar #'(lambda (a e n) (list n (list a e n))) at end name))
 
-
-(defmethod get-nth-dur ((x regions) rank)
-  "get nth duration"
-  (- (second (second (nth rank (region-list x)))) (get-nth-time x rank)))
 
 (defmethod get-fql-from-time ((x regions) time)
   "invalid method for region-models"
@@ -152,3 +149,6 @@
 (defun build-region-list (names starts ends)
 "build a region list from name starting_time and end-times lists"
   (mapcar 'list names (mapcar 'list starts ends) (make-list (length names))))
+
+
+

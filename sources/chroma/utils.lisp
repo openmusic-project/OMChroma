@@ -67,6 +67,10 @@
          (mapcar '#(lambda (elt) (if (consp elt) elt (list elt)))
                  list)))
   
+(defun mat-trans (matrix)
+  (let ((maxl (1- (loop for elt in matrix maximize (length elt)))))
+    (loop for i from 0 to maxl collect
+          (mapcar #'(lambda (list) (nth i list)) matrix))))
 
 
 ;------------------------------------------------------------------c
