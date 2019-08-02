@@ -340,8 +340,11 @@
     ))
 
 
-(defmethod cs-synthesize ((self cs-evt) &key (name "my-synt") tables (run t) (format :aiff) inits sr kr)
-  (cs-synthesize (list self) :name name :tables tables :run run :format format :inits inits :sr sr :kr kr))
+(defmethod cs-synthesize ((self cs-evt) &key (name "my-synt") (run t) (format :aiff) inits tables resolution normalize sr kr)
+  (cs-synthesize (list self) :name name :run run :format format 
+                 :inits inits  :tables tables 
+                 :sr sr :kr kr 
+                 :resolution resolution :normalize normalize))
 
 ;;; .. to make it work with the generic OM 'synthesize' method
 (defmethod om::synthesize-method ((self cs-evt)) 'cs-synthesize)
