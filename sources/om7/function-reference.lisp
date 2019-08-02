@@ -84,7 +84,7 @@
                                 (om::get-lib-reference-pages-folder lib)
                                 :title (format nil "OMChroma ~A" (om::version lib))  
                                 :general-doc *chroma-general-doc* 
-                                :slots-doc-base *chroma-slots-doc* 
+                                ;:slots-doc-base *chroma-slots-doc* 
                                 :appendix *chroma-appendix*
                                 :logofile (probe-file (merge-pathnames (make-pathname :name "logo" :type "png")
                                                                        (om::lib-resources-folder lib)))
