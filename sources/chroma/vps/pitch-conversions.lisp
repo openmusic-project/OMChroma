@@ -63,7 +63,7 @@ pch-class   *   *   *     *     *    *      *           \
 (defmethod fq->pch ((f list) &optional (approx 0))
   (cond ((pitch-with-octave-p f) f)
         ((or (symbolp f) (stringp f))
-         (error "CANNOT CALCULATE THE FREQ OF ~a, SIR ~a" f (get-gbl USER)))
+         (error "CANNOT CALCULATE THE FREQ OF ~a, SIR ~a" f (get-gbl 'USER)))
         (t (mapcar (lambda (x) (fq-to-pch x approx)) f))))
 
 (defmethod fq->pch ((f t) &optional (approx 0))
@@ -97,15 +97,16 @@ pch-class   *   *   *     *     *    *      *           \
   (midi->midic (fq-to-midi f)))
 
 (defmethod fq->midic ((f t))
-  (error "CANNOT CALCULATE THE MIDIC OF ~a, SIR ~a" f (get-gbl USER)))
+  (error "CANNOT CALCULATE THE MIDIC OF ~a, SIR ~a" f (get-gbl 'USER)))
 
 
 (defmethod fq->ratio ((f list))
-  (cond ((null (second f))())
-        (t ( cons (/(second f)(first f))(fq->ratio(cdr f))))))
+  (cond ((null (second f)) ())
+        (t (cons (/ (second f) (first f))
+                 (fq->ratio (cdr f))))))
 
 (defmethod fq->ratio ((l t))
-  (error "I NEED A LIST OF AT LEAST TWO ARGUMENTS, SIR ~a, AND YOU GAVE ME ~a" (get-gbl USER) l))
+  (error "I NEED A LIST OF AT LEAST TWO ARGUMENTS, SIR ~a, AND YOU GAVE ME ~a" (get-gbl 'USER) l))
 
 
 ; COMPOUND CONVERSIONS, ms0906
@@ -149,7 +150,7 @@ pch-class   *   *   *     *     *    *      *           \
   note)
 
 (defmethod pch->fq ((note list) &rest diap)        ;nouvelle version pour pch (cf : LLdg-pitch.lisp) 
-  (let ((diap (ifn diap (get-gbl DIAPASON) (car diap))) )
+  (let ((diap (ifn diap (get-gbl 'DIAPASON) (car diap))) )
     (if(or(memberp (cdr note) *DEVIATIONS*) (numberp (cdr note)))
         (freq (make-instance 'symbolic-pitch :pitch (string (car note)) 
                              :diapason diap 
@@ -157,12 +158,12 @@ pch-class   *   *   *     *     *    *      *           \
       (mapcar (lambda (n) (pch->fq n diap)) note))))
 
 (defmethod pch->fq ((note t) &rest diap)        ;nouvelle version pour pch (cf : LLdg-pitch.lisp) 
-  (let ((diap (ifn diap (get-gbl DIAPASON) (car diap))) )
+  (let ((diap (ifn diap (get-gbl 'DIAPASON) (car diap))) )
     (freq (make-instance 'symbolic-pitch :pitch (string note) 
                          :diapason diap))))
 
 (defmethod pch->midi (note &rest diap)
-  (let ((diap (ifn diap (get-gbl DIAPASON) (car diap))) )
+  (let ((diap (ifn diap (get-gbl 'DIAPASON) (car diap))) )
     (cond ((numberp note) note)
           ((listp note)
            (if(or (memberp (cdr note) *DEVIATIONS* ) (numberp (cdr note)))
@@ -414,7 +415,7 @@ pch-class   *   *   *     *     *    *      *           \
   (ratio->fq (list int) ref))
 
 (defmethod ratio->fq (int ref)
-  (error "MYSTERIOUS ARGUMENTS, SIR ~a: ~a - ~a" (get-gbl USER) int ref))
+  (error "MYSTERIOUS ARGUMENTS, SIR ~a: ~a - ~a" (get-gbl 'USER) int ref))
 
 (defmethod ratio->itvl (int)
   (semitones->itvl(ratio->semitones int)))
@@ -508,34 +509,39 @@ pch-class   *   *   *     *     *    *      *           \
 
  
 (defmethod itvl->midi (int (ref number))
-  (let ((deviation 0)(octave 0)(intervalle)(pitch)
+  (let ((deviation 0)
+        (octave 0)
+        (intervalle)
+        (pitch)
         (int (if (listp int) int (list int))))
-    (if (null int) (list ref)
-        (progn (if (memberp (car int) *INTERVALLES*) 
+    (if (null int) 
+        (list ref)
+      (progn (if (memberp (car int) *INTERVALLES*) 
                  (progn (setf intervalle (car int))
-                        (setf deviation 0)
-                        (setf octave 0))
-                 (progn (if (listp (car int))
+                   (setf deviation 0)
+                   (setf octave 0))
+               (progn (if (listp (car int))
                           (setf intervalle (caar int))
-                          (error "UNREALISTIC INTERVAL, SIR: ~a" (car int)))
-                        (unless (memberp intervalle *INTERVALLES*)
-                          (error "CAN'T BELIEVE 'THIS IS AN INTERVAL: ~a" intervalle))
-                        (if(null (third (car int)))
-                          (progn (setf deviation 0)
-                                 (setf octave (second (car int))))
-                          (progn (setf octave (second (car int)))
-                                 (setf deviation (third (car int)))))))
-               (when (symbolp intervalle)
-                 (setf intervalle (internc intervalle)))
-               (setf pitch  (+ ref 
-                               (cdr(assoc intervalle *INTERVALLES-ALIST*))
-                               (/ deviation 100) 
+                        (error "UNREALISTIC INTERVAL, SIR: ~a" (car int)))
+                 (unless (memberp intervalle *INTERVALLES*)
+                   (error "CAN'T BELIEVE 'THIS IS AN INTERVAL: ~a" intervalle))
+                 (if(null (third (car int)))
+                     (progn (setf deviation 0)
+                       (setf octave (second (car int))))
+                   (progn (setf octave (second (car int)))
+                     (setf deviation (third (car int)))))))
+        (when (symbolp intervalle)
+          (setf intervalle (internc intervalle)))
+        (setf pitch  (+ ref 
+                        (cdr(assoc intervalle *INTERVALLES-ALIST*))
+                        (/ deviation 100) 
                                (* 12  octave )))
-               (cons ref (itvl->midi (cdr int) pitch)
-                     )))))
+        (cons ref (itvl->midi (cdr int) pitch))
+        ))
+    ))
 
 (defmethod itvl->midi (int (ref t))
-  (itvl->midi (ratio->itvl val) ref))
+  (itvl->midi (ratio->itvl int) ref))
 
 
 (defmethod itvl->midic (int (ref number))
