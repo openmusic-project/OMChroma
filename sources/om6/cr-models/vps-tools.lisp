@@ -364,10 +364,7 @@ NB: RPL, CIL and CRL must be previously converted.
 ;;; 
 
 ;ms_1112, English correct!
-(defun om-sort-partials (freqs amps &optional more)
-  (om-sort-partiels freqs amps more))
-
-(defun om-sort-partiels (freqs amps &optional more)
+(defun sort-partials (freqs amps &optional more)
   (if more 
     (let* ((f2 (copy-list freqs)))
       (multiple-value-setq (freqs amps) (cr::sort-vps-contents freqs amps))

@@ -183,10 +183,10 @@
       (progn
       (if (cr::get-bw vps)
           (multiple-value-setq (freqs amps bws)
-              (om-sort-partiels (cons f (get-vps-freqs vps)) (cons 0.9 (get-vps-amps vps)) (cons 0 (cr::get-bw vps))))
+              (sort-partials (cons f (get-vps-freqs vps)) (cons 0.9 (get-vps-amps vps)) (cons 0 (cr::get-bw vps))))
         ;(initialize-instance vps :the-list freqs :amplitudes amps :bwl bws))
         (multiple-value-setq (freqs amps)
-              (om-sort-partiels (cons f (get-vps-freqs vps)) (cons 0.9 (get-vps-amps vps))))
+              (sort-partials (cons f (get-vps-freqs vps)) (cons 0.9 (get-vps-amps vps))))
         ;(initialize-instance vps :the-list freqs :amplitudes amps))
           )
       (initialize-instance vps :the-list freqs :amplitudes amps :bwl bws))
@@ -379,7 +379,7 @@
 (defmethod merge-vps ((self vps-list))
   (let ((freqs (loop for vps in (elements self) append (get-vps-freqs vps)))
         (amps (loop for vps in (elements self) append (get-vps-amps vps))))
-    (multiple-value-setq (freqs amps) (multiple-value-bind (f a) (om-sort-partiels freqs amps)
+    (multiple-value-setq (freqs amps) (multiple-value-bind (f a) (sort-partials freqs amps)
                                         (remove-unisson f a)))
 (make-model-obj 'FQL :freq freqs :amp amps)))
 
