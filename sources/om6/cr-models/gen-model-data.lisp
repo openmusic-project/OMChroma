@@ -166,11 +166,11 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
                     collect 
                     (mapcar
                      #'round
-                     (loop for marker in markers do
+                     (loop for marker in markers
                            collect (cr::y-val_fun (cr::make_fun fun) marker itpmode))))
            (loop for fun in result
                  collect 
-                 (loop for marker in markers do
+                 (loop for marker in markers
                        collect (cr::y-val_fun (cr::make_fun fun) marker itpmode))))
          )))
 

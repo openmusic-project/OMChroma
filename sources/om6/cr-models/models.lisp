@@ -111,33 +111,34 @@
 ;;  (t2 ((ind freq amp phi) ... (ind freq amp phi)))
 ;;  ...)
 (defmethod get-analysis-data ((datatype (eql '1TRC)) datasrc beg end)
-  (multiple-value-setq (data times) (getsdifdata datasrc 0 "1TRC" "1TRC" nil nil nil beg end))
-  (mat-trans (list times data)))
+  (multiple-value-bind (data times) 
+      (getsdifdata datasrc 0 "1TRC" "1TRC" nil nil nil beg end)
+    (mat-trans (list times data))))
 
 ;; ((t1 ((ind freq amp phi) ... (ind freq amp phi))) 
 ;;  (t2 ((ind freq amp phi) ... (ind freq amp phi)))
 ;;  ...)
 (defmethod get-analysis-data ((datatype (eql '1HRM)) datasrc beg end)
-  (multiple-value-setq (data times) (getsdifdata datasrc 0 "1HRM" "1HRM" nil nil nil beg end))
-  (remove nil (mat-trans (list times data)) :key 'cdr))
+  (multiple-value-bind (data times) (getsdifdata datasrc 0 "1HRM" "1HRM" nil nil nil beg end)
+    (remove nil (mat-trans (list times data)) :key 'cdr)))
 
 ;;
 (defmethod get-analysis-data ((datatype (eql '1MRK)) datasrc beg end)
-  (multiple-value-setq (data times) (getsdifdata datasrc 0 "1MRK" "1TRC" nil nil nil beg end))
-  (mat-trans (list times data)))
+  (multiple-value-bind (data times) (getsdifdata datasrc 0 "1MRK" "1TRC" nil nil nil beg end)
+    (mat-trans (list times data))))
 
 ;; 
 (defmethod get-analysis-data ((datatype (eql '1FOB)) datasrc beg end)
-  (multiple-value-setq (data times) (getsdifdata datasrc 0 "1FOB" "1FOF" nil nil nil beg end))
-  (mat-trans (list times data)))
+  (multiple-value-bind (data times) (getsdifdata datasrc 0 "1FOB" "1FOF" nil nil nil beg end)
+    (mat-trans (list times data))))
 
 ;; ((t1 f1) (t2 f2) ... (tn fn)) 
 (defmethod get-analysis-data ((datatype (eql '1FQ0)) datasrc beg end)
-  (multiple-value-setq (data times) (getsdifdata datasrc 0 "1FQ0" "1FQ0" 0 nil nil beg end))
-  (mat-trans (list times (flat data))))
+  (multiple-value-bind (data times) (getsdifdata datasrc 0 "1FQ0" "1FQ0" 0 nil nil beg end)
+    (mat-trans (list times (flat data)))))
 
 (defmethod get-data-times ((self pathname) datatype)
-  (get-data-frames (load-sdif-file self) datatype))
+  (get-data-times (load-sdif-file self) datatype))
 
 (defmethod get-data-times ((self sdiffile) (datatype (eql '1TRC)))
   (get-times self 0 "1TRC" "1TRC" nil nil))
@@ -212,8 +213,8 @@
                             (equal (datatype self) '1MRK)
                             (set-model-markers (time-struct self) (datasrc self) (datatype self)))
                            (;;; on n'a rien: pas de timestruct
-                            (setf tdata (get-data-times (datasrc self) (datatype self))) 
-                            (list 0.0 (or (car (last tdata 2)) 1.0))))))
+                            (let ((tdata (get-data-times (datasrc self) (datatype self))))
+                              (list 0.0 (or (car (last tdata 2)) 1.0)))))))
            (setf (time-struct self) (onsetsmrk2seg (or ttt (time-struct self))))
            (when (time-struct self)
              (setf (data self) (compute-model-data (datatype self) (modeltype self) (datasrc self) (time-struct self))))
@@ -274,9 +275,16 @@
 
 (defmethod get-model-data ((datatype (eql '1TRC)) modeltype datalist &key (sort t) (weighed-avg t) (durmin 0.0))
   ;;; datalist = ((T1 (ind freq amp phi) ...) ... (Tn (ind freq amp phi) ...))
-  (let (npartials freq_moyenne max_amp freq_fun amp_fun time_list triplets dur
-                  (amps nil)
-                  (freqs nil))
+  (let (freq_moyenne 
+        max_amp 
+        freq_fun 
+        amp_fun 
+        triplets 
+        dur
+        min-ind-partial 
+        max-ind-partial
+        (amps nil)
+        (freqs nil))
     (setf min-ind-partial (list-min (mapcar #'car (flat (mapcar #'cadr datalist) 1))))
     (setf max-ind-partial (list-max (mapcar #'car (flat (mapcar #'cadr datalist) 1))))
     (loop for i from min-ind-partial to max-ind-partial
@@ -311,14 +319,17 @@
 
 
 (defmethod get-model-data ((datatype (eql '1TRC)) (modeltype (eql 'PTL)) datalist &key (sort t) (weighed-avg t) (durmin 0.0))
-  (let (npartials freq_moyenne max_amp freq_fun edel dur amp_fun time_list triplets subdata
-                  (amps nil)
-                  (edels nil)
-                  (durs nil)
-                  (freqs nil)
-                  (amp_funs nil)
-                  (freq_funs nil)
-                  (init-time (car (car datalist))))
+  (let (freq_moyenne 
+        max_amp freq_fun edel dur amp_fun time_list triplets
+        min-ind-partial 
+        max-ind-partial
+        (amps nil)
+        (edels nil)
+        (durs nil)
+        (freqs nil)
+        (amp_funs nil)
+        (freq_funs nil)
+        (init-time (car (car datalist))))
     (setf min-ind-partial (list-min (mapcar #'car (flat (mapcar #'cadr datalist) 1))))
     (setf max-ind-partial (list-max (mapcar #'car (flat (mapcar #'cadr datalist) 1))))
     (loop for i from min-ind-partial to max-ind-partial
@@ -344,7 +355,7 @@
                 ;frequence moyenne
                 (setf freq_fun  (mapcar #'third triplets))
                 (setf freq_moyenne (if weighed-avg 
-                                     (cr::moyenne_ponderee freq_fun amp_fun)
+                                       (cr::moyenne_ponderee freq_fun amp_fun)
                                      (cr::moyenne freq_fun))) 
                 (push freq_moyenne freqs)
                 (push max_amp amps)
@@ -362,18 +373,18 @@
                 (push amp_fun amp_funs)
                 ))))
     (if (not (null freqs))
-      (progn (if sort (multiple-value-setq (freqs amps edels durs freq_funs amp_funs) 
-                        (cr::sort-partiels-and-everything freqs amps edels durs freq_funs amp_funs)))
-             (make-instance 'cr::ptl
-               :the-list (nreverse freqs) 
-               :amplitudes (nreverse amps)                     
-               :duration (- (car (last-elem datalist)) init-time)  
-               :origtime init-time
-               :entry-delays (nreverse edels)
-               :durs (nreverse durs)
-               :transp_funs (nreverse freq_funs)
-               :amp_funs (nreverse amp_funs))
-             ))))
+        (progn (if sort (multiple-value-setq (freqs amps edels durs freq_funs amp_funs) 
+                            (cr::sort-partiels-and-everything freqs amps edels durs freq_funs amp_funs)))
+          (make-instance 'cr::ptl
+                         :the-list (nreverse freqs) 
+                         :amplitudes (nreverse amps)                     
+                         :duration (- (car (last-elem datalist)) init-time)  
+                         :origtime init-time
+                         :e-dels (nreverse edels)
+                         :durs (nreverse durs)
+                         :transp_funs (nreverse freq_funs)
+                         :amp_funs (nreverse amp_funs))
+          ))))
 
 
 
@@ -381,6 +392,7 @@
   (get-model-data '1TRC modeltype datalist :sort sort :weighed-avg weighed-avg :durmin durmin))
 
 (defmethod get-model-data ((datatype (eql '1MRK)) modeltype datalist &key (sort t) (weighed-avg t) (durmin 0.0))
+  (declare (ignore weighed-avg durmin))
   (let ((data (cadr (car datalist)))
         (amps nil) (freqs nil))
     (loop for p in data 
@@ -396,6 +408,7 @@
 
 (defmethod get-model-data ((datatype (eql '1FQ0)) modeltype datalist &key (sort t) (weighed-avg t) (durmin 0.0))
   ;;; datalist = ((t1 f1) ... (tn fn))
+  (declare (ignore sort weighed-avg durmin))
   (make-model-obj modeltype :freq (list (cr::moyenne (mapcar #'cadr datalist))))
   )
 
@@ -405,6 +418,7 @@
 ;;; SPECIALIZED TARGETS
 
 (defmethod make-model-obj ((modeltype t) &key freq amp &allow-other-keys)
+  (declare (ignore freq amp))
   nil)
 
 (defmethod make-model-obj ((modeltype (eql 'FQL)) &key freq amp &allow-other-keys)
@@ -435,50 +449,43 @@
   (let ((path (om-choose-new-file-dialog :prompt "Choose a file name for saving your model")))
     (save-model self path)))
 
- (defmethod objfromobjs ((self sdiffile) (type cr-model))
-   (let ((new (make-instance 'cr-model))
-         (tlist nil)
-         (datalist nil)
-         (ptrfile (dynamic-open self)))
-       (sdif::SdifFReadGeneralHeader ptrfile)
-       (sdif::SdifFReadAllASCIIChunks ptrfile)
-       (loop for item in (framesdesc self) do
-             (when (equal "1MRK" (car item))
-               (push (nth 1 item) tlist)
-               (sdif-set-pos ptrfile (nth 3 item))
-               (setf mlist (nth 4 item))
-               (loop for mat in mlist do
-                     (cond ((equal "1BEG" (car mat)) (setf bmat mat))
-                           ((equal "1END" (car mat)) (setf emat mat))
-                           ((equal "1TRC" (car mat)) (setf pmat mat))
-                           (t nil)))
-               (when pmat 
-                 (let ((flist nil) (alist nil))
-                   ;;; a parameter matrix :
-                   ;;; cherche les notes dans tmplist et set pitch et velocity
-                   (sdif-read-headers ptrfile (nth 3 item) (fifth pmat))
-                   (loop for i = 0 then (+ i 1) while (< i (second pmat)) do
-                         (sdif::SdifFReadOneRow ptrfile)
-                         (let* ((freq (sdif::SdifFCurrOneRowCol ptrfile 2))
-                                (amp (sdif::SdifFCurrOneRowCol ptrfile 3)))
-                           (pushr freq flist)
-                           (pushr amp alist)
-                           ))
-                   (when flist (push (make-instance 'cr::fql :the-list flist :amplitudes alist) datalist))
-                   ))
-               (setf bmat nil)
-               (setf emat nil)
-               (setf pmat nil)
-               )
-             )
-       (dynamic-close self ptrfile)
-       (setf (time-struct new) (reverse tlist))
-       (setf (data new) (reverse datalist))
-       new))
+(defmethod objfromobjs ((self sdiffile) (type cr-model))
+  (let ((new (make-instance 'cr-model))
+        (tlist nil)
+        (datalist nil)
+        (ptrfile (sdif::sdif-open-file self)))
+    (sdif::SdifFReadGeneralHeader ptrfile)
+    (sdif::SdifFReadAllASCIIChunks ptrfile)
+    (loop for item in (framesdesc self) do
+          (when (equal "1MRK" (car item))
+            (push (nth 1 item) tlist)
+            (sdif::sdif-set-pos ptrfile (nth 3 item))
+            (let ((mlist (nth 4 item)))
+              (loop for mat in mlist do
+                    (when (equal "1TRC" (car mat)) 
+                      (let ((flist nil) (alist nil))
+                        ;;; a parameter matrix :
+                        ;;; cherche les notes dans tmplist et set pitch et velocity
+                        (sdif-read-headers ptrfile (nth 3 item) (fifth mat))
+                        (loop for i = 0 then (+ i 1) while (< i (second mat)) do
+                              (sdif::SdifFReadOneRow ptrfile)
+                              (let* ((freq (sdif::SdifFCurrOneRowCol ptrfile 2))
+                                     (amp (sdif::SdifFCurrOneRowCol ptrfile 3)))
+                                (pushr freq flist)
+                                (pushr amp alist)
+                                ))
+                        (when flist (push (make-instance 'cr::fql :the-list flist :amplitudes alist) datalist))
+                        ))
+                    )))
+          )
+    (sdif::sdif-close-file ptrfile)
+    (setf (time-struct new) (reverse tlist))
+    (setf (data new) (reverse datalist))
+    new))
 
 
 (defmethod save-model ((self cr-model) filename)
-  (let ((outfile (sdif-open-file (namestring (pathname filename)) 1)))
+  (let ((outfile (sdif::sdif-open-file (namestring (pathname filename)) 1)))
     (sdif-write-header outfile (list (make-instance 'sdiftype 
                                        :struct 'F :signature "1MRK" 
                                        :description '(("1TRC" "model_data")))))

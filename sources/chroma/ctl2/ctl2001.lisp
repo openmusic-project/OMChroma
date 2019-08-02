@@ -98,7 +98,7 @@ Write in the Intermediate-files folder by default."
   (format  outstream ") ~%~%")
 )
 
-(defun CTL2_global(self ctl-model)
+(defun CTL2_global (self ctl-model)
   (declare (special outstream my-model my-rank n-fql my-time my-dur my-nev my-fql my-ptl))
   (let((keywords (get-global-keywords self)))
   (format outstream" (list ~a " (+ (offset my-model) my-time))

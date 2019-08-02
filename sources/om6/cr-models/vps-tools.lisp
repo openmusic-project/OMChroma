@@ -457,6 +457,7 @@ NB: RPL, CIL and CRL must be previously converted.
   :icon 656
   :indoc '("vps" "stretching factor")
   :initvals '(nil 2)
+  (declare (ignore random offset))
   l)
 
 ;(defmethod! spl->chord ((spl spl))
@@ -588,16 +589,16 @@ WARNING: AT THE MOMENT IT DOES NOT TAKE AMPS and BWS INTO ACCOUNT"
 
 
 (defmethod! add-randomize ((self number) range xpitvls &optional (remove-dup t))
-            (if (within-p self range) (+ self (nth-random xpitvls)) self))
+            (if (cr::within-p self range) (+ self (nth-random xpitvls)) self))
 
 (defmethod! add-randomize ((self cr::fql) range xpitvls &optional (remove-dup t))
   (let ((result
           (loop for freq in (get-vps-freqs self)
-                  collect (if (within-p freq range) (+ freq (nth-random xpitvls)) freq))))
+                  collect (if (cr::within-p freq range) (+ freq (nth-random xpitvls)) freq))))
     (if (null remove-dup)
        (cr::make_fql (sort. result))
       (let ((sorted (sort. result)))
-        (make_fql (remove-dup sorted #'= 1))))))
+        (cr::make_fql (remove-dup sorted #'= 1))))))
 
 ;(get-vps-freqs (add-randomize (cr::make_fql '(100 200 300 400 500)) '(200 400) '(0.9 1.0 1.1)))
 ;(mapcar #'get-vps-freqs (add-randomize (list (cr::make_fql '(100 200 300 400 500)) (cr::make_fql '(200 250 300 350 400))) '(200 400) '(0.9 1.0 1.1)))
@@ -637,7 +638,7 @@ WARNING: AT THE MOMENT IT DOES NOT TAKE AMPS and BWS INTO ACCOUNT"
 
 
 (defmethod! mul-randomize ((self number) range xpitvls &optional (remove-dup))
-           (if (within-p self range) (* self (nth-random xpitvls)) self))
+           (if (cr::within-p self range) (* self (nth-random xpitvls)) self))
 
 ;(mul-randomize 100.0 '(50 200) '(-100 0 100))
 ;(mul-randomize 100 '(150 200) '(100 0 100 -100 0 100))
