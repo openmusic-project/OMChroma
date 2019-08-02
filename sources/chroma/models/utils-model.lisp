@@ -39,20 +39,20 @@
 (defun markerstodur (l)
    (cond((null (second l))())
        (t( cons (-(second l)(first l))(markerstodur(cdr l))))))
+
 ;(markerstodur '(0 1.1 1.3 1.5))
-;(om::x->dx '(0 1.1 1.3 1.5))
 
 (defun nombre_de_partiels (subdata)
   (apply #'min (mapcar #'car (mapcar #'car subdata))))
-;le nombre de partiel est défini comme le minimum de tous les nombres de partiels entre deux segments
+;le nombre de partiel est defini comme le minimum de tous les nombres de partiels entre deux segments
 
 (defun nombre_de_partiels_max (subdata)
   (apply #'max (mapcar #'car (mapcar #'car subdata))))
-;le nombre de partiel est défini comme le maximum de tous les nombres de partiels entre deux segments
+;le nombre de partiel est defini comme le maximum de tous les nombres de partiels entre deux segments
 
 (defun numero_de_partiels_max (subdata)
-  (apply #'max(mapcar (lambda (x) (apply #'max  (mapcar #'car x))) (mapcar #'cdr subdata))))
-;le numero de partiel max est défini comme le maximum de tous les index de partiels entre deux segments
+  (apply #'max (mapcar (lambda (x) (apply #'max  (mapcar #'car x))) (mapcar #'cdr subdata))))
+;le numero de partiel max est defini comme le maximum de tous les index de partiels entre deux segments
 
 (defun get_add_fun (data numero colonne)
   (loop for frame in data

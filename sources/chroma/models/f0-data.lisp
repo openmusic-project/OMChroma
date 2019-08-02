@@ -36,17 +36,25 @@
   )
 
 
+(defun read-list-from-string (string &optional (pos 0))
+  (multiple-value-bind (val pos) (ignore-errors 
+				  (read-from-string string nil :eof :start pos))
+    (if (eql val :eof)
+	nil
+	(cons val (read-list-from-string string pos)))))
+
+
 (defmethod load-file ((x f0-data) &optional file)
-"Load f0 data from an Audiosculpt or an AddAn f0 file"
-  (if(null file)(setf file (choose-file-dialog)))
-  (with-open-file (in-stream file :direction :input)
-    (let((line  (om-read-list-from-string (read-line in-stream nil))))
-      (loop while (null line) 
-            do (setf line (om-read-list-from-string (read-line in-stream nil))))
-      (cond
-       ((numberp line)(load-file1 x file))
-       ((eq 2(length line)) (load-file2 x file))
-       (t  (error "unknown f0 file format !!!!"))))))
+ "Load f0 data from an Audiosculpt or an AddAn f0 file"
+ (if (null file) (setf file (choose-file-dialog)))
+ (with-open-file (in-stream file :direction :input)
+   (let((line  (read-list-from-string (read-line in-stream nil))))
+     (loop while (null line) 
+           do (setf line (read-list-from-string (read-line in-stream nil))))
+     (cond
+      ((numberp line)(load-file1 x file))
+      ((eq 2 (length line)) (load-file2 x file))
+      (t  (error "unknown f0 file format !!!!"))))))
 
 (defmethod load-file1 ((x f0-data) file)
 "Load f0 data from an AddAn f0 file"
@@ -61,16 +69,17 @@
     )))
 
 (defmethod load-file2 ((x f0-data) file)
-"Load f0 data from an Audiosculpt f0 file"
+  "Load f0 data from an Audiosculpt f0 file"
   (format t "LOADING DATA FROM ~a (2)~%" (file x))
- (let ((truc nil) (funl nil))
-  (with-open-file (in-stream file :direction :input)
+  (let ((truc nil) (funl nil))
+    (with-open-file (in-stream file :direction :input)
       (loop while (not truc) 
             do (multiple-value-bind (s tr) (read-line in-stream nil)
                  (setf truc tr)
-                 (if s (push (om-read-list-from-string s) funl)))))
+                 (if s (push (read-list-from-string s) funl)))))
     (setf (data x) (reverse funl))
-     ) 'loaded)
+    )
+  'loaded)
 
 
 

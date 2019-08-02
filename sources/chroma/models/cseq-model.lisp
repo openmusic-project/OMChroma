@@ -88,9 +88,12 @@ There are as many ranks as events in a model"
   (let ((vps-number (length(member-if (lambda (y) (< time y)) (markers x)))))
     (car (last (fql-list x) vps-number))))
 
+
 (defmethod copy-model ((x model-cseq))
 "Return a copy of the model"
-  (make-instance 'model-cseq :markers (copy-tree (markers x)) :fql-list (mapcar #'om::copy-instance  (fql-list x))))
+(make-instance 'model-cseq 
+               :markers (copy-tree (markers x)) 
+               :fql-list (mapcar #'copy_vs (fql-list x))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -114,9 +117,11 @@ There are as many ranks as events in a model"
 
 (defmethod extract-fql ((x model-cseq) (y additive-data) a b
                              &key sort weighed-avg durmin)
-  (let (npartials freq_moyenne max_amp freq_fun amp_fun time_list triplets subdata dur
-                  (amps nil)
-                  (freqs nil))
+  (let (npartials 
+        npartials0 
+        freq_moyenne max_amp freq_fun amp_fun time_list triplets subdata dur
+        (amps nil)
+        (freqs nil))
     (when b
       (when (get-gbl 'prnflg)
         (format t "markers-> ~a~%" (list (cdr a) (cdr b))))

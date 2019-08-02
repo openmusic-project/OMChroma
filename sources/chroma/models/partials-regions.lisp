@@ -43,7 +43,9 @@
 
 (defmethod copy-model ((x regions-partials))
 "Return a copy of the model"
-  (make-instance 'regions-partials :markers (copy-tree (markers x)) :ptl-list (mapcar #'copy-instance (ptl-list x))))
+  (make-instance 'regions-partials 
+                 :markers (copy-tree (markers x)) 
+                 :ptl-list (mapcar #'copy_vs (ptl-list x))))
 
 (defmethod merge-model ((model1 regions-partials)(model2 regions-partials))
   "returns a model made of 2 models"
@@ -54,8 +56,8 @@
                                                           (+ (get-offset model2)  (cadadr x)))))
                          (get-regions model2))))
   (make-instance 'regions-partials :markers (append regions1 regions2)
-                 :ptl-list (append (mapcar #'copy-instance (fql-list model1))
-                                   (mapcar #'copy-instance (fql-list model2))))))
+                 :ptl-list (append (mapcar #'copy_vs (fql-list model1))
+                                   (mapcar #'copy_vs (fql-list model2))))))
 
 
 

@@ -46,7 +46,9 @@
 
 (defmethod copy-model ((x model-partials))
 "Return a copy of the model"
-  (make-instance 'model-partials :markers (copy-tree (markers x)) :ptl-list (mapcar #'copy-instance (ptl-list x))))
+  (make-instance 'model-partials 
+                 :markers (copy-tree (markers x)) 
+                 :ptl-list (mapcar #'copy_vs (ptl-list x))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;PRIVATE METHODS :
@@ -56,7 +58,7 @@
  ;(inherited !) (if add (compute-model x add markers :sort sort :weighed-avg weighed-avg :threshold threshold))
   (if cseq (error "partials from cseq_analysis = NOT YET ! ")))
 
-(defmethod compute-model ((x model-partials)(y analysis-data) markers &key sort weighed-avg durmin)
+(defmethod compute-model ((x model-partials) (y analysis-data) markers &key sort weighed-avg durmin)
   (declare (ignore markers))
   (let ((ptl-list nil))
     (loop for (a b) on (markers x) by #'cdr
@@ -66,78 +68,81 @@
 
 
 (defmethod extract-ptl ((x model-partials) (y additive-data) a b
-                             &key sort weighed-avg durmin)
- (let (npartials freq_moyenne max_amp freq_fun edel dur amp_fun time_list triplets subdata
-                  (amps nil)
-                  (edels nil)
-                  (durs nil)
-                  (freqs nil)
-                  (amp_funs nil)
-                  (freq_funs nil))
-         (when b
+                        &key sort weighed-avg durmin)
+  (let (npartials 
+        npartials0
+        freq_moyenne max_amp freq_fun edel dur amp_fun time_list triplets subdata
+        (amps nil)
+        (edels nil)
+        (durs nil)
+        (freqs nil)
+        (amp_funs nil)
+        (freq_funs nil))
+    
+    (when b
           ;(format t "markers->~a~%" (list (cdr a) (cdr b)))
-          (setf subdata (subseq(data y) (car a) (1+ (car b))))
+      (setf subdata (subseq (data y) (car a) (1+ (car b))))
           ;pour chaque paire de marker
-          (setf npartials0 (nombre_de_partiels_max subdata))
-          (setf npartials (numero_de_partiels_max subdata))s
+      (setf npartials0 (nombre_de_partiels_max subdata))
+      (setf npartials (numero_de_partiels_max subdata))
           ;(format t "~a partiels (~a) ~%" npartials npartials0)
           ;pour chaque partiel
-          (loop for i from 1 to npartials
-                initially (setf amps nil freqs nil amp_funs nil freq_funs nil edels nil durs nil)
-                do
+      (loop for i from 1 to npartials
+            initially (setf amps nil freqs nil amp_funs nil freq_funs nil edels nil durs nil)
+            do
                 ;(format t "~%partiel n~a~%" i)
                 ;moyenne pondŽrŽe frequence
-                (setf freq_fun (get_freq_fun subdata i))
+            (setf freq_fun (get_freq_fun subdata i))
                 ;amplitude moyenne
-                (setf amp_fun (get_amp_fun subdata i))
+            (setf amp_fun (get_amp_fun subdata i))
                 ;temps (X des fun)
-                (setf time_list (get_add_time subdata))
-                (setf triplets  (mapcar #'list amp_fun time_list freq_fun))
+            (setf time_list (get_add_time subdata))
+            (setf triplets  (mapcar #'list amp_fun time_list freq_fun))
                 ;delete breakpoints absents de l'analyse
-                (setf triplets (delete nil triplets :key 'car))
-                (when (> (length triplets) 1) ;nombre minimum de points dans les bpf (pourrait tre 2)
-                  (setf time_list (mapcar #'second triplets))
-                  (setf dur  (- (car (last time_list)) (first time_list)))
-                  (when (> dur durmin)
-                    (progn
+            (setf triplets (delete nil triplets :key 'car))
+            (when (> (length triplets) 1) ;nombre minimum de points dans les bpf (pourrait tre 2)
+              (setf time_list (mapcar #'second triplets))
+              (setf dur  (- (car (last time_list)) (first time_list)))
+              (when (> dur durmin)
+                (progn
                       ;amplitude maximum
-                      (setf amp_fun (mapcar #'first triplets))
-                      (setf max_amp (apply #'max amp_fun))
+                  (setf amp_fun (mapcar #'first triplets))
+                  (setf max_amp (apply #'max amp_fun))
                       ;normalisation des fonctions d'amplitudes ??
                       ;(setf amp_fun (mapcar #'(lambda (x) (/ x max_amp)) amp_fun))
                       ;frequence moyenne
-                      (setf freq_fun  (mapcar #'third triplets))
-                      (setf freq_moyenne (if weighed-avg 
-                                           (moyenne_ponderee freq_fun amp_fun)
-                                           (moyenne freq_fun))) 
-                      (push freq_moyenne freqs)
-                      (push max_amp amps)
-                      (setf freq_fun (mapcar #'(lambda (x) (ratio->semitones(/ x freq_moyenne))) freq_fun))
+                  (setf freq_fun  (mapcar #'third triplets))
+                  (setf freq_moyenne (if weighed-avg 
+                                         (moyenne_ponderee freq_fun amp_fun)
+                                       (moyenne freq_fun))) 
+                  (push freq_moyenne freqs)
+                  (push max_amp amps)
+                  (setf freq_fun (mapcar #'(lambda (x) (ratio->semitones(/ x freq_moyenne))) freq_fun))
                       ;entry-delays
-                      (setf edel (- (first time_list) (cdr a)))
-                      (push edel edels)
-                      (push dur durs)
+                  (setf edel (- (first time_list) (cdr a)))
+                  (push edel edels)
+                  (push dur durs)
                       ;normalisation des fonctions en temps
-                      (setf freq_fun (make_fun(om::flat (mapcar #'(lambda (x y) (list x y)) freq_fun time_list))))
-                      (X-resc_fun freq_fun 0 1)
-                      (setf amp_fun (make_fun(om::flat (mapcar #'(lambda (x y) (list x y)) amp_fun time_list))))
-                      (X-resc_fun amp_fun 0 1)
-                      (push freq_fun freq_funs)
-                      (push amp_fun amp_funs)
-                      ))))
-          (if (not (null freqs))
-            (progn (if sort (multiple-value-setq (freqs amps edels durs freq_funs amp_funs) 
+                  (setf freq_fun (make_fun (flat (mapcar #'(lambda (x y) (list x y)) freq_fun time_list))))
+                  (X-resc_fun freq_fun 0 1)
+                  (setf amp_fun (make_fun (flat (mapcar #'(lambda (x y) (list x y)) amp_fun time_list))))
+                  (X-resc_fun amp_fun 0 1)
+                  (push freq_fun freq_funs)
+                  (push amp_fun amp_funs)
+                  ))))
+      (if (not (null freqs))
+          (progn (if sort (multiple-value-setq (freqs amps edels durs freq_funs amp_funs) 
                               (sort-partiels-and-everything freqs amps edels durs freq_funs amp_funs)))
-                   (make-instance 'ptl
+            (make-instance 'ptl
                            :the-list (nreverse freqs) 
                            :amplitudes (nreverse amps)                     
                            :duration (- (cdr b) (cdr a))  
                            :origtime (cdr a)
-                           :entry-delays (nreverse edels)
+                           :e-dels (nreverse edels)
                            :durs (nreverse durs)
                            :transp_funs (nreverse freq_funs)
                            :amp_funs (nreverse amp_funs))
-                   )))))
+            )))))
 
 
 (defmethod model-threshold ((x model-partials) analysis-max-amp &key threshold threshmod)
@@ -145,7 +150,7 @@
     (loop for theptl in (ptl-list x)
           do (let (( triplets (mapcar #'list (get-amp theptl)
                                       (fql theptl)
-                                      (entry-delays theptl)
+                                      (e-dels theptl)
                                       (durs theptl)
                                       (transp_funs theptl)
                                       (amp_funs theptl)))
@@ -157,13 +162,13 @@
                  (otherwise (warn "unknown threshold mode")))
                (setf triplets (seuillage_cseq triplets thresh))
                (if triplets  
-                 (push (make-instance 'ptl
-                         :the-list (mapcar #'second triplets)
-                          :amplitudes (mapcar #'first triplets)
-                           :entry-delays (mapcar #'third triplets)
-                           :durs (mapcar #'fourth triplets)
-                           :transp_funs (mapcar #'fifth triplets)
-                           :amp_funs (mapcar #'sixth triplets))
+                   (push (make-instance 'ptl
+                                        :the-list (mapcar #'second triplets)
+                                        :amplitudes (mapcar #'first triplets)
+                                        :e-dels (mapcar #'third triplets)
+                                        :durs (mapcar #'fourth triplets)
+                                        :transp_funs (mapcar #'fifth triplets)
+                                        :amp_funs (mapcar #'sixth triplets))
                        ptl-list)
                  (push nil ptl-list)))
           finally (setf (ptl-list x) (nreverse ptl-list)))))

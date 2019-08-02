@@ -25,8 +25,7 @@
 ;CLASSE
 ;--------------------
 
-(defclass chroma-model 
-  ()
+(defclass chroma-model ()
   ((sfname)
    (sfduration)
    (offset :type float
@@ -81,12 +80,10 @@
 (defun load-markers-file (&optional file)
   (if(null file)(setf file (choose-file-dialog)))
   (if (probe-file file)
-    (if (om::sdif-check-file (namestring file))
-      (load-markers-file-sdif file)
-      (load-markers-file-text file))
-    (om::om-beep-msg "this file does not exist"))
-    )
-
+      (load-markers-file-text file)
+    (progn 
+      (cr-beep) (print "this file does not exist"))))
+  
 ;;SLM 01-2005
 (defun load-markers-file-text (&optional file)
   (if(null file)(setf file (choose-file-dialog)))
@@ -95,20 +92,26 @@
     (cddr (read in-stream nil))
     ))
 
+#|
+; With OM the markers can also bve loaded from and SDIF file:
 
-(defun load-markers-file-sdif (&optional file)
-  (if(null file)(setf file (choose-file-dialog)))
+ (defun load-markers-file-sdif (&optional file)
+   (unless file (setf file (choose-file-dialog)))
    (format t "LOADING MARKERS FROM FILE ~a~%" file)
-   (mapcar #'second (om::framesdesc (om::load-sdif-file (om-namestring file)))))
+   (mapcar #'second (om::framesdesc (om::load-sdif-file (namestring file)))))
 
 ;(load-markers-file-sdif)
+|#
 
 
-;;; MARKERS STUFF :
+#|
+;;; MARKERS FROM AIFF (DEPRECATED) :
+
 (defun get-aiff-markers ()
-  (let ((name (CHOOSE-FILE-DIALOG)))
+  (let ((name (choose-file-dialog)))
     (when name
-      (peak-regions(load-aiff-markers name)))))
+      (peak-regions (load-aiff-markers name)))))
+
 
 (defun load-aiff-markers (name)
    (let ((result nil)
@@ -145,8 +148,6 @@
                  (end-time (third (assoc end-id markers))))
               (push (list n str  start-time  end-time) result)))))
          (nreverse result)))
-
-
 
 
 (defun peak-regions0 (l)
@@ -189,8 +190,9 @@
   (let((result nil))
     (loop for i from 0 to n 
           do (push (code-char (read-byte s)) result))
-(coerce (nreverse result) 'string)))
+    (coerce (nreverse result) 'string)))
 
+|#
 
 #|
 Peak writes regions into application specific chunks with the ID

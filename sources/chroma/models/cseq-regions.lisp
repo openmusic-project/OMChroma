@@ -41,7 +41,9 @@
 
 (defmethod copy-model ((x regions-cseq))
 "Return a copy of the model"
-  (make-instance 'regions-cseq :markers (copy-tree (region-list x)) :fql-list (mapcar #'copy-instance (fql-list x))))
+  (make-instance 'regions-cseq 
+                 :markers (copy-tree (region-list x)) 
+                 :fql-list (mapcar #'copy_vs (fql-list x))))
 
 (defmethod merge-model ((model1 regions-cseq)(model2 regions-cseq))
   "returns a model made of 2 models"
@@ -52,8 +54,8 @@
                                                           (+ (get-offset model2)  (cadadr x)))))
                          (get-regions model2))))
   (make-instance 'regions-cseq :markers (append regions1 regions2)
-                 :fql-list (append (mapcar #'copy-instance (fql-list model1))
-                                   (mapcar #'copy-instance (fql-list model2))))))
+                 :fql-list (append (mapcar #'copy_vs (fql-list model1))
+                                   (mapcar #'copy_vs (fql-list model2))))))
 
 
 ;--------------------
