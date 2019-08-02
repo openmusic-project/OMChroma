@@ -304,7 +304,7 @@
                   (push max_amp amps)
                   ))))
     (if (not (null freqs))
-        (progn (if sort (multiple-value-setq (freqs amps) (om-sort-partiels freqs amps)))
+        (progn (if sort (multiple-value-setq (freqs amps) (sort-partials freqs amps)))
           (make-model-obj modeltype :freq freqs :amp amps)
           ))))
 
@@ -390,7 +390,7 @@
           (push (caddr p) amps)
           )
     (if (not (null freqs))
-      (progn (if sort (multiple-value-setq (freqs amps) (om-sort-partiels freqs amps)))
+      (progn (if sort (multiple-value-setq (freqs amps) (sort-partials freqs amps)))
              (make-model-obj modeltype :freq freqs :amp amps)
              ))))
 

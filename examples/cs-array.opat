@@ -5,8 +5,8 @@
  (:doc "")
  (:info
   (:created "2017/11/09 15:28:47")
-  (:modified "2019/03/27 13:10:54"))
- (:window (:size (1513 986)) (:position (407 23)))
+  (:modified "2019/08/01 18:40:22"))
+ (:window (:size (1123 997)) (:position (407 23)))
  (:grid nil)
  (:lock nil)
  (:boxes
@@ -15,14 +15,15 @@
    (:type :object)
    (:group-id nil)
    (:name nil)
-   (:x 1241)
-   (:y 155)
+   (:x 779)
+   (:y 34)
    (:w 256)
    (:h 334)
    (:color (:color 0.9 0.9 0.9 1.0))
    (:border 1.5)
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
+   (:align :center)
    (:name nil)
    (:display :mini-view)
    (:showname nil)
@@ -39,12 +40,18 @@
      (:type :standard)
      (:name "CONTENTS")
      (:value nil)
-     (:reactive nil)))
+     (:reactive nil))
+    (:input
+     (:type :key)
+     (:name "output-mode")
+     (:value :text)
+     (:reactive t)))
    (:outputs
     (:output (:name "SELF") (:reactive nil))
-    (:output (:name "CONTENTS") (:reactive nil)))
+    (:output (:name "CONTENTS") (:reactive nil))
+    (:output (:name "output-mode") (:reactive nil)))
    (:window (:size (808 718)) (:position (34 23)))
-   (:edition-params (:read-mode :text))
+   (:edition-params (:output-mode :text) (:read-mode :text))
    (:value
     (:object
      (:class textbuffer)
@@ -108,6 +115,7 @@
    (:border nil)
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
+   (:align :center)
    (:name nil)
    (:display :mini-view)
    (:showname nil)
@@ -253,16 +261,16 @@ endin
           (:default 0.0)
           (:data
            (:list
-            4.168421
-            5.8893538
-            2.7984717
-            3.490285
-            1.828062
-            0.26882672
-            4.4521113
-            0.12872386
-            1.4289408
-            0.9010334)))
+            2.7283767
+            4.797021
+            3.5717283
+            4.128767
+            0.2423594
+            3.3862274
+            4.986577
+            2.2509985
+            5.573908
+            4.9090405)))
          (:array-field
           (:name "durs")
           (:doc "duration [sec]")
@@ -337,8 +345,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0))))
@@ -367,8 +374,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0))))
@@ -397,8 +403,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0))))
@@ -427,8 +432,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0))))
@@ -457,8 +461,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0))))
@@ -487,8 +490,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0))))
@@ -517,8 +519,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0))))
@@ -547,8 +548,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0))))
@@ -577,8 +577,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0))))
@@ -607,8 +606,7 @@ endin
                (:size 4097)
                (:stime 0)))
              (:add-slots
-              ((:decimals 2)
-               (:color (:color 0.3 0.3 0.3 1.0))
+              ((:color (:color 0.3 0.3 0.3 1.0))
                (:name nil)
                (:size 4097)
                (:stime 0)))))))))))))
@@ -713,6 +711,7 @@ endin
    (:border nil)
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
+   (:align :center)
    (:name nil)
    (:display :mini-view)
    (:showname t)
@@ -738,6 +737,11 @@ endin
      (:reactive nil))
     (:input
      (:type :standard)
+     (:name "DECIMALS")
+     (:value 0)
+     (:reactive nil))
+    (:input
+     (:type :standard)
      (:name "ID")
      (:value 12)
      (:reactive nil)))
@@ -745,6 +749,7 @@ endin
     (:output (:name "SELF") (:reactive nil))
     (:output (:name "X-POINTS") (:reactive nil))
     (:output (:name "Y-POINTS") (:reactive nil))
+    (:output (:name "DECIMALS") (:reactive nil))
     (:output (:name "ID") (:reactive nil)))
    (:window (:size (585 312)) (:position (75 91)))
    (:edition-params)
@@ -764,8 +769,7 @@ endin
        (:size 4097)
        (:stime 0)))
      (:add-slots
-      ((:decimals 2)
-       (:color (:color 0.3 0.3 0.3 1.0))
+      ((:color (:color 0.3 0.3 0.3 1.0))
        (:name "GEN07")
        (:size 4097)
        (:stime 0)))))
@@ -778,7 +782,7 @@ endin
    (:x 912)
    (:y 623)
    (:w 32)
-   (:h 28)
+   (:h 30)
    (:color
     (:color-or-nil (:color (:color 1.0 1.0 1.0 1.0)) (:t-or-nil t)))
    (:border nil)
@@ -803,6 +807,7 @@ endin
    (:border nil)
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
+   (:align :center)
    (:name nil)
    (:display :mini-view)
    (:showname nil)
@@ -829,7 +834,7 @@ endin
        (:default-frame-type marker-frame)
        (:frames nil)
        (:buffer nil)
-       (:n-samples 263515)
+       (:n-samples 281089)
        (:n-channels 1)
        (:sample-rate 44100)
        (:smpl-type :float)
@@ -838,14 +843,21 @@ endin
       ((:markers nil)
        (:file-pathname
         (:pathname
-         (:directory (:absolute "Users" "bresson" "OM" "out-files"))
+         (:directory
+          (:absolute
+           "Users"
+           "bresson"
+           "_SHARED-FILES"
+           "WORKSPACES"
+           "my-workspace"
+           "out-files"))
          (:device :unspecific)
          (:host :unspecific)
          (:name "my-synt")
          (:type "aiff")))
        (:sample-rate 44100)
        (:n-channels 1)
-       (:n-samples 263515)
+       (:n-samples 281089)
        (:gain 1.0)
        (:access-from-file nil)))))
    (:id 8))
@@ -908,6 +920,7 @@ endin
    (:border nil)
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
+   (:align :center)
    (:name nil)
    (:display :mini-view)
    (:showname t)
@@ -931,18 +944,22 @@ endin
      (:name "Y-POINTS")
      (:value (:list 0 100 0))
      (:reactive nil))
-    (:input (:type :standard) (:name "ID") (:value 12) (:reactive nil))
     (:input
-     (:type :key)
-     (:name "decimals")
-     (:value 2)
+     (:type :standard)
+     (:name "DECIMALS")
+     (:value 0)
+     (:reactive nil))
+    (:input
+     (:type :standard)
+     (:name "ID")
+     (:value 12)
      (:reactive nil)))
    (:outputs
     (:output (:name "SELF") (:reactive nil))
     (:output (:name "X-POINTS") (:reactive nil))
     (:output (:name "Y-POINTS") (:reactive nil))
-    (:output (:name "ID") (:reactive nil))
-    (:output (:name "decimals") (:reactive nil)))
+    (:output (:name "DECIMALS") (:reactive nil))
+    (:output (:name "ID") (:reactive nil)))
    (:window (:size (607 351)) (:position (398 109)))
    (:edition-params)
    (:value
@@ -962,8 +979,7 @@ endin
        (:size 4097)
        (:stime 0)))
      (:add-slots
-      ((:decimals 2)
-       (:color (:color 0.3 0.3 0.3 1.0))
+      ((:color (:color 0.3 0.3 0.3 1.0))
        (:name "GEN07")
        (:size 4097)
        (:stime 0)))))
@@ -1025,6 +1041,7 @@ endin
    (:border nil)
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
+   (:align :center)
    (:name nil)
    (:display :mini-view)
    (:showname t)
@@ -1102,6 +1119,7 @@ endin
    (:border 1.5)
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
+   (:align :center)
    (:name nil)
    (:display :mini-view)
    (:showname nil)
@@ -1137,16 +1155,16 @@ endin
          ""
          ";------ lines for event ------"
          ""
-         "i1 5.5838 0.8000 0.0000 400 0.8000 "
-         "i1 0.3615 0.8000 28.4300 500 0.8000 "
-         "i1 1.3764 0.8000 232.7200 200 0.8000 "
-         "i1 5.5171 0.8000 385.9000 400 0.8000 "
-         "i1 4.2639 0.8000 284.4700 500 0.8000 "
-         "i1 2.5561 0.8000 146.5400 200 0.8000 "
-         "i1 2.3409 0.8000 0.0000 400 0.8000 "
-         "i1 4.2900 0.8000 0.0000 500 0.8000 "
-         "i1 4.4652 0.8000 28.4300 200 0.8000 "
-         "i1 4.0591 0.8000 232.7200 400 0.8000 "))))
+         "i1 0.0210 0.8000 0.0000 400 0.8000 "
+         "i1 0.3717 0.8000 28.4300 500 0.8000 "
+         "i1 2.7708 0.8000 232.7200 200 0.8000 "
+         "i1 2.1734 0.8000 385.9000 400 0.8000 "
+         "i1 4.2265 0.8000 284.4700 500 0.8000 "
+         "i1 5.2640 0.8000 146.5400 200 0.8000 "
+         "i1 3.5388 0.8000 0.0000 400 0.8000 "
+         "i1 5.6113 0.8000 0.0000 500 0.8000 "
+         "i1 2.8358 0.8000 28.4300 200 0.8000 "
+         "i1 1.4585 0.8000 232.7200 400 0.8000 "))))
      (:add-slots ((:input-mode :lines-cols)))))
    (:id 16))
   (:box
@@ -1201,13 +1219,14 @@ endin
    (:group-id nil)
    (:name nil)
    (:x 9)
-   (:y 16)
+   (:y 20)
    (:w 256)
    (:h 334)
    (:color (:color 0.9 0.9 0.9 1.0))
    (:border 1.5)
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
+   (:align :center)
    (:name nil)
    (:display :mini-view)
    (:showname nil)
@@ -1224,12 +1243,18 @@ endin
      (:type :standard)
      (:name "CONTENTS")
      (:value nil)
-     (:reactive nil)))
+     (:reactive nil))
+    (:input
+     (:type :key)
+     (:name "output-mode")
+     (:value :text)
+     (:reactive t)))
    (:outputs
     (:output (:name "SELF") (:reactive nil))
-    (:output (:name "CONTENTS") (:reactive nil)))
+    (:output (:name "CONTENTS") (:reactive nil))
+    (:output (:name "output-mode") (:reactive nil)))
    (:window (:size (643 742)) (:position (741 63)))
-   (:edition-params (:read-mode :text))
+   (:edition-params (:output-mode :text) (:read-mode :text))
    (:value
     (:object
      (:class textbuffer)

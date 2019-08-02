@@ -8,7 +8,7 @@
 
  (:doc "High-level control of sound synthesis in OM.")
 
- (:author "M. Stroppa, C. Agon, J. Bresson, S. Lemouton, IRCAM (2000-2018)")
+ (:author "M. Stroppa, C. Agon, J. Bresson, S. Lemouton, IRCAM (2000-2019)")
 
  ;;; SOURCE FILES TO LOAD
  (:source-files

@@ -175,7 +175,7 @@ using the default weights (cr::*STABILITY-SPACE*)
 or a user-defined space.
 "
             :icon 2003
-                 (cr::cs_vps vps ss))
+            (cr::cs_vps vps ss))
 
 (defmethod! get-vps-harm (vps)
             :indoc '("SPL, AIL, FQL, ARL")
@@ -364,16 +364,12 @@ NB: RPL, CIL and CRL must be previously converted.
 ;;; 
 
 ;ms_1112, English correct!
-(defun om-sort-partials (freqs amps &optional more)
-  (om-sort-partiels freqs amps more))
-
-(defun om-sort-partiels (freqs amps &optional more)
+(defun sort-partials (freqs amps &optional more)
   (if more 
     (let* ((f2 (copy-list freqs)))
       (multiple-value-setq (freqs amps) (cr::sort-vps-contents freqs amps))
         (values freqs amps (cadr (multiple-value-list (cr::sort-vps-contents f2 more)))))
     (cr::sort-vps-contents freqs amps)))
-
 
 (defmethod! high-pass-filter ((self cr::vps) freq)
   :icon 656
@@ -462,11 +458,6 @@ NB: RPL, CIL and CRL must be previously converted.
   :initvals '(nil 2)
   l)
 
-;(defmethod! spl->chord ((spl spl))
-;            :icon 2003
-;            :indoc '("Symbolic Pitch List")
-;            :documentation '("Convert an SPL into an OM chord")
-;            (get-spl 
 
 (defmethod! pitch-transpose ((self cr::vps) ratio)
   :icon 656

@@ -304,7 +304,7 @@
                   (push max_amp amps)
                   ))))
     (if (not (null freqs))
-        (progn (if sort (multiple-value-setq (freqs amps) (om-sort-partiels freqs amps)))
+        (progn (if sort (multiple-value-setq (freqs amps) (sort-partials freqs amps)))
           (make-model-obj modeltype :freq freqs :amp amps)
           ))))
 
@@ -390,7 +390,7 @@
           (push (caddr p) amps)
           )
     (if (not (null freqs))
-      (progn (if sort (multiple-value-setq (freqs amps) (om-sort-partiels freqs amps)))
+      (progn (if sort (multiple-value-setq (freqs amps) (sort-partials freqs amps)))
              (make-model-obj modeltype :freq freqs :amp amps)
              ))))
 
@@ -435,7 +435,8 @@
   (let ((path (om-choose-new-file-dialog :prompt "Choose a file name for saving your model")))
     (save-model self path)))
 
- (defmethod objfromobjs ((self sdiffile) (type cr-model))
+
+(defmethod objfromobjs ((self sdiffile) (type cr-model))
    (let ((new (make-instance 'cr-model))
          (tlist nil)
          (datalist nil)
