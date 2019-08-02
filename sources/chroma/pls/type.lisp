@@ -18,6 +18,16 @@
 
 (in-package :cr)
 
+;-----------------------------------------------------------------------------
+; DEFAULT STRUCTURES:
+;	*TYPES*	    :  list of all the types known by the tagged architecture
+;-----------------------------------------------------------------------------
+
+; types DVE, RAW added on March 2000
+(defvar *TYPES* '(WT CTL TBL FUN VE DVE RAW))
+;-----------------------------------------------------------------------------
+
+
 ; AVAILABLE FUNCTIONS:
 ;	CONSTRUCTORS: attach-type
 ;	SELECTORS:    pls-type
@@ -63,19 +73,11 @@
 ;	TYPE:		Expr with 1 argument
 ;	CALL:		(is-tagged datum)
 ;	FUNCTION:	test whether datum is a known type
-;	VALUE:		t or () according to the test
+;	VALUE:		the TYPE name or () according to the test
 ;	SOURCE:		$LLpls/type.ll
 
 (defun is-tagged (datum)
-   (and (not (atom datum))
-	(member (car datum) TYPES&)))
-
-
-;-----------------------------------------------------------------------------
-; DEFAULT STRUCTURES:
-;	TYPES&	    :  list of all the types known by the tagged architecture
-;-----------------------------------------------------------------------------
-
-; types DVE, RAW added on March 2000
-(defvar TYPES& '(WT CTL TBL FUN VE DVE RAW))
+   (when (and (not (atom datum))
+	(member (car datum) *TYPES*))
+     (car datum)))
 ;-----------------------------------------------------------------------------

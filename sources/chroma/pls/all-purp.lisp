@@ -15,7 +15,7 @@
 ;	structure to a particular function called:
 ;		       		   "<ALL-PURPOSE-NAME>_<DATA-TYPE>"
 
-; Recognized types are contained in #:marco:pls:TYPES& (see default.ll)
+; Recognized types are contained in #:marco:pls:*TYPES* (see default.ll)
 
 
 ; AVAILABLE FUNCTIONS:
@@ -50,10 +50,10 @@
 ;	FUNCTION:	return the size (or number of elements) of datum
 ;	VALUE:		the number above
 ;	SOURCE:		$PLSsys/allpurp.ll
-
 "
 
-   (let* ((datca (car datum))
+   (let* (
+;         (datca (car datum))
 ;         (datcd (cdr datum))
           (name (string-upcase (concatenate 'string "sizeof_" (string (pls-type datum))))))
      (setf name (intern name :cr))

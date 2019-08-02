@@ -135,7 +135,7 @@
                   :size gensize
                   :gen-num gentyp
                   :param-list (fun-points fun gensize))
-    (fun-list->gen-cs-table fun)))
+    (fun-list->gen-cs-table fun gentyp)))
 
 (defun fun-list->gen-cs-table (fun-list gentyp)
   (loop for f in fun-list

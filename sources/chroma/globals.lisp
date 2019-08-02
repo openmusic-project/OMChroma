@@ -92,6 +92,7 @@
 (set-gbl 'KR '(get-gbl SR))		; CONTROL RATE FOR CSOUND
 (set-gbl 'NCH 1)		; NUMBER OF CHANNELS
 (set-gbl 'DURMIN 0.01)		; MINIMUM DURATION FOR A NOTE
+(set-gbl 'WINMIN 0.005)		; MINIMUM DURATION FOR A WINDOW OF A WT OBJECT
 (set-gbl 'MINFQ 13.0)		; MINIMUM FREQUENCY FOR A NOTE
 (set-gbl 'MAXSI 12.0)		; MAXIMUM SAMPLE INCREMENT WHEN READING A WT
 
@@ -105,6 +106,9 @@
                             ; IF () NO CONTROL
 (set-gbl 'DIAPASON 'om::*diapason-freq*)	; CURRENT DIAPASON
 
+(eval 'om::*diapason-freq*)
+(eval DIAPASON)
+(get-gbl DIAPASON)
 
 ;-----------------------------------------------------------------------------
 (set-gbl 'PRT-FM 0)		; PORTAMENTO FLAG FOR FM (USED IN CIF D. BASE)
@@ -115,13 +119,11 @@
 ;				  () = PRINT ONLY ERROR AND DISCARDED PARTIALS
 ;-----------------------------------------------------------------------------
 
-(set-gbl '*chroma-output* *standard-output*)	
-
+;(set-gbl '*chroma-output* *standard-output*)	
+(set-gbl '*chroma-output* om-lisp::*om-stream*)	
 
 (set-gbl 'USER 'om::*composer-name*)	; USER'S NAME FOR PERSONALIZED MESSAGES
 
-(eval 'om::*diapason-freq*)
-(eval DIAPASON)
 ;-----------------------------------------------------------------------------;-----------------------------------------------------------------------------
 ; Temporary place for the dynamically computed GENS of a WT object
 (set-gbl 'WTL ())		; A-LIST OF WT OBJECTS

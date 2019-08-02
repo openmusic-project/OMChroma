@@ -75,7 +75,8 @@
           (insert_tbl tbl key1 (car key2)))
        (t
         (insert_tbl tbl key1 (car key2) (cadr key2)))
-      tbl))))
+       )
+      tbl)))
 
 
 ;	NAME:		lookup_tbl  (SELECTOR)
@@ -223,24 +224,28 @@
   (let ((key2 (ifn (cdr rest) key1 (nextl rest)))
         (val (car rest))
         (subtable (assoc key1 (contents tbl))))
+
     (ifn subtable
          (progn
            (rplacd tbl
                    (cons (list key1
+;                   (list (list key1
                                (cons key2 val))
                          (contents tbl)))
            ())
-      (let ((record (assoc key2 (cdr subtable))))
+      (let ((record (print (assoc key2 (cdr subtable)))))
         (ifn record	
              (progn (rplacd subtable
-                            (cons (cons key2 val)
-                                  (cdr subtable)))
+;                            (list (cons key2 val)
+                            (print (cons (cons key2 val)
+                                  (cdr subtable))))
                     ())
            (rplacd record val)
           )) )
     ) tbl)
 
 
+(list 1 (cons 'a 3))
 
 (defun rm_tbl (tbl key1 &rest key2)
 "
@@ -302,17 +307,16 @@
 "
   (mapc (lambda (tbl) (unless (is_tbl tbl)
                         (error-type 'insert_tbl tbl))) tbls)
-  (when (< (length tbls) 2)
-    (error "No insertion, sir ~a!  Must have at least two tables: ~a" (get-gbl 'USER) tbls))
-  (let ((newtbl (make_tbl)))
-    (loop for tbl in tbls do
-          (mapc (lambda (key val) (if (listp key)
-                                      (insert_tbl newtbl (car key) (cadr key) val)
-                                    (insert_tbl newtbl key val)))
-                (lkeys_tbl tbl) (lels_tbl tbl)))
-    newtbl))
-
-
+  (if (< (length tbls) 2)
+;    (error "No insertion, sir ~a!  Must have at least two tables: ~a" (get-gbl 'USER) tbls))
+      tbls
+    (let ((newtbl (make_tbl)))
+      (loop for tbl in tbls do
+            (mapc (lambda (key val) (if (listp key)
+                                        (insert_tbl newtbl (car key) (cadr key) val)
+                                      (insert_tbl newtbl key val)))
+                  (lkeys_tbl tbl) (lels_tbl tbl)))
+      newtbl)))
 
 ;	NAME:		is_tbl  (PREDICATE)
 ;	TYPE:		Expr with 1 argument
@@ -375,6 +379,36 @@
 "
     (null (contents tbl)))
 
+
+;	NAME:		sizeof_tbl  (PREDICATE)
+;	TYPE:		Expr with 1 argument
+;	CALL:		(sizeof_tbl tbl)
+;	FUNCTION:	returns the number of primary elements in the table
+;	VALUE:		one element = 1
+;	SOURCE:		$LLsys/tbl.ll
+
+(defun sizeof_tbl (tbl)
+"
+;	NAME:		sizeof_tbl  (PREDICATE)
+;	TYPE:		Expr with 1 argument
+;	CALL:		(sizeof_tbl tbl)
+;	FUNCTION:	returns the number of primary elements in the table
+;	VALUE:		one element = 1
+;	SOURCE:		$LLsys/tbl.ll
+"
+     (length (contents tbl)))
+
+(defun sizeof-all_tbl (tbl)
+"
+;	NAME:		sizeof-all_tbl  (PREDICATE)
+;	TYPE:		Expr with 1 argument
+;	CALL:		(sizeof-all_tbl tbl)
+;	FUNCTION:	returns the number of all the elements in the table and subtables
+;	VALUE:		one element = 1
+;	SOURCE:		$LLsys/tbl.ll
+"
+(loop for i in (contents tbl)
+      sum (length (cdr i))))
 
 ;	NAME:		print_/short-print_tbl  (INFO)
 ;	TYPE:		Expr with 1 argument

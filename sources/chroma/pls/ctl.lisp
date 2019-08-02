@@ -14,7 +14,7 @@
 ; DESCRIPTION OF THE DATA STRUCTURE:
 ; Control data are characterized by a KEY and a VALUE associated to the key.
 ; They are quite similar to mono-dimensional tables, but the retrieval
-;    nechanism is more souple and never produces error or warning messages
+;    mechanism is more souple and never produces error or warning messages
 ;    when the specified key does not exist.
 
 ; CURRENT IMPLEMENTATION:
@@ -94,7 +94,7 @@
 
 (defun sizeof_ctl (ctl)
    (pls-check-type 'CTL ctl 'sizeof_ctl)
-   (length (contents ctl)) )
+   (sizeof (contents ctl)) )
 
 
 
