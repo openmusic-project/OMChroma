@@ -99,7 +99,7 @@
       (loop while (>= (decf nev) 0)
             do
             (let* ((val (y-val_fun fun acc exp)))
-              (newl result (om::om-round val)))
+              (newl result (round val)))
             do (incf acc step))
       (nreverse result)) ) )
 

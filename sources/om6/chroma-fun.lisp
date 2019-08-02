@@ -58,7 +58,7 @@
   
   (if (listp bpf)
       
-      (loop for f in bpf-list collect (bpf->fun f precision))
+      (loop for f in bpf collect (bpf->fun f precision))
     
     (make_fun
      (loop for x in (om::x-points bpf) for y in (om::y-points bpf) append (list y x))
@@ -82,16 +82,18 @@
 ;	SOURCE:		$LLsys/utils.lisp
 
 (defun fun->gen-cs-table (fun &optional (gentyp 7) &key (gensize (get-gbl 'DEF-GEN-SIZE)) (expzero (get-gbl 'EXPZERO)))
-"POLYMORPHIC FUNCTION:
+  "POLYMORPHIC FUNCTION:
    Convert a CHROMA FUN object into a GEN-CS-TABLE of type <gentyp>.
    In case of GEN 5 (exponential bpf), replace 0 by expzero.
    If a list of FUNs is given, return a list of objects."
+  
   (if (is_fun fun)
-    (make-instance 'om::gen-cs-table
-                  :size gensize
-                  :gen-num gentyp
-                  :param-list (fun-points fun gensize))
-    (fun-list->gen-cs-table fun gentyp)))
+      (make-instance 'om::gen-cs-table
+                     :size gensize
+                     :gen-num gentyp
+                     :param-list (fun-points fun gensize))
+    (fun-list->gen-cs-table fun gentyp)
+    ))
 
 
 (defun fun-list->gen-cs-table (fun-list gentyp)
@@ -122,6 +124,90 @@ bpf to incremental x-points is correct.
 ; (fun->gen-cs-table (make_fun '(0 0 1 1 .5 2)))
 ; (fun->gen-cs-table (list (make_fun '(0 0 1 1 .5 2)) (make_fun '(0 0 1 1 .5 2 1 3))))
 ;------------------------------------------------------------------
+
+
+;========================================
+; CREATE A GEN-CS-TABLE FROM VE
+;========================================
+
+
+;====================
+; auxiliary functions
+;====================
+(defun zero-exp (fun zeroexp)
+  "Replace 0 with very small values when using the exponential GEN 5"
+  (let ((y (y-list_fun fun)))
+    (if (member 0 y :test '=)
+        (make_fun (om::flat
+                   (om::mat-trans (list (replace-zeros y zeroexp) (x-list_fun fun)))))
+      fun)))
+
+(defun replace-zeros (list zeroexp)
+  "Replace zeros with very small values when using exponential GENs"
+  (loop for y in list
+       collect (if (= y 0) zeroexp y)))
+
+
+(defun cs-fun-points (fun size)
+  "Prepare the points in the format of a GEN table. From OM, cs-bpf-points
+   "
+   (let* ((pointx (x-list_fun fun))
+          (pointy (y-list_fun fun)))
+     (setf pointx (cdr (mapcar 'round (om::om-scale pointx 0 (- size 1)))))
+     
+     (append (loop for y in pointy
+                   for last = 0 then x
+                   for x in pointx
+                   append (list y (- x last))) (last pointy)) ))
+
+
+(defun syn-fun (fun synth gentype size zeroexp)
+  "Turns a fun into a OMChroma compatible, synth-dependent table.
+  "
+;(print synth) (print gentype) (print size) (print zeroexp)
+  (case synth
+    (csound
+     (let ((pts (if (= gentype 5)
+                    (cs-fun-points (zero-exp fun zeroexp) size)
+                  (cs-fun-points fun size))))
+       (make-instance 'om::gen-cs-table
+                      :id "?"
+                      :size size
+                      :stime 0
+                      :gen-num gentype
+                      :param-list pts)))
+    (t
+     (error-synth 's_ve synth))))
+
+
+(defun s_ve (ve &key (gentype 7) (synth 'csound) (size (get-gbl 'DEF-GEN-SIZE)) (zeroexp (get-gbl 'EXPZERO)))
+  "
+;	NAME:		s_ve (SELECTOR)
+;	TYPE:		Expr with 1 argument and 4 keys
+;	CALL:		(s_ve ve :gentype 7 :synth 'csound :size 513 :zeroexp 0.00001)
+;	FUNCTION:	return the format of the function envelope appropriate
+;			   to each known synthesizer
+;			if synth is not specified, the current synthesizer's
+;			   name is used
+;                       if the structure is not of type VE, it is a dynamic
+;                          function -> convert the structure into a cs-gen-table
+;	VALUE:		the new data
+"
+  (case (pls-type ve)
+    
+    (VE
+     (if (num_ve ve)
+         (num_ve ve)
+       (syn-fun (fun_ve ve) synth gentype size zeroexp)))
+    
+    (FUN
+     (syn-fun ve synth gentype size zeroexp))
+    
+    (otherwise
+     (error "Dunno what I'm gonna do with this: ~a, Sir ~a" ve (get-gbl 'USER)))
+    ))
+
+
 
 
 
