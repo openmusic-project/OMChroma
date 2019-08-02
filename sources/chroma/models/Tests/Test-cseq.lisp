@@ -112,19 +112,19 @@
 
 ; GET ALL THE AMPLITUDES
 (loop for i in (fql-list model-cseq)
-      collect (lin->db (amplitudes i)))
+      collect (lintodb (amplitudes i)))
 (loop for i in (fql-list model-cseq-as)
-      collect (lin->db (amplitudes i)))
+      collect (lintodb (amplitudes i)))
 (loop for i in (fql-list model-cseq-as)
-      collect (lin->db (amplitudes i)))
+      collect (lintodb (amplitudes i)))
 
 ; GET ALL THE MAXIMUM AMPLITUDES PER FQL
 (loop for i in (fql-list model-cseq)
-      collect (apply #'max (lin->db (amplitudes i))))
+      collect (apply #'max (lintodb (amplitudes i))))
 (loop for i in (fql-list model-cseq-as)
-      collect (apply #'max (lin->db (amplitudes i))))
+      collect (apply #'max (lintodb (amplitudes i))))
 (loop for i in (fql-list model-cseq-aa)
-      collect (apply #'max (lin->db (amplitudes i))))
+      collect (apply #'max (lintodb (amplitudes i))))
 
 ; COMPUTE THE OVERALL AMOUNT OF PARTIALS
 (loop for i in (fql-list model-cseq)
@@ -141,7 +141,7 @@
       collect (length (fql_vps i)))
 
 
-(lin->db (get-max-amp model-cseq))
+(lintodb (get-max-amp model-cseq))
 
 
 (format t "************************* TESTING PROCESS: SECTION 3~%")

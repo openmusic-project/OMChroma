@@ -160,7 +160,7 @@
       ;  (npart (length l)) 
         (npart  (caar l)) 
         (time (cadar l))
-        (triplets (mapcar #'(lambda (x) (list (first x)(third x)(db->lin (fourth x)) 0.)) l)))
+        (triplets (mapcar #'(lambda (x) (list (first x)(third x)(dbtoline (fourth x)) 0.)) l)))
     (cons (list npart time) (reverse triplets))))
 ;(asd_group '((1 1 1 1)(2 2 2 2)(3 2 3 3)(4 4 4 4)(5 4 5 5)))
 
