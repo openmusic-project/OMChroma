@@ -51,8 +51,7 @@ NOTE: <l> cannot be empty"
 "
 Signal an error of type for function f"
 
-    (om::om-beep)
-    (error "Wrong type for structure ~%~a~% in function ~a~%" l f))
+(error "Wrong type for structure ~%~a~% in function ~a~%" l f))
 
 ;-----------------------------------------------------------------------------
 ; (choose-in-list l)
@@ -61,15 +60,26 @@ Signal an error of type for function f"
   "Random selection in list"
   (nth (random (length list))list))
 
+
+(defun closest-pwr2 (val)
+  "Return the closest larger power of two) of val, ex. 3.4 --> 4. Useful for csound audio tables."
+  (let ((size 2))
+    (loop while (> val size) do
+        (setf size (* size 2)))
+    size))
+
+
 ;-----------------------------------------------------------------------------
 ;pwr2, same as closest-pwr2
 (defun pwr2 (n)
 "RETURN THE POWER OF TWO IMMEDIATELY > n"
-  (om::closest-pwr2 n))
+  (closest-pwr2 n))
 
 ;  (let ((exp 0))
 ;    (loop while (< (expt 2 (incf exp)) n) )
 ;    (expt 2 exp)) )
+
+
 
 ;-----------------------------------------------------------------------------
 ;rplac
@@ -156,6 +166,9 @@ where L-FQ: list of (out-fq [ref-fq]) by default, ref-fq = 1.0.
 		      (ref-fq (ifn fq 1.0 (nextl fq))) )
 		    `'(list ,out-fq ,ref-fq)) )
 	    l-fqwt) )
+
+
+
 ;-----------------------------------------------------------------------------
 ; load-wt load-comp-wt / save-wt
 ;	load the data base containing the definitions of the WT objects used
@@ -235,7 +248,7 @@ specified by the environment variable LLwt"
 	(set-gbl 'EXT "lisp")
 
 	(format t "COMPILING WT OBJECTS~%")
-	(open-output-file curr-file)	; OPEN WITH MARGIN = 500
+	(open curr-file :direction :output)	; OPEN WITH MARGIN = 500
         (format (get-gbl '*chroma-output*) "(in-package cr)~%")
 	(mapc (lambda (obj)
                 (let* ((name (second obj))
@@ -245,7 +258,7 @@ specified by the environment variable LLwt"
 		  (format (get-gbl '*chroma-output*) "(setf ~a '~S )~%" name val)
 		  (format (get-gbl '*chroma-output*) "~%")))
 	        objs)
-	(close-output-file curr-file)
+	(close curr-file)
 
 	
 	(set-gbl 'OUTDIR old-dir)	; RESTORE PREVIOUS STATE
@@ -280,7 +293,7 @@ specified by the environment variable LLwt"
 ;          (cons 'snd-type snd-type))
 
 
-;(multiple-value-bind (buffer format n-channels sample-rate sample-size size skip)  (audio-io::om-get-sound-info (om::om-choose-file-dialog))
+;(multiple-value-bind (buffer format n-channels sample-rate sample-size size skip)  (sound-file-get-info (choose-file-dialog))
 ;  (list buffer format n-channels sample-rate sample-size size skip))
 ;("AIFF(int)" 2 48000 24 11771540 1 nil)
 ;("AIFF(float)" 1 96000 32 96000 1 nil)
@@ -305,8 +318,8 @@ specified by the environment variable LLwt"
 (defun get-sndinfo (&rest file-in)
   (let* ((l-results
          (multiple-value-bind (buffer format n-channels sample-rate sample-size size skip)
-             (ifn file-in (audio-io::om-get-sound-info (om::om-choose-file-dialog))
-               (audio-io::om-get-sound-info file-in))
+             (ifn file-in (sound-file-get-info (choose-file-dialog "Choose an audio file"))
+               (sound-file-get-info file-in))
            (list buffer format n-channels sample-rate sample-size size skip)))
          
          (sr (third l-results))
@@ -384,15 +397,16 @@ specified by the environment variable LLwt"
 ;         (decs-to-bignum (rest liste)))))))
 
 
+#|
 ;-----------------------------------------------------------------------------
 ;auxiliary functions, for debugging purposes (OBSOLETE NOW)
 (defun read-aiff-header (file-in)
-    (with-open-file  (stream  file-in :direction :input)
-      (if(not(equal  (get-id stream) "FORM"))
+    (with-open-file (stream  file-in :direction :input)
+      (if (not(equal (get-id stream) "FORM"))
         (error "unrecognized AIFF file")
           (progn
             (format t "chunkSize-~a-~%"(get-long stream)) 
-            (format t "-~a-~%"(get-id stream))
+            (format t "-~a-~%"(get-id  stream))
             (format t "-~a-~%"(get-id stream))
             (format t "chunkSize-~a-~%"(get-long stream))
             (format t "numChans~a~%"(get-integer stream))
@@ -402,16 +416,18 @@ specified by the environment variable LLwt"
             ))))
 
 ;(read-aiff-header (om::om-choose-file-dialog) )
+|#
+
 
 (defun get-bin-double (stream)
-(format nil "~a~a~a~a"  (dec-to-bin(char-int (read-char stream))8)
-        (dec-to-bin(char-int(read-char stream))8)
-        (dec-to-bin(char-int(read-char stream))8)
-        (dec-to-bin(char-int(read-char stream) )8)))
+  (format nil "~a~a~a~a"  (dec-to-bin (char-int (read-char stream))8)
+          (dec-to-bin(char-int(read-char stream))8)
+          (dec-to-bin(char-int(read-char stream))8)
+          (dec-to-bin(char-int(read-char stream) )8)))
 
 (defun dec-to-nib (x)
   (cond((equal x 0)())
-         (t(multiple-value-bind (div rem)(floor x 2)
+       (t(multiple-value-bind (div rem)(floor x 2)
            (cons rem (dec-to-nib div))))))
 
 (defun dec-to-bin (x  size )
@@ -452,7 +468,7 @@ dir: directory where the file is to be written (default: value of CSfun).
     (when wt-list
       (format t "~%WRITING WT TABLES FOR CSOUND IN~%   ~a~%" complete-filename)
       (format t "   ON ")
-      (printdate)
+      (om::printdate)
       (format t "~%~%")
       (with-open-file (out-stream complete-filename :direction :output 
                                 :if-does-not-exist :create 

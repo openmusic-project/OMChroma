@@ -775,7 +775,7 @@
 
              (WITH-OPEN-FILE (out path-sco :direction :output :if-does-not-exist :create :if-exists :supersede)
                (format out ";This synthesis process called ~D started on " name)
-               (printdate out)
+               (format out (om-get-date))
                (format out "~%~%")
                (format out "; Global Variables: sr = ~D, kr = ~D, ksmps = ~D, nchnls = ~D~%~%" synth-sr synth-kr ksmps nch)
                (format out "; Defined by chroma classes:~%")

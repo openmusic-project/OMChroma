@@ -12,6 +12,17 @@
 
 (export '(within-p) :chroma)
 
+
+;;; The same function exist in OM
+;;; here we have them in the CR package
+(defun lintodB (x)
+  (let ((y (if (= 0.0 x) 0.00000001 x)))
+    (* (log y 10) 20)))
+
+(defun dbtolin (x)
+  (expt 10.0 (/ x 20.0)))
+
+
 ;------------------------------------------------------------------
 ; FUNCTIONS (in alphabetical order):
 ;	ran / ran-from / ran%
@@ -46,7 +57,8 @@
     `(setq ,symb (pop ,lst))
     `(pop ,lst) ))
 
-(defmacro newl (lst elem) `(push ,elem ,lst))
+(defmacro newl (lst elem) 
+  `(push ,elem ,lst))
 
 ;------------------------------------------------------------------c
 
