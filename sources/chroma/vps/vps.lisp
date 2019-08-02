@@ -173,6 +173,15 @@
     (if (not (null l))(apply #'min l))))
 
 
+;;; like copy-instance but without deep-copy (not needed)
+(defmethod copy_vs ((source vps) &key to)
+  "Shallow copies the slots of 'source' to the slots of 'target'. Source must be subclass of target"
+  (let ((copy (or to (make-instance (type-of source)))))
+    (loop for slot in (mapcar #'slot-definition-name (class-slots (class-of source)))
+          when (slot-boundp source slot)
+          do (setf (slot-value copy slot) (slot-value source slot)))
+    copy))
+
 
 (defmethod print_vs ((x vps))
   (format t "Vertical Structure :~%~a    (~a)
@@ -184,8 +193,6 @@
 (defmethod number-of-notes ((x vps))
   "Number of Notes in a VPS"
   (length (the-list x)))
-
-
 
 ;to allow empty vps in models:
 (defmethod get-max-fq ((x t)  &key  &allow-other-keys) nil)
