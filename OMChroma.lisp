@@ -33,6 +33,7 @@
 (cr::set-gbl 'cr::SR om::*audio-sr*)		 ; SAMPLING RATE
 (cr::set-gbl 'cr::DIAPASON 'om::*diapason-freq*) ; CURRENT DIAPASON
 (cr::set-gbl 'cr::USER 'om::*composer-name*)	; USER'S NAME FOR PERSONALIZED MESSAGES
+(set-gbl '*chroma-output* om-lisp::*om-stream*) 
 
 (mapc 
 
