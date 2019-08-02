@@ -233,36 +233,8 @@
       (if (om-shift-key-p) (omselect-with-shift self n)
         (when (not (member n (selection? self) :test '=))
           (setf (selection? self) (list n)))))
-     (t (unless t ;(om-drag-selection-p self where)
-          (setf (selection? self) nil)
-          (om-init-motion-functions self 'make-selection-rectangle 'release-selection-rectangle)
-          (om-new-movable-object self (om-point-h where) (om-point-v where) 4 4 'om-selection-rectangle)
-          )))
+     (t (setf (selection? self) nil)))
     (om-invalidate-view self t)))
-
-(defmethod make-selection-rectangle ((self vpsPanel) pos)
-  (let ((rect  (om-get-rect-movable-object self (om-point-h pos) (om-point-v pos))))
-    (when rect
-      (om-update-movable-object self (first rect) (second rect) 
-                                (max 4 (third rect)) (max 4 (fourth rect))))))
-
-(defmethod release-selection-rectangle ((self vpsPanel) pos)   
-  (let* ((rect (om-get-rect-movable-object self (om-point-h pos) (om-point-v pos)))
-        miny maxy)
-    (when rect
-      (om-erase-movable-object self)
-      (let (user-rect)
-        (setf user-rect (om-make-rect (first rect) (second rect) 
-                                      (+ (first rect) (third rect)) 
-                                      (+ (second rect) (fourth rect))))
-        (setf miny (min (om-rect-top user-rect) (om-rect-bottom user-rect)))
-        (setf maxy (max (om-rect-top user-rect) (om-rect-bottom user-rect)))
-        (loop for f in (get-vps-freqs (selected-object (om-view-container self)))
-              for k = 0 then (+ k 1) do
-              (let ((pix (freq2point (om-view-container self) f)))
-                (when (and (>= pix miny) (<= pix maxy))
-                  (push k (selection? self)))))))
-    (om-invalidate-view self)))
 
 
 (defmethod om-draw-contents ((self vpspanel))
@@ -274,8 +246,7 @@
   nil)
 
 (defmethod draw-vps ((self cr::vps) panel time-fact begin-time end-time maxfreq &optional (maxamp 1.0))
-  (let* ((fh 0)
-         (x1 (if (= time-fact -1) 0 (round (* time-fact begin-time))))
+  (let* ((x1 (if (= time-fact -1) 0 (round (* time-fact begin-time))))
          (x2 (if (= time-fact -1) (w panel) (round (* time-fact end-time))))
          (amps (when (get-vps-amps self)
                 (draw-value-for-amp (editor panel) (om/ (get-vps-amps self) maxamp))
@@ -322,8 +293,8 @@
 (defmethod release-change-amp (envpanel pos)
   (check-change-amp envpanel pos))
 
-(defmethod om-view-click-handler ((self specenv-panel) where)
-  (om-init-motion-functions self 'check-change-amp 'release-change-amp))
+;(defmethod om-view-click-handler ((self specenv-panel) where)
+;  (om-init-motion-functions self 'check-change-amp 'release-change-amp))
 
 (defmethod om-draw-contents ((self specenv-panel))
   (let* ((vps (selected-object (om-view-container self))))
@@ -338,7 +309,7 @@
 
 (defmethod draw-envelope ((self cr::fql) panel maxfreq)
   (let ((pts (list (list 0 (h panel))))
-        (maxf (maxfreq (om-view-container panel)))
+        ;(maxf (maxfreq (om-view-container panel)))
         (last '(0 0)))
     (om-with-focused-view panel
       (loop for f in (get-vps-freqs self) 
@@ -399,7 +370,7 @@
 (defmethod get-editor-class ((self vps-list)) 'vpslisteditor)
 
 (defclass vpslisteditor (vpseditor) 
-              ((selectedvps :accessor selectedvps :initarg :selectedvps :initform :all)))
+  ((selectedvps :accessor selectedvps :initarg :selectedvps :initform :all)))
 
 (defmethod initialize-instance :after ((self vpslisteditor) &rest args)
   (when (object self)
@@ -409,17 +380,16 @@
   (setf (slot-value self 'selectedvps) n)
   (setf (selection? (panel self)) nil)
   (when (title-bar self)
-    (om-set-dialog-item-text (car (om-subviews (title-bar self)))
-                             (string+ "Selection: " (if (integerp n)
-                                                        (integer-to-string n) 
-                                                      (if n "ALL" "NIL")))))
-  )
+    (om-set-dialog-item-text 
+     (car (om-subviews (title-bar self)))
+     (string+ "Selection: " (if (integerp n)
+                                (integer-to-string n) 
+                              (if n "ALL" "NIL"))))))
 
 
 
 (defmethod get-panel-class ((self vpslisteditor)) 'vpslistpanel)
 (defclass vpslistpanel (vpspanel) ())
-
 
 
 (defmethod selected-object ((self vpslisteditor))
