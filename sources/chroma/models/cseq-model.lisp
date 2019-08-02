@@ -223,14 +223,17 @@ There are as many ranks as events in a model"
 
 (defmethod compute-model ((x model-cseq) (y cseq-data) markers &key &allow-other-keys)
 (declare (ignore markers))  
-(let* (time-end (freqs ())(amps ())(fql-list nil)(markers-list nil)
-                  (list (cddr (data y)))
-                  (time  (third (car list)))
-                  )
-     (loop for curr-list in list 
+(let* (time-end 
+       (freqs ())
+       (amps ())
+       (fql-list nil)
+       (markers-list nil)
+       (list (cddr (data y)))
+       (time (third (car list))))
+  (loop for curr-list in list 
           do(let ((new-time (third curr-list)))
               (if(equal  new-time time)
-                (progn(push (om::db->lin (fifth curr-list)) amps)
+                (progn(push (dbtolin (fifth curr-list)) amps)
                       (push (fourth curr-list) freqs))
                 (progn (push (make-instance 'fql :the-list (nreverse freqs) :amplitudes (nreverse amps)) fql-list)
                        (push time markers-list)
@@ -238,7 +241,7 @@ There are as many ranks as events in a model"
                        (setf freqs nil)
                        (push (fourth curr-list) freqs)
                        (setf amps nil)
-                       (push (om::db->lin (fifth curr-list)) amps)
+                       (push (dbtolin (fifth curr-list)) amps)
                        ))
               (setf time new-time)))
     (push time markers-list)
@@ -255,8 +258,8 @@ There are as many ranks as events in a model"
           do (let (( triplets (mapcar #'list (amplitudes thefql) (the-list thefql))))
                (case threshmod
                  (abs ())
-                 (rel (setf thresh (+ (lin->db analysis-max-amp) threshold)))
-                 (fql (setf thresh (+ (lin->db (get-max-amp thefql)) threshold)))
+                 (rel (setf thresh (+ (lintodb analysis-max-amp) threshold)))
+                 (fql (setf thresh (+ (lintodb (get-max-amp thefql)) threshold)))
                  (otherwise (warn "unknown threshold mode")))
                (setf triplets (seuillage_cseq triplets thresh))
                (if triplets  
@@ -288,8 +291,8 @@ There are as many ranks as events in a model"
   (unless (listp (car (markers x))) ;;??????????????
     (unless (equal (length (markers x)) (1+ (length (fql-list x))))
       (error "THERE SHOULD BE ONE MARKER MORE THAN FQLS~%      Markers = ~a,fqls = ~a~%"
-             (length (markers x))(length (fql-list x))))))
-
+             (length (markers x))
+             (length (fql-list x))))))
 
 
 
@@ -300,14 +303,10 @@ There are as many ranks as events in a model"
 (defun get_add_time (data)
   (mapcar #'cadr (mapcar #'car data)))
 
-
-
 #|
 (defun localthreshold (amp_fun thresh)
   (let ((amp_fun (remove nil amp_fun)))
     (if amp_fun
-      (+ thresh (lin->db(apply #'max amp_fun)))
+      (+ thresh (lintodb (apply #'max amp_fun)))
       ())))
-
-
 |#

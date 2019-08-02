@@ -53,10 +53,10 @@
       ;; amplitudes in dB
       (when (> (reduce #'max (amplitudes x) :initial-value MOST-NEGATIVE-LONG-FLOAT) 0)
         (print (concatenate 'string "Warning positive AND negative values found in amplitudes lists of " (string (type-of x)) "."))
-        (print "Positive values will be set to O dB before conversion into absolute amplitudes"))
+        (print "Positive values will be set to 0 dB before conversion into absolute amplitudes"))
       (loop for a in (amplitudes x) for i = 0 then (+ i 1) do
             ;(when (> a 0) (setf (nth i (amplitudes x)) 0))
-            (setf (nth i (amplitudes x)) (om::db->lin (min 0 a)))
+            (setf (nth i (amplitudes x)) (dbtolin (min 0 a)))
             )
       )
     ))

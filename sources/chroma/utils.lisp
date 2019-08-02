@@ -15,7 +15,7 @@
 
 ;;; The same function exist in OM
 ;;; here we have them in the CR package
-(defun lintodB (x)
+(defun lintodb (x)
   (let ((y (if (= 0.0 x) 0.00000001 x)))
     (* (log y 10) 20)))
 

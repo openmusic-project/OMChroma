@@ -30,18 +30,14 @@
 (load (merge-pathnames "sources/package" *load-pathname*))
 (load (merge-pathnames "sources/chroma/load" *load-pathname*))
 
-(cr::set-gbl 'cr::SR om::*audio-sr*)		 ; SAMPLING RATE
-(cr::set-gbl 'cr::DIAPASON 'om::*diapason-freq*) ; CURRENT DIAPASON
-(cr::set-gbl 'cr::USER 'om::*composer-name*)	 ; USER'S NAME FOR PERSONALIZED MESSAGES
-(cr::set-gbl '*chroma-output* om-lisp::*om-stream*) 
-
 (mapc 
 
  #'(lambda (file)
      (compile&load (merge-pathnames file *load-pathname*)))
  
  '(
-   "sources/om6/cs-events/fun"
+   "sources/om6/chroma-init"
+   "sources/om6/chroma-fun"
    "sources/om6/cs-events/general-parsing"
                         
    "sources/om6/cs-events/csound/cs-utils"

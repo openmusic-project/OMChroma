@@ -159,7 +159,12 @@
 "
     (unless (is_tbl tbl)
       (error-type 'lkey_tbl tbl))
-    (om::flat (kltbl (contents tbl)) 1))
+    (apply 'append ;;; equivalent to (om::FLAT <list> 1)
+           (mapcar 
+            #(lambda (elt) (if (consp elt) elt (list elt)))
+            (kltbl (contents tbl))))
+    )
+
 
 (defun kltbl (ctbl)
   (ifn (car ctbl)

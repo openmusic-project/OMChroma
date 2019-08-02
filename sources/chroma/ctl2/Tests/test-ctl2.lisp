@@ -37,7 +37,7 @@
 
 (setf add-analysis
       (make-instance 'additive-data 
-         :file (merge-pathnames (getenv LLamod ) "trombone-C3¶.trc.sdif")))
+         :file (merge-pathnames (getenv LLamod) "trombone-C3¶.trc.sdif")))
 
 (inspect add-analysis)
 

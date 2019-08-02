@@ -5,6 +5,8 @@
 (defvar *cs-max-points* 1024)
 (defvar *def-table-size* 4097)
 
+;(set-gbl 'PMAX om::*cs-max-points*) ; MAXIMUM NUMBER OF CSOUND P FIELDS
+
 (defclass! CS-table () 
    ((id :initform "?" :initarg :id :accessor id)
     (size :initform nil :initarg :size :type integer :accessor size)

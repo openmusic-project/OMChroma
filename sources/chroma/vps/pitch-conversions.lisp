@@ -43,7 +43,7 @@ pch-class   *   *   *     *     *    *      *           \
 
 (in-package :cr)
 
-;;; too much ... ? :)
+
 (export '(fq->pch 
           fq->midi fq->ratio fq->midic  fq->itvl fq->semitones
           pch->fq pch->midi pch->midic pch->itvl pch->semitones pch->pch-class pch->ratio

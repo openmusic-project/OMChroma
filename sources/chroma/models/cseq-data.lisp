@@ -41,14 +41,14 @@
 
 
 (defmethod load-cseq-file ((x cseq-data)&optional file)
-  (if(null file)(setf file (choose-file-dialog)))
+  (if (null file) (setf file (choose-file-dialog)))
   (format t "LOADING DATA FROM ~a~%" (file x))
   (with-open-file (in-stream file :direction :input)
-         (setf (data x) (read in-stream)))'loaded
-)
+    (setf (data x) (read in-stream)))'loaded
+  )
 
 (defmethod load-cseq-sdif-file ((x cseq-data) &optional file)
-  (if(null file)(setf file (choose-file-dialog)))
+  (if (null file) (setf file (choose-file-dialog)))
   (format t "LOADING DATA FROM ~a~%" (file x))
   (setf dataNewFormat (om::get-chordseq-data (om::load-sdif-file file)))
   (setf (data x) (convertToAsFormat dataNewFormat))
@@ -56,19 +56,19 @@
 
 ;traverse l'analyse pour trouver l'amplitude max (normalisation ....)
 (defmethod get-max-amp ((x cseq-data))
-  (db->lin (apply #'max (mapcar #'fifth (cddr (data x))))))
+  (dbtolin (apply #'max (mapcar #'fifth (cddr (data x))))))
 
 
 (defun convertToAsFormat (data)
   (setf res (convertToAsFormat1 data))
-  (setf res(sort res #'< :key #'fourth))
-  (setf res(stable-sort res #'< :key #'third))
+  (setf res (sort res #'< :key #'fourth))
+  (setf res (stable-sort res #'< :key #'third))
   (append (list "partials" (length res)) res)
   )
 
 (defun convertToAsFormat1 (data)
   (loop for i in data
-        do (setf fq  (first i) amp  (om::lin->db (fourth i)))
+        do (setf fq  (first i) amp  (lintodb (fourth i)))
         collect (list "points" 2 (second i) fq amp (third i) fq amp)
         ))
 

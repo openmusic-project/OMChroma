@@ -152,8 +152,8 @@
                    )
                (case threshmod
                  (abs ())
-                 (rel (setf thresh (+ (lin->db analysis-max-amp) threshold)))
-                 (fql (setf thresh (+ (lin->db (get-max-amp theptl)) threshold)))
+                 (rel (setf thresh (+ (lintodb analysis-max-amp) threshold)))
+                 (fql (setf thresh (+ (lintodb (get-max-amp theptl)) threshold)))
                  (otherwise (warn "unknown threshold mode")))
                (setf triplets (seuillage_cseq triplets thresh))
                (if triplets  
@@ -185,7 +185,7 @@
     (loop for curr-list in list 
           do(let ((new-time (third curr-list)))
               (if(equal  new-time time)
-                (progn(push (db-to-lin (fifth curr-list)) amps)
+                (progn(push (dbtolin (fifth curr-list)) amps)
                       (push (fourth curr-list) freqs))
                 (progn (push (make-instance 'fql :the-list (nreverse freqs) :amplitudes (nreverse amps))fql-list)
                        (push time markers-list)
@@ -193,7 +193,7 @@
                        (setf freqs nil)
                        (push (fourth curr-list) freqs)
                        (setf amps nil)
-                       (push (db-to-lin (fifth curr-list)) amps)))
+                       (push (dbtolin (fifth curr-list)) amps)))
               (setf time new-time)))
     (push time markers-list)
     (push time-end markers-list)

@@ -245,7 +245,7 @@ my-nev : ...
                                   :max-ratio max-ratio
                                   :limits limits)))
       (set-gbl '*closest-wt* (cadadr result))
-      (eval(cadar result)))))
+      (eval (cadar result)))))
 
 
 ; get-model-cwt+
@@ -305,13 +305,13 @@ my-nev : ...
 (defun make-ran-dB (min max)
   (declare (special my-nev))
   (let ((pivot (/ (+ max min) 2))
-        (bernard (/ (abs(- max min)) 2)))
+        (bernard (/ (abs (- max min)) 2)))
     (dbtolin (rept my-nev (ran pivot bernard)))))
 
 (defun make-ran (min max)
   (declare (special my-nev))
   (let ((pivot (/ (+ max min)2))
-        (bernard (/(abs (- max min))2)))
+        (bernard (/ (abs (- max min)) 2)))
     (rept my-nev (ran pivot bernard))))
 
 ;---------------------------------------------------------------;

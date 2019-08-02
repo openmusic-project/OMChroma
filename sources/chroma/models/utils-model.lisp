@@ -74,16 +74,17 @@
   (/(apply #'+ (mapcar #'* freq amp))(apply #'+ amp)))
 
 (defun seuillage_add (list seuil)
-  (remove-if #'(lambda (y)(< y (db->lin seuil))) list :key #'car))
+  (remove-if #'(lambda (y) (< y (dbtolin seuil))) list :key #'car))
 
 ;(seuillage_add '((1 2 3)(4 5 6)(1 2 3)(100 100 100)) (lin->db 101))
 (defun seuillage_add2 (list seuil)
-  (if(> (apply #'max (mapcar #'car list))  (db->lin seuil))
-    list
+  (if (> (apply #'max (mapcar #'car list)) (dbtolin seuil))
+      list
     nil))
-;(seuillage_add '((1 2 3)(4 5 6)(1 2 3)(100 100 100)) (lin->db 101))
+
+;(seuillage_add '((1 2 3)(4 5 6)(1 2 3)(100 100 100)) (lintodb 101))
 (defun seuillage_cseq (list seuil)
-  (remove-if #'(lambda (y)(< y (db->lin seuil))) list :key #'car))
+  (remove-if #'(lambda (y)(< y (dbtolin seuil))) list :key #'car))
 
 
 (defun fragmente_add (data debut fin)

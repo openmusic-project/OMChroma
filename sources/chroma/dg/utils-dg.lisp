@@ -62,7 +62,7 @@
 
 (defun load-db (name)
 "Load a given data base from $LLdb
-The extension of the file to be loaded is : "name"_db.lisp"
+The extension of the file to be loaded is : \"name\"_db.lisp"
   (cond
    ((null name) 'done)
    ((symbolp name)

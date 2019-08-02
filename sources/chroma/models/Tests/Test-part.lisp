@@ -110,15 +110,15 @@
 
 ; GET ALL THE AMPLITUDES
 (loop for i in (fql-list model-part-as)
-      collect (lin->db (amplitudes i)))
+      collect (lintodb (amplitudes i)))
 (loop for i in (fql-list model-part-as)
-      collect (lin->db (amplitudes i)))
+      collect (lintodb (amplitudes i)))
 
 ; GET ALL THE MAXIMUM AMPLITUDES PER FQL
 (loop for i in (fql-list model-part-as)
-      collect (apply #'max (lin->db (amplitudes i))))
+      collect (apply #'max (lintodb (amplitudes i))))
 (loop for i in (fql-list model-part-aa)
-      collect (apply #'max (lin->db (amplitudes i))))
+      collect (apply #'max (lintodb (amplitudes i))))
 
 ; COMPUTE THE OVERALL AMOUNT OF PARTIALS
 (loop for i in (fql-list model-part-as)
@@ -132,8 +132,8 @@
       collect (length (fql_vps i)))
 
 
-(lin->db (get-max-amp model-part-aa))
-(lin->db (get-max-amp model-part-as))
+(lintodb (get-max-amp model-part-aa))
+(lintodb (get-max-amp model-part-as))
 
 
 (format t "************************* TESTING PROCESS: SECTION 8~%")

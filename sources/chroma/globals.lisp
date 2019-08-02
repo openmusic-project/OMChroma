@@ -99,7 +99,7 @@
 (set-gbl 'EXPZERO 0.00001)	; REPLACE 0 IN EXPONENTIAL GENS
 
 (set-gbl 'PMAX 1024) ; MAXIMUM NUMBER OF CSOUND P FIELDS
-;(set-gbl 'PMAX om::*cs-max-points*) ; MAXIMUM NUMBER OF CSOUND P FIELDS
+
                             ; USED WHEN COMPILING FUNCTIONS (= MAX - 2,
                             ;    USED AT THE BEGINNING)
                             ; IF () NO CONTROL

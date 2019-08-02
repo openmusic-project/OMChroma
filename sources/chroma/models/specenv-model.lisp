@@ -42,7 +42,8 @@
   (let((result nil)(l (cdr l)))
     (loop for i from 0 to (length l) 
           for e in l
-          do (push (lin->db e) result)(push i result))
+          do (push (lintodb e) result)
+          (push i result))
     (make_fun (nreverse result))))
 
 
