@@ -98,41 +98,41 @@
   (make-instance 'ptl :the-list 
                  (mapcar #'(lambda (f) (* ratio f)) (fql x))
                  :amplitudes (get-amp x)
-                 :entry-delays (entry-delays x)
+                 :e-dels (e-dels x)
                  :durs (durs x)
                  :transp_funs (transp_funs x)
                  :amp_funs (amp_funs x)))
  
 (defmethod transpose ((x fql) (ratio t))
   (if (interval-p ratio)
-    (if (and (get-amp x) (bwl x))
-      (make-instance 'fql :the-list 
-                     (mapcar #'(lambda (f)
-                                 (* (car (itvl->ratio (list ratio))) f))
-                             (fql x))
-                     :amplitudes (get-amp x)
-                     :bwl (bwl x))
-      (if (get-amp x)
-        (make-instance 'fql :the-list 
-                       (mapcar #'(lambda (f)
-                                   (* (car (itvl->ratio (list ratio))) f))
-                               (fql x))
-                       :amplitudes (get-amp x))
-        (make-instance 'fql :the-list 
-                       (mapcar #'(lambda (f)
-                                   (* (car (itvl->ratio (list ratio))) f))
-                               (fql x)))))
-    (error "WANNA A REAL INTERVAL OR A RATIO, BUT NOT THIS SHITTY ARGUMENT:~a"
-           ratio)))
+      (if (and (get-amp x) (bwl x))
+          (make-instance 'fql 
+                         :the-list (mapcar #'(lambda (f)
+                                               (* (car (itvl->ratio (list ratio))) f))
+                                           (fql x))
+                         :amplitudes (get-amp x)
+                         :bwl (bwl x))
+        (if (get-amp x)
+            (make-instance 'fql :the-list 
+                           (mapcar #'(lambda (f)
+                                       (* (car (itvl->ratio (list ratio))) f))
+                                   (fql x))
+                           :amplitudes (get-amp x))
+          (make-instance 'fql :the-list 
+                         (mapcar #'(lambda (f)
+                                     (* (car (itvl->ratio (list ratio))) f))
+                                 (fql x)))))
+    (error "WANNA A REAL INTERVAL OR A RATIO, BUT NOT THIS SHITTY ARGUMENT:~a" ratio)
+    ))
 
 (defmethod transpose ((x ptl) (ratio t))
   (if (interval-p ratio)
-    (make-instance 'fql :the-list 
+    (make-instance 'ptl :the-list 
                    (mapcar #'(lambda (f)
                                (* (car (itvl->ratio (list ratio))) f))
                            (fql x))
                    :amplitudes (get-amp x)
-                   :entry-delays (entry-delays x)
+                   :e-dels (e-dels x)
                    :durs (durs x)
                    :transp_funs (transp_funs x)
                    :amp_funs (amp_funs x))
@@ -307,7 +307,7 @@
 ;    including the value of the threshold.
 ; The testing interval can be any interval in intervallic notation or in semitones.
 
-(defmethod itvl-p_vps ((x vps) itvl-list &optional (seuil 0.05 ))
+(defmethod itvl-p_vps ((x vps) itvl-list &optional (seuil 0.05))
   " Return t if any of the intervals appears in the VPS "
   (let* ((curr-itvl (car itvl-list))
          (itvl (if (interval-p curr-itvl)
@@ -412,7 +412,7 @@
     (unless (equal random 0) (setf result (sort (copy-list result) #'<)))
     (make-instance 'ptl :the-list result
                    :amplitudes (get-amp x)
-                   :entry-delays (entry-delays x)
+                   :e-dels (e-dels x)
                    :durs (durs x)
                    :transp_funs (transp_funs x)
                    :amp_funs (amp_funs x))))
@@ -483,7 +483,7 @@
        (let ((fq-and-all (mapcar #'list
                                  (copy-list (get-amp x))
                                  (copy-list (fql x))
-                                 (copy-list (entry-delays x))
+                                 (copy-list (e-dels x))
                                  (copy-list (durs x))
                                  (copy-list (transp_funs x))
                                  (copy-list (amp_funs x)))))
@@ -505,7 +505,7 @@
                (setf fq-and-all (sort fq-and-all  #'< :key #'second))
                (make-instance 'ptl :the-list (mapcar #'second fq-and-all)
                               :amplitudes (mapcar #'first fq-and-all)
-                              :entry-delays (mapcar #'third fq-and-all)
+                              :e-dels (mapcar #'third fq-and-all)
                               :durs (mapcar #'fourth fq-and-all)
                               :transp_funs (mapcar #'fifth fq-and-all)
                               :amp_funs (mapcar #'sixth fq-and-all)))

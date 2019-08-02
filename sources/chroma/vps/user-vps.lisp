@@ -692,7 +692,7 @@ pch-class    *  *    *    *     *      *          \
 
 
 (defmethod ail_vps ((vps rpl) &rest pars)
-  (when (null (cdr pars)) &optional reference
+  (when (null (cdr pars))
     (error "WANNA A REFERENCE AND AN OCTAVE NUMBER"))
   (let ((ref (car pars))
         (oct (cadr pars))
@@ -702,6 +702,7 @@ pch-class    *  *    *    *     *      *          \
     (get-ail (make-instance 'FQL
                :the-list (get-fql vps :octave oct))
               :reference ref :approx approx)) ))
+
 
 (defmethod ails_vps ((vps rpl) &rest pars)
   (when (null (cdr pars))

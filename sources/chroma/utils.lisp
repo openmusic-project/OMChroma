@@ -60,6 +60,15 @@
 (defmacro newl (lst elem) 
   `(push ,elem ,lst))
 
+
+;;; equivalent to (om::FLAT <list> 1)
+(defun flat (list)
+  (apply 'append 
+         (mapcar '#(lambda (elt) (if (consp elt) elt (list elt)))
+                 list)))
+  
+
+
 ;------------------------------------------------------------------c
 
 ;------------------------------------------------------------------

@@ -159,10 +159,7 @@
 "
     (unless (is_tbl tbl)
       (error-type 'lkey_tbl tbl))
-    (apply 'append ;;; equivalent to (om::FLAT <list> 1)
-           (mapcar 
-            #'(lambda (elt) (if (consp elt) elt (list elt)))
-            (kltbl (contents tbl))))
+    (flat (kltbl (contents tbl)))
     )
 
 
