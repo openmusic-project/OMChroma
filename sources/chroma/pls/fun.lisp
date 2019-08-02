@@ -337,6 +337,11 @@
                    ))) )) )
 
 
+;;; similar to om::number-interpolation
+(defun number-interpolation (n1 n2 n curve)
+  (+ n1 (* (- n2 n1) (expt n (exp curve)))))
+
+
 ; WITH OPTIONAL PARAMETER: EXP INTERPOLATION (from om::abc-interpolation, now obsolete), asymetric
 ;ms_1002
 ; replaced by number-interpolations (in "kernels.lisp")
@@ -355,7 +360,8 @@
                             (let ((Xin (cadr cts))
                                   (Yin  (car cts))
                                   (Yend  (third cts)))
-                             (om::number-interpolation Yin Yend (/ (- Xcurr Xin) (- Xend Xin)) alpha))))))))))
+                             (number-interpolation Yin Yend (/ (- Xcurr Xin) (- Xend Xin)) alpha))))))))))
+
 
 
 ; WITH OPTIONAL PARAMETER: NEW SYMETRIC INTERPOLATION
@@ -375,8 +381,8 @@
                                   (Yin  (car cts))
                                   (Yend  (third cts)))
                               (if (> Yend Yin) ; case as exp-y-val-fun
-                                  (om::number-interpolation Yin Yend (/ (- Xcurr Xin) (- Xend Xin)) alpha)
-                                (om::number-interpolation Yend Yin (- 1 (/ (- Xcurr Xin) (- Xend Xin))) alpha)))))))))))
+                                  (number-interpolation Yin Yend (/ (- Xcurr Xin) (- Xend Xin)) alpha)
+                                (number-interpolation Yend Yin (- 1 (/ (- Xcurr Xin) (- Xend Xin))) alpha)))))))))))
 
 
 ; OPTIONAL PARAMETER: SINUSOIDAL INTERPOLATIONS

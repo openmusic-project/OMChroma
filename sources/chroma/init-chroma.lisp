@@ -35,9 +35,19 @@
   (error "Sorry I can not prompt for file...")
   )
 
+
+(defun cr-beep ()
+  #+lispworks
+  (capi::beep-pane nil)
+  #-lispworks
+  (print "BIP")
+  )
+
+
 (defun sound-file-get-info (filename)
   #+libsndfile
   (sf::sndfile-get-info filename)
   #-libsndfile
   (error "Sorry I can not read sound info...")
   )
+

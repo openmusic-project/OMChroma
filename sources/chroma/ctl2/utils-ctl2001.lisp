@@ -245,7 +245,7 @@ my-nev : ...
                                   :max-ratio max-ratio
                                   :limits limits)))
       (set-gbl '*closest-wt* (cadadr result))
-      (eval(cadar result)))))
+      (eval (cadar result)))))
 
 
 ; get-model-cwt+

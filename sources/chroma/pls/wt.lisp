@@ -222,7 +222,7 @@ wt)
 	(if (is-field_wt wt fld)
 	   (rm_tbl (contents wt) fld)
 	   (when (get-gbl 'PRNFLG)
-             (progn (capi::beep-pane nil)
+             (progn (cr-beep)
                (print (format () "         WARNING: CAN'T REMOVE AN INEXISTENT FIELD, SIR: ~a~%            OUFF...." fld))))))
 
 
@@ -347,7 +347,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 		      (when (< (phys-dur-att_wt wt) real-off)	; DO NOTHING
 			(set-phys-dur-att_wt wt real-off) ; DUR-ATT = BEG-OFF
                         (when (get-gbl 'PRNFLG)
-                          (capi::beep-pane nil)
+                          (cr-beep)
                           (print (format () "set-beg-off_wt - WARNING: DUR-ATT < BEG-OFF~%       PHYS-DUR-ATT MODIFIED TO ~a~%" real-off)))
 		      )
 		   ))
@@ -372,7 +372,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
        ((beyond-phys-eof_wt wt real-off)
         (error-eof_wt 'set-end-off_wt val (phys-dur_wt wt si)))
        ((<= real-off (beg-off_wt wt))
-        (capi::beep-pane nil)
+        (cr-beep)
         
         (error "set-end-off_wt: CAN'T SET END OFFSET <= BEG OFFSET. END-OFF: ~d, BEG-OFF: ~d~%" val (beg-off_wt wt si)))
        (t
@@ -381,7 +381,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
             (when (>= (phys-dur-att_wt wt) real-off)
               (set-phys-dur-att_wt wt real-off)
               (when (get-gbl 'PRNFLG)
-                (capi::beep-pane nil)
+                (cr-beep)
                 (print "set-end-off_wt - WARNING: DUR-ATT >= END-OFF~%            PHYS-DUR-ATT MODIFIED TO ~a~%" real-off))
               )
             ))
@@ -495,7 +495,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 		((beyond-eof_wt wt (+ real-from (win-size_wt wt)))
 		 (let ((new-size (- (end-off_wt wt) real-from)))
 		     (insert_tbl (contents wt) 'win 'from real-from)
-		     (capi::beep-pane nil)
+		     (cr-beep)
 		     (print (format () "SET-WIN-PHYS-FROM_WT: WARNING ... WINDOW SIZE MODIFIED~%       OLD SIZE = ~a, NEW SIZE = ~a~%" (win-size_wt wt si) (/ new-size si)))
 		     (set-win-size_wt wt new-size)
 		     wt))
@@ -547,7 +547,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 		((beyond-eof_wt wt (+ real-size old-from))
 		 (let ((new-from (- end real-size)))
 		    (insert_tbl (contents wt) 'win 'size real-size)
-		    (capi::beep-pane nil)
+		    (cr-beep)
 		    (print (format () "SET-WIN-SIZE_WT: WARNING ... WINDOW FROM MODIFIED~%     OLD FROM = ~a, NEW FROM = ~a~%" (win-phys-from_wt wt si) (/ new-from si)))
 		    (set-win-phys-from_wt wt new-from)
 		    wt))
@@ -569,13 +569,12 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 	(let ((real-size (* size si)))
 	    (cond
 		((> real-size (dur_wt wt))
-		 (capi::beep-pane nil)
-
-	 (error_wt 'set-win-min-size_wt "MIN-SIZE > DUR. KEEP IT BELOW "
-			(dur_wt wt si)))
-		(t
-		 (insert_tbl (contents wt) 'win 'min-size real-size))))))
-
+		 (cr-beep)
+                 (error (format nil "set-win-min-size_wt: MIN-SIZE > DUR. KEEP IT BELOW ~A"
+                                (dur_wt wt si))))
+                 (t
+                  (insert_tbl (contents wt) 'win 'min-size real-size))))))
+            
 
 ; SET-[PHYS-]WIN: SET A WHOLE WINDOW BY GIVING FROM AND TO
 ; [PHYS-]WIN: RETURN A CONS WITH FROM AND SIZE
@@ -587,11 +586,9 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 	      (real-to (* to si)))
 	    (cond
 		((< (- real-to real-from) min-win)
-		 (capi::beep-pane nil)
-
-	 (error_wt 'set-phys-win_wt
-			"TOO SMALL WINDOW. CURRENT MINIMUM SIZE IS "
-			(/ min-win si)))
+		 (cr-beep)
+                 (error (format nium "set-phys-win_wt: TOO SMALL WINDOW. CURRENT MINIMUM SIZE IS ~A"
+                                (/ min-win si))))
 		((beyond-begof_wt wt real-from)
 		 (terpri)
 		 (print "WRONG FROM")
@@ -658,7 +655,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 		((beyond-eof_wt wt (+ real-from (win-size_wt wt)))
 		 (let ((new-size (- (end-off_wt wt) real-from)))
 		     (insert_tbl (contents wt) 'win 'from real-from)
-		     (capi::beep-pane nil)
+		     (cr-beep)
 		     (print (format () "SET-WIN-PHYS-FROM_WT: WARNING ... WINDOW SIZE MODIFIED~%"))
                      (print (format () "                        OLD SIZE = ~a, NEW SIZE = ~a~%" (win-size_wt wt si) (/ new-size si)))
 		     (set-win-size_wt wt new-size)
@@ -737,10 +734,10 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
         (pos (if (< pos 1) 1 pos)) )
     (if (listp fq)
       (nth (1- pos) fq)
-      (progn (capi::beep-pane nil)
-             (error_wt 'nth-freq_wt
-	               "THERE IS NO LIST OF FREQ FOR THE OBJECT ASSOCIATED TO FILE"
-		       (abs-file_wt wt))))))
+      (progn (cr-beep)
+        (error (format nim "nth-freq_wt: THERE IS NO LIST OF FREQ FOR THE OBJECT ASSOCIATED TO FILE ~A"
+		       (abs-file_wt wt)))
+        ))))
 
 
 ; FIRST/RAN/LAST-FREQ: RETURN THE FIRST, ONE RANDOMLY CHOSEN OR LAST FREQUENCY OF A LIST
@@ -769,7 +766,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 
 
 #| commented out, Marco, 970515
-      (progn (capi::beep-pane nil)
+      (progn (cr-beep)
              (error_wt 'last-freq_wt
 	               "THERE IS NO LIST OF FREQ FOR THE OBJECT ASSOCIATED TO FILE"
 		       (abs-file_wt wt))))))
@@ -785,7 +782,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
          fq
 #|
          (progn
-           (capi::beep-pane nil)
+           (cr-beep)
            
            (error_wt 'close-freq_wt 
 	             "THERE IS NO LIST OF FREQ FOR THE OBJECT ASSOCIATED TO FILE"
@@ -807,15 +804,15 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
   (pls-check-type 'WT wt 'set-field_wt)
   (if (is-field_wt wt fld)
     (lookup_tbl (contents wt) fld)
-    (progn (capi::beep-pane nil)
+    (progn (cr-beep)
 	   (print (format () "          WARNING: UNEXISTENT FIELD ~a~%" fld)))))
 
 (defun set-field_wt (wt fld val)
   (pls-check-type 'WT wt 'set-field_wt)
   (if (is-field_wt wt fld)
     (insert_tbl (contents wt) fld val)
-    (progn (capi::beep-pane nil)
-	   (print (format () "          WARNING: UNEXISTENT FIELD ~a~%" fld)))))
+    (progn (cr-beep)
+	   (print (format () "      nil    WARNING: UNEXISTENT FIELD ~a~%" fld)))))
 
 
 ; DUR: RETURN THE PERCEPTUAL DURATION (TIME GAP BETWEEN BEG-OFF AND END-OFF)
@@ -1109,7 +1106,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
     (> time (phys-dur_wt wt)))
 
 (defun error-eof_wt (fun val dur)
-   (capi::beep-pane nil)
+   (cr-beep)
    (error (format () "~a: THE TIME ~d IS BEYOND THE END OF THE FILE. PLEASE, KEEP IT BELOW ~d." fun val dur) ))
 
 ;-----------------------------------------------------------------------------
@@ -1123,7 +1120,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 
 ;-----------------------------------------------------------------------------
 (defun error-begof_wt (fun val dur)
-   (capi::beep-pane nil)
+   (cr-beep)
    (error (format () "~a: THE TIME ~d IS BEYOND THE BEGINNING OF THE FILE. PLEASE, KEEP IT ABOVE ~d." fun val dur) ))
 
 ; DEPRECATED
