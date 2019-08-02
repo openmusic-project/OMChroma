@@ -16,7 +16,7 @@
 ;;; The same function exist in OM
 ;;; here we have them in the CR package
 (defun lintodb (x)
-  (let ((y (if (= 0.0 x) 0.00000001 x)))
+  (let ((y (if (= 0.0 x) 0.0000000001 x)))
     (* (log y 10) 20)))
 
 (defun dbtolin (x)
@@ -27,7 +27,7 @@
 ; FUNCTIONS (in alphabetical order):
 ;	ran / ran-from / ran%
 ;	select
-; within-p
+;       within-p
 ;------------------------------------------------------------------
 ; MACROS (in alphabetical order):
 ;	cassq
@@ -64,7 +64,7 @@
 ;;; equivalent to (om::FLAT <list> 1)
 (defun flat (list)
   (apply 'append 
-         (mapcar '#(lambda (elt) (if (consp elt) elt (list elt)))
+         (mapcar #'(lambda (elt) (if (consp elt) elt (list elt)))
                  list)))
   
 (defun mat-trans (matrix)

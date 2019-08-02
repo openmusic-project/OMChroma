@@ -310,14 +310,20 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 ;
 (defun fade_wt (wt)
 	(pls-check-type 'WT wt 'fade_wt)
-	(lookup_tbl (contents wt) 'fade-env) )
+        (let ((fade (lookup_tbl (contents wt) 'fade-env)))
+          (ifn (cdr fade) (list (car fade) (car fade))
+              fade)))
 ;
 (defun set-fade_wt (wt val)
    (pls-check-type 'WT wt 'set-fade_wt)
-   (if (consp val)
-       (insert_tbl (contents wt) 'fade-env val)
-       (error "ILLEGAL VALUE. MUST BE A LIST OF TWO NUMBERS: ~a"
-	      val)) ) 
+   (cond
+    ((consp val)
+       (insert_tbl (contents wt) 'fade-env val))
+    ((numberp val)
+            (insert_tbl (contents wt) 'fade-env (list val)))
+   (t
+       (error "ILLEGAL VALUE. MUST BE A NUMBER OR LIST OF ONE OR TWO NUMBERS: ~a"
+	      val)) ))
 
 ; BEG-OFF: RETURN/SET THE OFFSET FROM THE BEGINNING OF THE SOUND FILE THAT
 ;    WILL BE CONSIDERED AS THE (REAL) BEGINNING
