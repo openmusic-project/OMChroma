@@ -328,8 +328,10 @@
 
 
 
-;;;;;========================================
-;by serge 07082001
+;========================================
+; by serge 07082001
+;========================================
+
 (defun mk-array (class numcols fixedargs  &rest argkeys) 
   (let* ((rep (make-instance class :numcols numcols))
          (initargs (get-all-initargs-of-class class))
@@ -352,12 +354,13 @@
     ;(put-precision rep precision)
     (set-data rep)
     rep))
+
 ;;;;;========================================
 
 
 
+(in-package :cr)
 
-(in-package chroma)
 
 (defmethod make-ctl2-list ((my-model om::cr-model) ctl-model target-class
                            &key (outfile "yaka-out") (args-yaka-user nil)
@@ -367,7 +370,7 @@
         resc-min resc-max gblamp-val )
     ; ? si outfile nil : stream pas vers fichier mais vers "load" ?
     (with-open-file  (outstream outfile :direction :output :if-exists :supersede)
-      (format  outstream "(in-package :chroma)(defun cr::ctl2-result() (list ~%")
+      (format outstream "(in-package :chroma)(defun cr::ctl2-result() (list ~%")
       (if by-time
         (setf resc-min (car (car (om::time-struct my-model))) resc-max (cadr (last-elem (om::time-struct my-model))))
         (setf resc-min 0 resc-max n-fql))

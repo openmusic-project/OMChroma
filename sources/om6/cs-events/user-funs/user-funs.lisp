@@ -1404,3 +1404,29 @@ fq[i] < fqmin	discard component
 ;                   [gbl-f0! gbl-N2!] set-N1! N2-ston!)
 ; sub tests: ([fq-sr? fqmin?  set-N1!] N2-ston)
 ;******************************************************************
+
+
+
+
+;***************************************************************;
+; FUNCTIONS FOR THE GLOBAL SLOTS (OPENMUSIC)
+(defun get-user-fun ()
+  "(om::gen-user-fun '(om::ed-0? om::ed-durmin? om::compute-dur!
+                    om::dur-durmin? om::ed+dur? om::amp? om::compute-amp!
+                    om::fq-sr? om::fqmin?) 
+                  '(om::sub-comps ) :sub-tests '(om::s-fq-sr?))"
+  )
+
+(defun get-user-fun1 (&key (tests ()) (subc '(om::sub-comps)) (subtests ()))
+  (let ((tests (loop for el in tests
+                     collect (format () "om::~a " el)))
+        (subc (loop for el in subc
+                     collect (format () "om::~a " el)))
+        (subtests (loop for el in subtests
+                        collect (format () "om::~a " el))))
+    (format () "(om::gen-user-fun '~a '~a :sub-tests '~a)"
+            tests subc subtests)))
+
+
+
+

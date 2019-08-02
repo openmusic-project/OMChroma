@@ -35,11 +35,10 @@
  #'(lambda (file)
      (compile&load (merge-pathnames file *load-pathname*)))
  
- '(
-   "sources/om6/chroma-init"
+ '("sources/om6/chroma-init"
    "sources/om6/chroma-fun"
    "sources/om6/cs-events/general-parsing"
-                        
+
    "sources/om6/cs-events/csound/cs-utils"
    "sources/om6/cs-events/csound/cs-tables"
    "sources/om6/cs-events/csound/csound-evt"
@@ -48,7 +47,7 @@
 
    "sources/om6/cs-events/user-funs/user-funs"
    "sources/om6/cs-events/user-funs/methods"
-   
+
    "sources/om6/cs-events/chromaspat"
 
    "sources/om6/chroma-reference"
@@ -59,8 +58,7 @@
    "sources/om6/cr-models/models"
    "sources/om6/cr-models/processing"
    "sources/om6/cr-models/controls"
-   "sources/om6/cr-models/gen-model-data"                      
-                        
+   "sources/om6/cr-models/gen-model-data"
    ))
 
 

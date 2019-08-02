@@ -39,16 +39,16 @@
 
 (defmethod load-file ((x specenv-data) &optional file)
 "Load spectral envelope data from an estimate file"
-  (if(null file)(setf file (choose-file-dialog)))
+  (if (null file) (setf file (choose-file-dialog)))
   (format t "LOADING DATA FROM ~a ~%" (file x))
   (with-open-file (in-stream file :direction :input)
-    (let ((result nil)(ti t)(li t))
+    (let ((result nil) (ti t) (li t))
       (loop while (not (null li))
             do (setf li (read-line in-stream nil)
                      ti (read-from-string (format nil "(~a)" li)))
             do (if ti (push ti result))
-            (when(and(listp ti)(get-gbl 'CTL2-PRINT)) (format t "~a~%" (first ti)) ))
-      (setf (data x) (nreverse  (cdr result))
+            (when (and (listp ti) (get-gbl 'CTL2-PRINT)) (format t "~a~%" (first ti))))
+      (setf (data x) (nreverse (cdr result))
       ))))
 
 

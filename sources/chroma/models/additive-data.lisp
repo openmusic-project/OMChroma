@@ -56,7 +56,7 @@
 
 
 (defun load-add-file (&optional file)
-  (if(null file)(setf file (choose-file-dialog)))
+  (if (null file) (setf file (choose-file-dialog)))
   (format t "LOADING DATA FROM ~a~%"  file)
   (let ((curr-list nil)(result '(x))(result2 nil)(truc nil))
     (with-open-file (in-stream file :direction :input)
@@ -76,7 +76,7 @@
 )
 
 (defun load-as-file (&optional file)
-  (if(null file)(setf file (choose-file-dialog)))
+  (if (null file) (setf file (choose-file-dialog)))
   (format t "LOADING DATA FROM Audiosculpt file ~a~%"  file)
   (with-open-file (in-stream file :direction :input)
     (let* ((data (read in-stream t))

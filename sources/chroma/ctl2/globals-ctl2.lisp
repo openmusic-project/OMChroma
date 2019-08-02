@@ -27,10 +27,12 @@
 (defvar ctl2-def-fun1 (make_fun '(0 0 1 1)))
 (defvar ctl2-def-fun2 (make_fun '(1 0 0 1)))
 (defvar ctl2-def-fun3 (make_fun '(0 0 1 .5 0 1)))
+
 #|
-(defconstant *ctl2-keywords* '((ADD .(ED DUR AMP FQ BAL CAENV CAMOD CFMOD CFPRT NOSC ED2 DUR2 AMP2 STON))
-                        (FM .(ED DUR AMP FQ BAL IEV IMIN IMAX STON CAENV CAMOD CFMOD CFPRT NFRM ED2 DUR2 AMP2 IEV2 IMIN2 IMAX2 STON2))
-                        (WT .(ED DUR AMP CWT FQWT BAL CAENV CAMOD CFMOD CFPRT NOSC ED2 DUR2 AMP2 STON))))
+(defconstant *ctl2-keywords* 
+  '((ADD .(ED DUR AMP FQ BAL CAENV CAMOD CFMOD CFPRT NOSC ED2 DUR2 AMP2 STON))
+    (FM .(ED DUR AMP FQ BAL IEV IMIN IMAX STON CAENV CAMOD CFMOD CFPRT NFRM ED2 DUR2 AMP2 IEV2 IMIN2 IMAX2 STON2))
+    (WT .(ED DUR AMP CWT FQWT BAL CAENV CAMOD CFMOD CFPRT NOSC ED2 DUR2 AMP2 STON))))
 |#
 
 (defvar *default-ctl-model* 

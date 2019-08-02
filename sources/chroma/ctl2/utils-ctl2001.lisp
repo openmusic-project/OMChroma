@@ -69,25 +69,6 @@ my-nev : ...
 
 
 ;***************************************************************;
-; FUNCTIONS FOR THE GLOBAL SLOTS (OPEN MUSIC)
-(defun get-user-fun ()
-  "(om::gen-user-fun '(om::ed-0? om::ed-durmin? om::compute-dur!
-                    om::dur-durmin? om::ed+dur? om::amp? om::compute-amp!
-                    om::fq-sr? om::fqmin?) 
-                  '(om::sub-comps ) :sub-tests '(om::s-fq-sr?))"
-  )
-
-(defun get-user-fun1 (&key (tests ()) (subc (sub-comps)) (subtests ()))
-  (let ((tests (loop for el in tests
-                     collect (format () "om::~a " el)))
-        (subc (loop for el in subc
-                     collect (format () "om::~a " el)))
-        (subtests (loop for el in subtests
-                        collect (format () "om::~a " el))))
-    (format () "(om::gen-user-fun '~a '~a :sub-tests '~a)"
-            tests subc subtests)))
-
-;***************************************************************;
 ; FUNCTIONS FOR THE LOCAL SLOTS
 (defun get-model-amp ()
   (declare (special my-fql my-ptl))
@@ -98,8 +79,8 @@ my-nev : ...
 (defun get-model-amp-db ()
   (declare (special my-fql my-ptl))
   (if my-ptl
-    (lintodB (get-amp my-ptl))
-   (lintodB (get-amp my-fql))))
+    (lintodb (get-amp my-ptl))
+   (lintodb (get-amp my-fql))))
 
 (defun get-model-norm-amp ()
   (declare (special my-model my-rank))
@@ -108,7 +89,8 @@ my-nev : ...
 
 (defun get-model-norm-gblamp ()
   (declare (special my-model my-rank))
-  (om::om* (get-norm-amp my-model my-rank) (get-gbl gblamp)))
+  (let ((amp (get-gbl 'GBLAMP)))
+    (mapcar #'(lambda (x) (* x amp)) (get-norm-amp my-model my-rank))))
 
 
 (defun get-model-reversed-amp ()
@@ -130,8 +112,10 @@ my-nev : ...
 ; BOTH THIS AND THE MODEL USED IN GET-MODEL-TRANSP_BPF WORK
 (defun get-model-amp_bpf (&key (reduction nil))
   (declare (special my-ptl))
-  (list 'fun->bpf `(quote ,(mapcar #'(lambda (x) (reduce2_fun x 3))
-                                   (amp_funs my-ptl)))  6)) ; precision = 6
+  (list 'fun->bpf `(quote ,(mapcar 
+                            #'(lambda (x) (reduce2_fun x 3))
+                            (amp_funs my-ptl)))
+        6)) ; precision = 6
 
 (defun get-model-transp_fun ()
   (declare (special my-ptl))
@@ -154,16 +138,16 @@ my-nev : ...
   (declare (special my-ptl my-dur my-nev))
   (if my-ptl  
     (list(duration my-ptl))
-      (list my-dur )))
+      (list my-dur)))
 
 
 (defun get-model-edels ()
   (declare (special my-ptl ))
-   (entry-delays my-ptl))
+   (e-dels my-ptl))
 
 (defun get-model-edel ()
   (declare (special my-ptl ))
-  (car (entry-delays my-ptl)))
+  (car (e-dels my-ptl)))
 
 (defun get-model-durs ()
   (declare (special my-ptl ))

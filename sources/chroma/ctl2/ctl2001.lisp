@@ -48,20 +48,19 @@ Write in the Intermediate-files folder by default."
   (cr::ctl2-result))
 
 
-(defmethod CTL2_compute ((self om::class-array)(my-model chroma-model) ctl-model my-rank outstream 
-args-yaka-user)
+(defmethod CTL2_compute ((self om::class-array) (my-model chroma-model) 
+                         ctl-model my-rank outstream 
+                         args-yaka-user)
   "ctl2 subroutine, process 1 ptl/fql"
-  (declare (special outstream my-model  my-rank))
-  (let*(
-        (my-time (get-nth-time my-model my-rank))
+  (declare (special outstream my-model my-rank))
+  (let*((my-time (get-nth-time my-model my-rank))
         (my-dur (get-nth-dur my-model my-rank))
         (n-fql (1- (nev my-model)))      ; n-fql - 1 , nmarkers - 2
         (my-fql (nth my-rank (fql-list my-model)))
         (my-ptl nil)
-        (my-nev (length (the-list my-fql)))
-        string1)
+        (my-nev (length (the-list my-fql))))
     (declare (special n-fql my-time my-dur my-nev my-fql my-ptl))
-    (when  my-fql         ;to allow empty fql in models
+    (when my-fql         ;to allow empty fql in models
       (when args-yaka-user (apply #'yaka-user args-yaka-user))
       (format outstream"(om::mk-array 'om::~a ~a ~%~%"
               (type-of self) my-nev ) 
@@ -75,19 +74,18 @@ args-yaka-user)
 )
 
 
-
-(defmethod CTL2_compute ((self om::class-array) (my-model model-partials) ctl-model my-rank outstream 
-args-yaka-user )
+(defmethod CTL2_compute ((self om::class-array) (my-model model-partials) 
+                         ctl-model my-rank outstream 
+                         args-yaka-user)
   "ctl2 subroutine, process 1 ptl/fql"
-  (declare (special outstream my-model  my-rank))
+  (declare (special outstream my-model my-rank))
   (let*((my-time (get-nth-time my-model my-rank))
         (my-dur (get-nth-dur my-model my-rank))
         (n-fql (1- (nev my-model)))      ; n-fql - 1 , nmarkers - 2
         (my-ptl (nth my-rank (ptl-list my-model)))
         (my-fql my-ptl)
-        (my-nev (length (the-list my-ptl)))
-        string1)
-    (declare (special  n-fql my-time my-dur my-nev my-fql my-ptl))
+        (my-nev (length (the-list my-ptl))))
+    (declare (special n-fql my-time my-dur my-nev my-fql my-ptl))
     (when my-ptl         ;to allow empty fql in models
  ;     (apply 'yaka-user args-yaka-user)
       (format outstream " (om::mk-array 'om::~a ~a ~% ~%"
@@ -210,7 +208,6 @@ except numrows and action-time (amptot, durtot, etc)"
 (defun ctl2N-function ()                 ; USER-DEFINED-FUNCTION
   (declare (special key outstream ex))
   (format outstream ":~a '~a ~%" key (eval(cdadr ex))))
-
 |#
 (defun ctl2G-function ()                 ; USER-DEFINED-FUNCTION
   (declare (special outstream ex))
