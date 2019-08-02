@@ -174,8 +174,8 @@
 		 (insert_tbl wtbl 'file 'dir (car dir)))
 	(let ((file (ifn dir file 
                        (merge-pathnames (car dir) file)
-                      ))
-                      )
+                      )))
+      
 	    (let* ((sndinfo (get-sndinfo file))
 		   (dur (cassq 'dur sndinfo)))
 		(insert_tbl wtbl 'sf 'sr (cassq 'SR sndinfo))

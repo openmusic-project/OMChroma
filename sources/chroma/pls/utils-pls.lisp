@@ -317,7 +317,7 @@ specified by the environment variable LLwt"
 
 
 ; new version, using libsndfile, 1801, ms
-(defun get-sndinfo (&rest file-in)
+(defun get-sndinfo (&optional file-in)
 ;(defun get-sndinfo (file-in)
   (let* ((l-results
          (multiple-value-bind (buffer format n-channels sample-rate sample-size size skip)
