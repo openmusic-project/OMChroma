@@ -140,7 +140,7 @@ Data format:
       (loop for i from min-ind-partial to max-ind-partial
             for partial-frames = (get-partial i datalist)
             do 
-            (when (print partial-frames) 
+            (when partial-frames 
               
               (let* ((partial-times (mapcar #'car partial-frames))
                      (partial-dur (- (apply #'max partial-times) (apply #'min partial-times)))
@@ -240,11 +240,7 @@ Data format:
   ;;; ... or sets a default time-struct
   (setf (time-struct self) (or (markers-to-segments (time-struct self)) 
                                (list (list 0.0 1.0)))) 
-  
-  (when (data self)
-    ;;; adjust time-struct to the actual data
-    (setf (time-struct self) (adjust-model-segments (time-struct self) (data self))))
-  
+
   ;;; generate the actual sequence from data + time-struct
    (om::data-stream-set-frames 
        self
@@ -259,15 +255,18 @@ Data format:
            (om::om-print "Warning some data was ignored because they were over the time structure" "cr-model"))
          
          (loop for seg in (time-struct self)
-               for i from 0
-               collect (let ((vps-frame (nth i (data self))))
-                         (om::item-set-time vps-frame (om::sec->ms (car seg)))  
-                         (setf (dur vps-frame) (- (cadr seg) (car seg)))
-                         vps-frame))
+               for vps-frame in (data self)
+               do (om::item-set-time vps-frame (om::sec->ms (car seg)))
+               do (setf (dur vps-frame) (- (cadr seg) (car seg)))
+               collect vps-frame)
          )
    
         ;;; (data self) is (in principle) a raw list of anamysis data
         ((data self)
+         
+         ;;; adjust time-struct to the actual data
+         ;;; (not sure we actually want to do this...)
+         (setf (time-struct self) (adjust-model-segments (time-struct self) (data self)))
          
          (loop for seg in (time-struct self)
                do (om::om-print (format nil "Segment : ~D -> ~D" (car seg) (cadr seg)))
