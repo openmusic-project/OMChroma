@@ -352,7 +352,7 @@
         (amps (loop for vps in (elements self) append (get-vps-amps vps))))
     (multiple-value-setq (freqs amps) (multiple-value-bind (f a) (sort-partials freqs amps)
                                         (remove-unisson f a)))
-(make-model-obj 'FQL :freq freqs :amp amps)))
+    (make-model-obj 'FQL :freq freqs :amp amps)))
 
 (defun remove-unisson (freqs amps)
   (let ((flist nil)
