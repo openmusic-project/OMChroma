@@ -7,3 +7,5 @@
 
 ;;; :chroma must not :use :om because it redefines the class CHORD
 ;;; (use-package :chroma :om)
+
+(import '(om::defmethod! om::defclass!) :cr)
