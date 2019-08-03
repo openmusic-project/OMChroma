@@ -22,6 +22,9 @@
   "sources/om7/cs-events/csound-sss"
   "sources/om7/cs-events/load-classes"
   "sources/om7/cs-events/compatibility"
+  
+  "sources/om7/cr-model/cr-model"
+
   "sources/om7/function-reference"
   )
 
