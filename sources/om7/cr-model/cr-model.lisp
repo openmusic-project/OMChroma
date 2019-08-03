@@ -60,47 +60,10 @@ It is used as element/data-frame for CR-MODELs.
 
 
 ;;;=======================
-;;; FOR THE EDITOR
-;;;=======================
-(defmethod om::y-range-for-object ((self cr-model)) '(8000 0))
-
-
-(defclass cr-model-editor (om::data-stream-editor) ())
-(defmethod om::object-has-editor ((self cr-model)) t)
-(defmethod om::get-editor-class ((self cr-model)) 'cr-model-editor)
-(defmethod om::editor-with-timeline ((self cr-model-editor)) nil)
-
-
-(defmethod om::data-frame-text-description ((self cr-vps))
-  (list "MODEL VPS"
-        (format nil "(~A elements)"(length (freqs self)))))
-
-
-(defmethod om::draw-data-frame ((frame cr-vps) editor i &optional (active t))
-  
-  (let* ((panel (om::active-panel editor))
-         (x1 (om::x-to-pix panel (om::date frame)))
-         (x2 (- (om::x-to-pix panel (+ (om::date frame) (om::sec->ms (dur frame)))) 2))
-         (max-amp (max-amp (om::object-value editor))))
-    
-    (oa::om-draw-line x1 0 x1 (om::h panel) :line 1 :style '(4 4) :color (oa::om-make-color 1. 0.3 0.3))
-    (oa::om-draw-line x2 0 x2 (om::h panel) :line 1 :style '(4 4) :color (oa::om-make-color 0.3 0.3 1.0))
-    
-    (if (zerop max-amp) (setf max-amp 1.0))
-    (loop for f in (freqs frame)
-          for a in (amps frame) do 
-          (let ((y (om::y-to-pix panel f))
-                (col (* (- 1 (/ a max-amp)) .5)))
-            (oa::om-draw-line x1 y x2 y :line 2 :color (oa::om-make-color col col col .5))
-            ))
-    ))
-
-
-;;;=======================
 ;;; GET MODEL DATA IN
 ;;;=======================
 
-(defmethod! model-data-from-sdif ((sdfiff t) sdiftype beg end)
+(defmethod! get-analysis-data ((sdfiff t) sdiftype beg end)
   :indoc '("an SDIF File object or pathname" "type of SDIF data" "begin time" "end time")
   :initvals '(nil "1TRC" nil nil)
   :menuins '((1 (("1TRC" "1TRC") ("1HRM" "1HRM") ("1MRK" "1MRK") ("1FOB" "1FOB") ("1REB" "1REB") ("1FQ0" "1FQ0"))))
@@ -212,7 +175,8 @@ Data format:
 ;;; GET/ADJUST TIME STRUCTURE
 ;;;===================================
 
-(defmethod! model-time-from-sdif ((sdiff t) sdiftype)
+;;; this is not super useful: om::getSDIFtimes direct would be easier...
+(defmethod! get-time-data ((sdiff t) sdiftype)
   
   :indoc '("an SDIF File object or pathname" "type of SDIF data")
   :initvals '(nil "1TRC")
@@ -325,9 +289,8 @@ Data format:
 
    (setf (max-amp self)
          (loop for frame in (om::data-stream-get-frames self) maximize
-               (apply #'max (amps frame))))
-   (print (list "AMPLITUDE:" (max-amp self)))
-  
+               (or (om::list-max (amps frame)) 0.0)))
+   
   (call-next-method))
  
 
@@ -360,6 +323,46 @@ Data format:
 
 
 
+;;;==================
+;;; MODEL INSPECT
+;;;==================
+
+;;; MAX AMP
+(defmethod! model-max-amp ((self list))
+  :icon 659
+  (om::list-max (mapcar #'om::list-max (remove nil (mapcar #'amps (remove nil self))))))
+
+(defmethod! model-max-amp ((self cr-model))
+  (model-max-amp (om::data-stream-get-frames self)))
+
+;;; MAX FREQ
+(defmethod! model-max-freq ((self list))
+  :icon 659
+  (om::list-max (mapcar #'om::list-max (remove nil (mapcar #'freqs (remove nil self))))))
+
+(defmethod! model-max-freq ((self cr-model))
+  (model-max-freq (om::data-stream-get-frames self)))
+
+;;; MIN FREQ
+(defmethod! model-min-freq ((self list))
+  :icon 659
+  (om::list-min (mapcar #'list-min (remove nil (mapcar #'freqs (remove nil self))))))
+
+(defmethod! model-min-freq ((self cr-model))
+  :icon 659
+  (model-min-freq (om::data-stream-get-frames self)))
+
+;;; NB EVTS
+(defmethod! model-nb-evts ((self cr-model))
+  :icon 659
+  (length (om::data-stream-get-frames self)))
+
+;;; NB EVTS
+(defmethod! model-total-dur ((self cr-model))
+  :icon 659
+  (cadr (car (last (time-struct self)))))
+
+
 ;;;====================================
 ;;; SDIF EXPORT OF A CR-MODEL
 ;;;====================================
@@ -382,7 +385,7 @@ Data format:
                   
               (let ((datalist (loop for time in (time-struct self)
                                     for frame in (om::data-stream-get-frames self)
-                                    when (vps frame) 
+                                    when (freqs frame) 
                                     collect (list time (loop for f in (freqs frame)
                                                              for i from 0
                                                              collect (list i f (or (nth i (amps frame)) 1.0) 0))))))

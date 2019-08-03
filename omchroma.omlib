@@ -24,6 +24,8 @@
   "sources/om7/cs-events/compatibility"
   
   "sources/om7/cr-model/cr-model"
+  "sources/om7/cr-model/cr-model-editor"
+  ;"sources/om7/cr-model/cr-control"
 
   "sources/om7/function-reference"
   )
@@ -41,7 +43,14 @@
       (:functions) 
       (:classes "cr::text-cs-table" "cr::gen-cs-table" "cr::gen01" "cr::gen-01" "cr::gen02" "cr::gen-02" "cr::gen05" "cr::gen-05" "cr::gen07" "cr::gen-07")
       ))
-    )))
+    )
+    (:package 
+      (:name "cr-models")
+      (:functions "cr::get-analysis-data" "cr::model-data" "cr::model-total-dur" "cr::model-nb-evts"
+                  "cr::model-min-freq" "cr::model-max-freq" "cr::model-max-amp") 
+      (:classes "cr::cr-model")
+    )
+    ))
 )
 
 
