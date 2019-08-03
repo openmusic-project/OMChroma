@@ -68,10 +68,10 @@
   (get_add_fun data numero 3))
 
 (defun moyenne (fun)
-  (/(apply #'+ fun)(length fun)))
+  (/(apply #'+ fun) (length fun)))
 
 (defun moyenne_ponderee (freq amp)
-  (/(apply #'+ (mapcar #'* freq amp))(apply #'+ amp)))
+  (/ (apply #'+ (mapcar #'* freq amp)) (apply #'+ amp)))
 
 (defun seuillage_add (list seuil)
   (remove-if #'(lambda (y) (< y (dbtolin seuil))) list :key #'car))
