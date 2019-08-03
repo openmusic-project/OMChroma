@@ -73,13 +73,13 @@ SIMPLE VERSION: uses only <npart>, <ston> and <fq>.
 ;;; *
 (defun fq-lin-dev (c npart ston fq)
   (loop for i from 1 to npart
-        collect (om::comp-field (clone c) "freq" (lin-fq fq ston)) into c-list
+        collect (om::comp-field (om::clone c) "freq" (lin-fq fq ston)) into c-list
         finally (return (append c-list		; add 2 empty lines at the end
                                (list (format () "~%"))))))
 ;;; *
 (defun fq-log-dev (c npart ston fq)
   (loop for i from 1 to npart
-        collect (om::comp-field (clone c) "freq" (log-fq fq ston)) into c-list
+        collect (om::comp-field (om::clone c) "freq" (log-fq fq ston)) into c-list
         finally (return (append c-list		; add 2 empty lines at the end
                                (list (format () "~%"))))))
 
@@ -116,6 +116,7 @@ The following subtests are however recommended: s-fq-sr?, s-fq-min?
 
 
 (defun get-subcomps+ (c)
+  
   (declare (special cr::durmin))  
   (when (> (om::comp-field c "npart") 0.0) ; go on only if it is needed!
 
