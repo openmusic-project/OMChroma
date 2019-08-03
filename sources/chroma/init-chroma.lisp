@@ -48,8 +48,7 @@
 
 (defun sound-file-get-info (filename)
   #+libsndfile
-  (sf::sndfile-get-info (namestring filename))
+  (audio-io::om-get-sound-info (namestring filename))
   #-libsndfile
-  (error "Sorry I can not read sound info...")
-  )
+  (error "Sorry I can not read sound info..."))
 
