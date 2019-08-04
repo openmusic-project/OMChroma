@@ -28,24 +28,41 @@
 ;;; J. Bresson 2019
 ;;;============================
 
-
 ;;; A wrapper-class around Chroma's VPS system
-(defclass! cr-vps (om::data-frame)
-  (
-;(vps :accessor vps :initarg :vps :initform nil :documentation "a object of any type of cr::VPS")
-   (freqs :accessor freqs :initarg :freqs :initform nil :documentation "a list of frequencies")
-   (amps :accessor amps :initarg :amps :initform nil :documentation "a list of amplitudes")
-   (dur :accessor dur :initarg :dur :initform 1000 :documentation "duration (ms)"))
+(defclass! cr-partials ()
+  ((freqs :accessor freqs :initarg :freqs :initform nil :documentation "a list of frequencies")
+   (amps :accessor amps :initarg :amps :initform nil :documentation "a list of amplitudes"))
   (:documentation "A container for frequency/amplitude values coming from sound analysis.
 
 It is used as element/data-frame for CR-MODELs.
 "))
+
+(defmethod cr-partials-freqs ((self t)) nil)
+(defmethod cr-partials-amps ((self t)) nil)
+
+(defmethod cr-partials-freqs ((self cr-partials)) (freqs self))
+(defmethod cr-partials-amps ((self cr-partials)) (amps self))
+
+
+;;; A wrapper-class around Chroma's VPS system
+(defclass! cr-frame (om::data-frame)
+  ((vps :accessor vps :initarg :vps :initform nil :documentation "a object of any type of cr::VPS")
+   (dur :accessor dur :initarg :dur :initform 1000 :documentation "duration (ms)"))
+  (:documentation "A container for frequency/amplitude values coming from sound analysis.
+It is used as element/data-frame for CR-MODELs.
+"))
+
+;;; specialize type with eql-specializers
+(defmethod make-cr-frame-contents ((type t) freqs amps)
+  (declare (ignore type))
+  (make-instance 'cr-partials :freqs freqs :amps amps))
 
 
 
 (defclass! cr-model (om::data-stream)
   ((data :accessor data :initarg :data :initform nil :documentation "model data: raw analysis data, or a list of CR-VPS instances")
    (time-struct :accessor time-struct :initarg :time-struct :initform nil :documentation "a list of time-markers or pairs of markers (begin/end)")
+   (data-type :accessor data-type :initform 'cr-partials)
    (max-amp :accessor max-amp :initform 1.0) ;;; just useful for normalization 
    )
   (:default-initargs :default-frame-type 'cr-vps)
@@ -53,10 +70,13 @@ It is used as element/data-frame for CR-MODELs.
   (:icon 654))
 
 ;;; once the model is initialized we don't need the data... 
-;; (defmethod om::excluded-slots-from-copy ((self cr-model)) 'data)
+(defmethod om::excluded-slots-from-copy ((self cr-model)) (append (call-next-method) '(data)))
 
+(defmethod om::additional-class-attributes ((self cr-model)) '(data-type))
 (defmethod om::get-obj-dur ((self cr-model)) 
-  (om::sec->ms (cadr (car (last (time-struct self))))))
+  (if (time-struct self)
+      (om::sec->ms (cadr (car (last (time-struct self)))))
+    1000))
 
 
 ;;;=======================
@@ -128,7 +148,7 @@ Data format:
 
 
 ;;; datalist = ((T1 (ind freq amp phi) ...) ... (Tn (ind freq amp phi) ...))
-(defmethod make-cr-frame-from-data (datalist &key (sort t) (weighed-avg t) (durmin 0.0))
+(defmethod make-frame-contents-from-data (datalist &key type (sort t) (weighed-avg t) (durmin 0.0))
   
   (let* ((partial_nums (mapcar #'car (om::flat (mapcar #'cadr datalist) 1)))
          (min-ind-partial (om::list-min partial_nums))
@@ -168,9 +188,9 @@ Data format:
       (multiple-value-setq (freqs amps)
           (values-list (om::mat-trans (sort (om::mat-trans (list freqs amps)) #'< :key #'car)))))
     
-    (make-instance 'cr-vps :freqs freqs :amps amps)))
+    (make-cr-frame-contents type freqs amps)))
    
-
+  
 ;;;===================================
 ;;; GET/ADJUST TIME STRUCTURE
 ;;;===================================
@@ -236,6 +256,7 @@ Data format:
 
 (defmethod om::om-init-instance ((self cr-model) &optional initargs)
   
+  (when initargs
   ;;; format list to list of segments (if needed)
   ;;; ... or sets a default time-struct
   (setf (time-struct self) (or (markers-to-segments (time-struct self)) 
@@ -247,18 +268,19 @@ Data format:
        
        (cond 
         
-        ;;; (data self) is already a list of cr-vps
+        ;;; (data self) is already a list of cr-frame-partials (or other type)
         ((and (consp (data self))
-              (om::list-subtypep (data self) 'cr-vps)) 
+              (om::list-subtypep (remove nil (data self)) (data-type self))) 
          
          (when (> (length (data self)) (length (time-struct self)))
            (om::om-print "Warning some data was ignored because they were over the time structure" "cr-model"))
          
          (loop for seg in (time-struct self)
-               for vps-frame in (data self)
-               do (om::item-set-time vps-frame (om::sec->ms (car seg)))
-               do (setf (dur vps-frame) (- (cadr seg) (car seg)))
-               collect vps-frame)
+               for cr-partials in (data self)
+               collect (make-instance 'cr-frame 
+                                      :date (om::sec->ms (car seg))
+                                      :dur (- (cadr seg) (car seg))
+                                      :vps cr-partials))
          )
    
         ;;; (data self) is (in principle) a raw list of anamysis data
@@ -272,24 +294,26 @@ Data format:
                do (om::om-print (format nil "Segment : ~D -> ~D" (car seg) (cadr seg)))
                collect (let* ((frame-data (remove-if #'(lambda (element) (or (< (car element) (car seg))
                                                                             (> (car element) (cadr seg))))
-                                                    (data self)))
-                              (vps-frame (make-cr-frame-from-data frame-data :durmin 0.1)))
-                         
-                         (om::item-set-time vps-frame (om::sec->ms (car seg)))
-                         (setf (dur vps-frame) (- (cadr seg) (car seg)))
-                         vps-frame))
+                                                    (data self))))
+                         (make-instance 'cr-frame 
+                                        :date (om::sec->ms (car seg))
+                                        :dur (- (cadr seg) (car seg))
+                                        :vps (make-frame-contents-from-data frame-data :type (data-type self) :durmin 0.1))
+                         ))
          )
          
         (t ;;; no data :(
            (loop for seg in (time-struct self) collect 
-                 (make-instance 'cr-vps :date (car seg) :dur (- (cadr seg) (car seg))))
+                 (make-instance 'cr-frame :date (car seg) :dur (- (cadr seg) (car seg))
+                                :vps nil))
            )
         ))
+   )
 
    (setf (max-amp self)
          (loop for frame in (om::data-stream-get-frames self) maximize
-               (or (om::list-max (amps frame)) 0.0)))
-   
+               (or (om::list-max (cr-partials-amps (vps frame))) 0.0)))
+
   (call-next-method))
  
 
@@ -318,7 +342,9 @@ Data format:
 (defmethod! model-data ((self cr-model) &optional modif-func args)
   :icon 654
   (when (data self) 
-    (model-data (om::data-stream-get-frames self) modif-func args)))
+    (model-data 
+     (mapcar #'vps (om::data-stream-get-frames self))
+     modif-func args)))
 
 
 
@@ -329,27 +355,27 @@ Data format:
 ;;; MAX AMP
 (defmethod! model-max-amp ((self list))
   :icon 659
-  (om::list-max (mapcar #'om::list-max (remove nil (mapcar #'amps (remove nil self))))))
+  (om::list-max (mapcar #'om::list-max (remove nil (mapcar #'cr-partials-amps (remove nil self))))))
 
 (defmethod! model-max-amp ((self cr-model))
-  (model-max-amp (om::data-stream-get-frames self)))
+  (model-max-amp (mapcar #'vps (om::data-stream-get-frames self))))
 
 ;;; MAX FREQ
 (defmethod! model-max-freq ((self list))
   :icon 659
-  (om::list-max (mapcar #'om::list-max (remove nil (mapcar #'freqs (remove nil self))))))
+  (om::list-max (mapcar #'om::list-max (remove nil (mapcar #'cr-partials-freqs (remove nil self))))))
 
 (defmethod! model-max-freq ((self cr-model))
-  (model-max-freq (om::data-stream-get-frames self)))
+  (model-max-freq (mapcar #'vps (om::data-stream-get-frames self))))
 
 ;;; MIN FREQ
 (defmethod! model-min-freq ((self list))
   :icon 659
-  (om::list-min (mapcar #'list-min (remove nil (mapcar #'freqs (remove nil self))))))
+  (om::list-min (mapcar #'list-min (remove nil (mapcar #'cr-partials-freqs (remove nil self))))))
 
 (defmethod! model-min-freq ((self cr-model))
   :icon 659
-  (model-min-freq (om::data-stream-get-frames self)))
+  (model-min-freq (mapcar #'vps (om::data-stream-get-frames self))))
 
 ;;; NB EVTS
 (defmethod! model-nb-evts ((self cr-model))
@@ -384,11 +410,13 @@ Data format:
                   
               (let ((datalist (loop for time in (time-struct self)
                                     for frame in (om::data-stream-get-frames self)
-                                    when (freqs frame) 
-                                    collect (list time (loop for f in (freqs frame)
-                                                             for i from 0
-                                                             collect (list i f (or (nth i (amps frame)) 1.0) 0))))))
-                
+                                    when (and frame (vps frame)) 
+                                    collect (let ((vps (vps frame)))
+                                              (list time (loop for f in (cr-partials-freqs vps)
+                                                               for i from 0
+                                                               collect (list i f (or (nth i (cr-frame-amps vps)) 1.0) 0))))
+                                    )))
+                    
                 (loop for frame in (om::make-1MRK-frames datalist) do
                       (om::sdif-write frame sdiffileptr))
                 ))
@@ -397,6 +425,6 @@ Data format:
       (om::om-beep-msg "Could not open file for writing: ~A" path))
     path))
 
-    
+
 
 

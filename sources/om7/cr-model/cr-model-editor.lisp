@@ -21,14 +21,16 @@
 ;Authors: C. Agon, M. Stroppa, J. Bresson, S. Lemouton
 
 
-(in-package :cr)
-
 
 ;;;=======================
 ;;; CR-MODEL EDITOR
 ;;;=======================
-(defmethod om::y-range-for-object ((self cr-model)) '(8000 0))
+; J. Bresson, 2019
 
+
+(in-package :cr)
+
+(defmethod om::y-range-for-object ((self cr-model)) '(8000 0))
 
 (defclass cr-model-editor (om::data-stream-editor) ())
 (defmethod om::object-has-editor ((self cr-model)) t)
@@ -36,12 +38,12 @@
 (defmethod om::editor-with-timeline ((self cr-model-editor)) nil)
 
 
-(defmethod om::data-frame-text-description ((self cr-vps))
+(defmethod om::data-frame-text-description ((self cr-frame))
   (list "MODEL VPS"
-        (format nil "(~A elements)"(length (freqs self)))))
+        (format nil "(~A elements)"(length (cr-partials-freqs (vps self))))))
 
 
-(defmethod om::draw-data-frame ((frame cr-vps) editor i &optional (active t))
+(defmethod om::draw-data-frame ((frame cr-frame) editor i &optional (active t))
   
   (let* ((panel (om::active-panel editor))
          (x1 (om::x-to-pix panel (om::date frame)))
@@ -52,10 +54,13 @@
     (oa::om-draw-line x2 0 x2 (om::h panel) :line 1 :style '(4 4) :color (oa::om-make-color 0.3 0.3 1.0))
     
     (if (zerop max-amp) (setf max-amp 1.0))
-    (loop for f in (freqs frame)
-          for a in (amps frame) do 
-          (let ((y (om::y-to-pix panel f))
-                (col (* (- 1 (/ a max-amp)) .5)))
-            (oa::om-draw-line x1 y x2 y :line 2 :color (oa::om-make-color col col col .5))
-            ))
-    ))
+    (when (vps frame)
+      (loop for f in (cr-partials-freqs (vps frame))
+            for a in (cr-partials-freqs (vps frame)) do 
+            (let ((y (om::y-to-pix panel f))
+                  (col (* (- 1 (/ a max-amp)) .5)))
+              (oa::om-draw-line x1 y x2 y :line 2 :color (oa::om-make-color col col col .5))
+              ))
+      )))
+
+
