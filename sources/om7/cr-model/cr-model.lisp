@@ -270,7 +270,10 @@ Data format:
         
         ;;; (data self) is already a list of cr-frame-partials (or other type)
         ((and (consp (data self))
-              (om::list-subtypep (remove nil (data self)) (data-type self))) 
+              (or (om::list-subtypep (remove nil (data self)) (data-type self))
+                  (om::list-subtypep (remove nil (data self)) 'cr::vps))) ;;; the default type
+         
+         (setf (data-type self) (type-of (car (data self))))
          
          (when (> (length (data self)) (length (time-struct self)))
            (om::om-print "Warning some data was ignored because they were over the time structure" "cr-model"))
@@ -341,10 +344,9 @@ Data format:
 
 (defmethod! model-data ((self cr-model) &optional modif-func args)
   :icon 654
-  (when (data self) 
-    (model-data 
-     (mapcar #'vps (om::data-stream-get-frames self))
-     modif-func args)))
+  (model-data 
+   (mapcar #'vps (om::data-stream-get-frames self))
+   modif-func args))
 
 
 
