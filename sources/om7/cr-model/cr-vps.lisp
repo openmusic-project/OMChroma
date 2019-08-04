@@ -118,6 +118,32 @@
   (cr::spsht_vps f0 np sh st ran))
 
 
+(defmethod! add-random ((self list) rate)
+  :icon 656
+  :indoc '("a list of values" "a random rate (0.0->1.0)")
+  :initvals '(nil 0.1)
+  (mapcar (lambda (x) (cr::ran x (* x rate))) self))
+
+
+
+;;;==================
+;;; UTILS CR-FUN (FOR TIME PROCESSING)
+;;;==================
+(defmethod! make-cr-fun ((self list))
+  :icon 657
+  :initvals '((0 0 1 1))
+  (cr::make_fun self))
+
+(defmethod! make-cr-fun ((self om::bpf))
+  :icon 657
+  (let ((list (loop for x in (om::x-points self)
+                    for y in (om::y-points self)
+                    append (list y x))))
+    (cr::make_fun list)))
+
+
+
+
 ;;;=========================================
 ;;; SELECTORS WITH POSSIBLE VPS CONVERSION
 ;;;=========================================
@@ -137,11 +163,6 @@ Pars: Approximation [cents], or Reference [pitch, octave or Hz], Approximation [
 ;(spl-vps arpl 4)
 ;(spl-vps aspl1 50)
 
-
-
-;;;=================
-;;; OTHER SELECTORS
-;;;=================
 
 (defmethod! get-vps-nn (vps)
   :indoc '("Any VPS")
@@ -496,7 +517,7 @@ NB: RPL, CIL and CRL must be previously converted.
 (defmethod! vps-transpose (l ratio) l)
  
 
-(defmethod! revert-vps ((self cr::vps))
+(defmethod! vps-revert ((self cr::vps))
   :icon 656
   :indoc '("symbolic pitch list")
   :initvals '(nil)
@@ -504,7 +525,7 @@ NB: RPL, CIL and CRL must be previously converted.
 
 ;ms_1109
 ; Unrecognized data, do nothing and pass it over
-(defmethod! revert-vps (l) l)
+(defmethod! vps-revert (l) l)
   
 
 (defmethod! vps-mirror ((self cr::vps))

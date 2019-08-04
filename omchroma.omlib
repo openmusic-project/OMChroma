@@ -53,6 +53,12 @@
       (:functions "cr::get-analysis-data" "cr::model-data" "cr::model-total-dur" "cr::model-nb-evts"
                   "cr::model-min-freq" "cr::model-max-freq" "cr::model-max-amp") 
       (:classes "cr::cr-model")
+     (:packages 
+     (:package 
+      (:name "vps")
+      (:functions "cr::vps-high-pass" "cr::vps-low-pass" "cr::vps-band-pass" "cr::vps-main-partials" "cr::vps-n-main-partials" 
+                "cr::vps-stretch" "cr::vps-transpose" "cr::vps-revert" "cr::vps-mirror")
+      ))
     )
     ))
 )
