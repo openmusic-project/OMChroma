@@ -13,6 +13,9 @@
  ;;; SOURCE FILES TO LOAD
  (:source-files
   "sources/package"
+  
+  "sources/chroma/load"
+
   "sources/om7/cs-events/csound-parser"
   "sources/om7/cs-events/csound-array"
   "sources/om7/cs-events/csound-tables"
@@ -25,6 +28,7 @@
   
   "sources/om7/cr-model/cr-model"
   "sources/om7/cr-model/cr-model-editor"
+  "sources/om7/cr-model/cr-vps"
   ;"sources/om7/cr-model/cr-control"
 
   "sources/om7/function-reference"
