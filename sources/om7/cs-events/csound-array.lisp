@@ -138,7 +138,7 @@
          (size (om::find-value-in-arg-list (cdr data) :size))
          (dec (om::find-value-in-arg-list (cdr data) :decimals)))
          
-    (make-instance (car data) 
+    (make-instance gentype 
                    :x-points (car split-xy)
                    :y-points (cadr split-xy)
                    :size size

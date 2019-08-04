@@ -63,7 +63,7 @@
 
 ;; T if <line> is to be ignored
 (defun orc-ignored-line (line)
-  (let ((substring (om::delete-spaces line)) rep)
+  (let ((substring (om::delete-spaces line)))
     (if (and substring (> (length substring) 0))
         (let* ((index (position-if #'delimator-char-p substring))
                (name (subseq substring 0 index)))

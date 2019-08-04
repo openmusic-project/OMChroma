@@ -84,7 +84,6 @@
                                 (om::get-lib-reference-pages-folder lib)
                                 :title (format nil "OMChroma ~A" (om::version lib))  
                                 :general-doc *chroma-general-doc* 
-                                ;:slots-doc-base *chroma-slots-doc* 
                                 :appendix *chroma-appendix*
                                 :logofile (probe-file (merge-pathnames (make-pathname :name "logo" :type "png")
                                                                        (om::lib-resources-folder lib)))
@@ -97,7 +96,7 @@
 ;;; HTML pages generation
 ;;;=========================
 
-(defun gen-chroma-reference-pages (ref-entries classes-entries dir &key title general-doc slots-doc-base appendix logofile)
+(defun gen-chroma-reference-pages (ref-entries classes-entries dir &key title general-doc appendix logofile)
     
   (when (probe-file dir) (om::om-delete-directory dir))
   (om::om-create-directory dir)
@@ -285,12 +284,10 @@
       (write-line "</td></tr>" index)
       (write-line "</table>" index)
       (write-line "</body></html>" index))
-  
-    
-    (setf *chroma-slots-list* nil)
+ 
       
     ;;; ENTRIES AND CLASSES PAGES
-    (mapcar #'(lambda (symb) (make-chroma-ref-page symb dir title slots-doc-base appendix)) allclasses)
+    (mapcar #'(lambda (symb) (make-chroma-ref-page symb dir title appendix)) allclasses)
     (mapcar #'(lambda (symb) (om::make-ref-page symb dir title)) allsymbols)
 
     ;;; OTHER PAGES...
@@ -303,7 +300,7 @@
 
 
 ;;; GENERATES A PAGE FOR A CHROMA CLASS..
-(defun make-chroma-ref-page (symbol dir &optional title slots-doc-base appendix)
+(defun make-chroma-ref-page (symbol dir &optional title appendix)
   (let* ((title (or title "Class Reference"))
          (pagepath (om::make-pathname :directory (pathname-directory dir)
                                       :name (om::special-path-check
