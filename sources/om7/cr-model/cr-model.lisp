@@ -390,6 +390,25 @@ Data format:
   (cadr (car (last (time-struct self)))))
 
 
+;---------------------------------------------------------
+; other inspection methods used in chroma CTL2
+
+(defmethod get-norm-amp ((self cr-model) rang &optional (scaling-factor 1))
+  (let ((thefql (nth rang (elements (data self)))))
+    (if thefql
+      (mapcar #'(lambda (y) (/ y (/ (model-max-amp self) scaling-factor ))) (get-vps-amps thefql))
+      nil)))
+
+(defmethod begin-time ((self cr-model))
+  (car (car (time-struct self))))
+
+(defmethod get-nth-time ((self cr-model) i)
+  (car (nth i (time-struct self))))
+
+(defmethod get-nth-data-frame ((self cr-model) i)
+  (vps (nth i (om::data-stream-get-frames self))))
+
+
 ;;;====================================
 ;;; SDIF EXPORT OF A CR-MODEL
 ;;;====================================

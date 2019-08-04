@@ -29,7 +29,7 @@
   "sources/om7/cr-model/cr-model"
   "sources/om7/cr-model/cr-model-editor"
   "sources/om7/cr-model/cr-vps"
-  ;"sources/om7/cr-model/cr-control"
+  "sources/om7/cr-model/cr-control"
 
   "sources/om7/function-reference"
   )
@@ -51,8 +51,8 @@
     (:package 
       (:name "cr-models")
       (:functions "cr::get-analysis-data" "cr::model-data" "cr::model-total-dur" "cr::model-nb-evts"
-                  "cr::model-min-freq" "cr::model-max-freq" "cr::model-max-amp") 
-      (:classes "cr::cr-model")
+                  "cr::model-min-freq" "cr::model-max-freq" "cr::model-max-amp" "cr::expand-model" "cr::out-slot") 
+      (:classes "cr::cr-model" "cr::model-ctl")
      (:packages 
      (:package 
       (:name "vps")
