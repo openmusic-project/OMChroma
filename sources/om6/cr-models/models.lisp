@@ -273,6 +273,15 @@
 ;;;====================
 ;;; SPECIALIZED METHODS
 
+;ms_1112, English correct!
+(defun sort-partials (freqs amps &optional more)
+  (if more 
+    (let* ((f2 (copy-list freqs)))
+      (multiple-value-setq (freqs amps) (cr::sort-vps-contents freqs amps))
+        (values freqs amps (cadr (multiple-value-list (cr::sort-vps-contents f2 more)))))
+    (cr::sort-vps-contents freqs amps)))
+
+
 (defmethod get-model-data ((datatype (eql '1TRC)) modeltype datalist &key (sort t) (weighed-avg t) (durmin 0.0))
   ;;; datalist = ((T1 (ind freq amp phi) ...) ... (Tn (ind freq amp phi) ...))
   (let (freq_moyenne 
