@@ -34,6 +34,7 @@
 ;	ifn
 ;	nextl
 ;	newl
+;       list-min
 ;------------------------------------------------------------------
 ; METHODS! (in alphabetical order):
 ;	find-chroma-file
@@ -73,6 +74,21 @@
           (mapcar #'(lambda (list) (nth i list)) matrix))))
 
 
+
+;;; equivalent to (om::list-min <list>)
+(defun list-min (l)
+  (if (listp l)
+      (let ((minval (car l)))
+        (loop for num in (cdr l) do
+              (when (< num minval)
+                (setf minval num)))
+        minval)
+    l))
+
+;(list-min '(11 2 3 4.0 5))
+;(list-min '(5 4 3 1 10))
+;(list-min '(4))
+;(list-min 3)
 ;------------------------------------------------------------------c
 
 ;------------------------------------------------------------------

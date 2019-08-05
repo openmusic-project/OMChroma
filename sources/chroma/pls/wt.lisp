@@ -263,7 +263,7 @@ wt)
 (defun set-freq_wt (wt val &optional (mode))
    "
 Set the FREQ and SI field of a WT object.
-New version (omChroma): automatic test for FREQ or SI.
+New version (omChroma): automatic test for FREQ or SI only when there is only one value.
 
 wt: WT object
 val: frequency OR sampling increment
@@ -281,10 +281,11 @@ Corrected insidious BUG with test of third argument!
     ((and mode (string-equal (string mode) "freq"))
      (insert_tbl (contents wt) 'freq 'mode 'freq) )
     (mode
-     (error "WHAT A BIZZARE VALUE, SIR ~a: ~a. I REGRET I CAN ONLY ACCEPT 'si OR 'freq.
-NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
-    ((<= val (get-gbl 'MAXSI))
-     (insert_tbl (contents wt) 'freq 'mode 'si) )
+     (error "WHAT A BIZZARE VALUE, SIR ~a: ~a. I REGRET I CAN ONLY ACCEPT 'si OR 'freq. NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
+    ((numberp val)
+     (if (<= val (get-gbl 'MAXSI))
+         (insert_tbl (contents wt) 'freq 'mode 'si)
+       (insert_tbl (contents wt) 'freq 'mode 'freq)))
     (t
      (insert_tbl (contents wt) 'freq 'mode 'freq)) ))
 
@@ -547,6 +548,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 ;		 (/ min-size si))
 		((> real-size (dur_wt wt))
 		 (let ((new-size (dur_wt wt)))
+                   (when (get-gbl 'PRNFLG) (print (format () "set-win-size_wt: WIN-SIZE ~d > DURATION ~d~%" real-size new-size))) 
 		     (insert_tbl (contents wt) 'win 'size new-size)
 		     wt))
 ;		     (/ new-size si)))
@@ -554,13 +556,12 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 		 (let ((new-from (- end real-size)))
 		    (insert_tbl (contents wt) 'win 'size real-size)
 		    (cr-beep)
-		    (print (format () "SET-WIN-SIZE_WT: WARNING ... WINDOW FROM MODIFIED~%     OLD FROM = ~a, NEW FROM = ~a~%" (win-phys-from_wt wt si) (/ new-from si)))
+		    (print (format () "SET-WIN-SIZE_WT: WARNING ... WINDOW FROM MODIFIED~%     OLD PHYS-FROM = ~a, NEW PHYS-FROM = ~a~%" (win-phys-from_wt wt si) (/ new-from si)))
 		    (set-win-phys-from_wt wt new-from)
 		    wt))
 		(t
 		 (insert_tbl (contents wt) 'win 'size real-size)
 		 wt)))))
-
 
 ;
 (defun win-min-size_wt (wt &rest si)
@@ -592,9 +593,12 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 	      (real-to (* to si)))
 	    (cond
 		((< (- real-to real-from) min-win)
-		 (cr-beep)
-                 (error (format nium "set-phys-win_wt: TOO SMALL WINDOW. CURRENT MINIMUM SIZE IS ~A"
-                                (/ min-win si))))
+		 (when (get-gbl 'PRNFLG)
+                   (cr-beep)
+                   (print (format () "set-phys-win_wt: TOO SMALL WINDOW. ~a. CURRENT MINIMUM SIZE IS ~a"
+                                (- real-to real-from) (/ min-win si))))
+                 (set-win-size_wt wt min-win)
+                 (set-win-phys-from_wt wt from si))
 		((beyond-begof_wt wt real-from)
 		 (terpri)
 		 (print "WRONG FROM")
@@ -652,23 +656,25 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 	    (cond
 		((beyond-eof_wt wt (+ real-from real-min-win))
 		 (let ((new-from (- (end-off_wt wt) real-min-win)))
-		     (insert_tbl (contents wt) 'win 'from new-from)
-		     (/ new-from si)))
+                   (when (get-gbl 'PRNFLG)
+                     (print (format () "set-win-phys-to_wt: value ~a beyond the end offset; reduced to ~a~%" real-from new-from)))
+                   (insert_tbl (contents wt) 'win 'from new-from)
+                   (/ new-from si)))
 		((beyond-begof_wt wt real-from)
 		 (let ((new-from (beg-off_wt wt)))
-		     (insert_tbl (contents wt) 'win 'from new-from)
-		     (/ new-from si)))
+                   (when (get-gbl 'PRNFLG)
+                     (print (format () "set-win-phys-to_wt: value ~a before the beg offset; reduced to ~a~%" real-from new-from)))
+                   (insert_tbl (contents wt) 'win 'from new-from)
+                   (/ new-from si)))
 		((beyond-eof_wt wt (+ real-from (win-size_wt wt)))
 		 (let ((new-size (- (end-off_wt wt) real-from)))
 		     (insert_tbl (contents wt) 'win 'from real-from)
-		     (cr-beep)
-		     (print (format () "SET-WIN-PHYS-FROM_WT: WARNING ... WINDOW SIZE MODIFIED~%"))
-                     (print (format () "                        OLD SIZE = ~a, NEW SIZE = ~a~%" (win-size_wt wt si) (/ new-size si)))
-		     (set-win-size_wt wt new-size)
-		     'ok))
+                     (when (get-gbl 'PRNFLG)
+                       (cr-beep)
+                       (print (format () "SET-WIN-PHYS-FROM_WT: WARNING ... WINDOW SIZE MODIFIED. OLD SIZE = ~a, NEW SIZE = ~a~%" (win-size_wt wt si) (/ new-size si))))
+		     (set-win-size_wt wt new-size)))
 		(t
-		 (insert_tbl (contents wt) 'win 'from real-from)
-		 'ok)))))
+		 (insert_tbl (contents wt) 'win 'from real-from))))))
 
 ; [PHYS-]ADVANCE-WIN: ADVANCE THE CURRENT WINDOW RESETTING THE FROM FIELD
 ;    RETURN THE NEW WINDOW OBJECT (PHYSICALLY DEFINED OR NOT)
@@ -677,12 +683,6 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
     (let ((si (ifn si 1.0 (car si))))
 	(win-do-it_wt wt time si)
 	(win_wt wt si)))
-
-(defun phys-advance-win_wt (wt time &rest si)
-    (pls-check-type 'WT wt 'win-advance_wt)
-    (let ((si (ifn si 1.0 (car si))))
-	(win-do-it_wt wt time si)
-	(phys-win_wt wt si)))
 
 (defun win-do-it_wt (wt time si)
     (let* ((real-time (* time si))
@@ -712,9 +712,14 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 ;
 (defun set-phys-dur_wt (wt file &rest dir)
 	(pls-check-type 'WT wt 'set-_wt)
-	(let ((file (ifn dir file (catenate (car dir) file))))
-	   (insert_tbl wt 'dur 'physical (cdr (assoc 'dur (get-sndinfo file))) 'd)))
-
+	(let* ((file (ifn dir file (catenate (car dir) file)))
+               (endoff (end-off_wt wt))
+               (physdur (cdr (assoc 'dur (get-sndinfo file)))))
+	   (insert_tbl (contents wt) 'dur 'physical physdur)
+           (when (< physdur endoff)
+               (when (cr-print?) (print (format () "set-phys-dur_wt: end off ~a beyond dur ~a. Reduced to dur.~%" endoff physdur)))
+             (set-end-off_wt wt physdur)
+             wt)))
 
 ;	NAME:		abs-file_wt / etc.  (SELECTORS)
 ;	TYPE:		Expr with 1 or more arguments
@@ -734,16 +739,21 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 
 
 ; NTH-FREQ: RETURN THE NTH FREQUENCY OF A LIST
-(defun nth-freq_wt (wt pos)
+(defun nth-freq_wt (wt &optional pos)
   (pls-check-type 'WT wt 'nth-freq_wt)
   (let ((fq (freq_wt wt))
-        (pos (if (< pos 1) 1 pos)) )
+        (pos (ifn pos 1 (if (< pos 1) 1 pos))) )
     (if (listp fq)
-      (nth (1- pos) fq)
-      (progn (cr-beep)
-        (error (format nim "nth-freq_wt: THERE IS NO LIST OF FREQ FOR THE OBJECT ASSOCIATED TO FILE ~A"
-		       (abs-file_wt wt)))
-        ))))
+        (let ((ffq (nth (1- pos) fq)))
+          (if ffq ffq (progn
+                        (when (cr-print?) (print (format () "nth-freq_wt: position beyond last freq: ~a. Fetching the last frequency." pos)))
+                        (nth (1- (length fq)) fq))))
+      (progn
+        (when (cr-print?) 
+          (cr-beep)
+          (print (format () "nth-freq_wt: THERE IS NO LIST OF FREQ FOR THE OBJECT ASSOCIATED TO FILE ~A"
+                         (abs-file_wt wt))))
+      fq))))
 
 
 ; FIRST/RAN/LAST-FREQ: RETURN THE FIRST, ONE RANDOMLY CHOSEN OR LAST FREQUENCY OF A LIST
@@ -783,7 +793,7 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 ;             IF THERE IS NO FREQUENCY LIST, RETURN THE ONLY FREQ AVAILABLE
 (defun close-freq_wt (wt ref-fq)
   (pls-check-type 'WT wt 'close-freq_wt)
-  (let ((fq (freq_wt wt)) (curr-close-fq 0.0))
+  (let* ((fq (freq_wt wt)) (curr-close-fq (list-min fq)))
     (ifn (listp fq)
          fq
 #|
@@ -795,7 +805,6 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 		     (abs-file_wt wt)))
 
 |#
-      
       (loop while fq
             do (let ((curr-fq (nextl fq))
                      (curr-distance (abs (- curr-close-fq ref-fq))))
@@ -805,20 +814,20 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
       curr-close-fq)))
 
 
-; FIELD: GET THE VALUE OF A DYNAMICAL FIELD
+; FIELD: GET THE VALUE OF A DYNAMIC FIELD
 (defun field_wt (wt fld)
   (pls-check-type 'WT wt 'set-field_wt)
   (if (is-field_wt wt fld)
-    (lookup_tbl (contents wt) fld)
+      (if (listp fld) (lookup_tbl (contents wt) (car fld) (cadr fld)) (lookup_tbl (contents wt) fld))
     (progn (cr-beep)
-	   (print (format () "          WARNING: UNEXISTENT FIELD ~a~%" fld)))))
+	   (print (format () "field_wt: UNEXISTENT FIELD ~a~%" fld)))))
 
 (defun set-field_wt (wt fld val)
   (pls-check-type 'WT wt 'set-field_wt)
   (if (is-field_wt wt fld)
-    (insert_tbl (contents wt) fld val)
+      (if (listp fld) (insert_tbl (contents wt) (car fld) (cadr fld) val) (insert_tbl (contents wt) fld val))
     (progn (cr-beep)
-	   (print (format () "      nil    WARNING: UNEXISTENT FIELD ~a~%" fld)))))
+	   (print (format () "set-field_wt: UNEXISTENT FIELD ~a~%" fld)))))
 
 
 ; DUR: RETURN THE PERCEPTUAL DURATION (TIME GAP BETWEEN BEG-OFF AND END-OFF)
@@ -899,7 +908,9 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
 
 (defun is-field_wt (wt fld)
     (pls-check-type 'WT wt 'is-field_wt)
-    (is-key_tbl (contents wt) fld))
+    (if (listp fld)
+        (is-key_tbl (contents wt) (car fld) (cadr fld))
+      (is-key_tbl (contents wt) fld)))
 
 
 ;	NAME:		print_/short-print_wt  (INFO)
@@ -1075,8 +1086,8 @@ NOBODY'S PERFECT!~%" (get-gbl 'USER) mode ))
                  (when limits
                    (let ((ratio (/ fq freq-of-wt)))
                      (when (or (> ratio (cdr limits))(< ratio (car limits)))
-                       (format t "WARNING ! TRANSPOSITION OF ~a EXCEEDS LIMITS.~%      Transposition : ~a / limits : ~a~%Wanted freq  = ~a WT Freq = ~a ~%"
-                               (cdar s-list) ratio limits fq freq-of-wt))))
+                       (print (format () "WARNING ! TRANSPOSITION OF ~a EXCEEDS LIMITS.~%      Transposition : ~a / limits : ~a~%Wanted freq  = ~a WT Freq = ~a ~%"
+                               (cdar s-list) ratio limits fq freq-of-wt)))))
                  (push (cdar s-list) cwt-list)
                  (push (list fq freq-of-wt) fqwt-list)))
     (setf cwt-list (nreverse cwt-list))

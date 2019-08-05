@@ -96,6 +96,8 @@
 ;	mode = 1 : call the freeze algorithm when needed
 ;	mode = 0 : do not freeze, START object at the right action time
 ;	mode = -1: do not freeze, END object at the right time
+;       mode = floating number, call the freeze only when the duration of the snd file
+;                to freeze is longer than <mode>
 
 ; LCO (LOCAL OVERWRITING OF GLOBAL CONTROLS)
 ; Before being used by the freeze algorithm a WT object must be initialized
