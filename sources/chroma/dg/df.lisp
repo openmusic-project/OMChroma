@@ -111,7 +111,7 @@
 ;	to make the format compatible with lkp, if YMIN and YMAX are not
 ;	   specified, lkpr behaves like lkp
 ; EX: (setf fun (make_fun '(0 0 1 1))), (lkpr 5 fun -10 10) ===> (-10 -5 0 5 10)
-(defun lkpr (nev fun ymin ymax &optional (exp 1.0) &key (offset 0.0))
+(defun lkpr (nev fun ymin ymax &optional (exp 0.0) &key (offset 0.0))
 "
 ; (lkpr NEV FUN YMIN YMAX [OFFS]) / (fix-lkpr NEV FUN YMIN YMAX [OFFS])
 ; 	sample FUN NEV equally spaced times
@@ -125,7 +125,7 @@
     (y-resc_fun fun (+ ymin offset) (+ ymax offset) exp)
     (lkp nev fun exp)) )
 
-(defun fix-lkpr (nev fun ymin ymax &optional (exp 1.0) &key (offset 0.0))
+(defun fix-lkpr (nev fun ymin ymax &optional (exp 0.0) &key (offset 0.0))
 "
 ; (lkpr NEV FUN YMIN YMAX [OFFS]) / (fix-lkpr NEV FUN YMIN YMAX [OFFS])
 ; 	sample FUN NEV equally spaced times

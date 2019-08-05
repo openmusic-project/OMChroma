@@ -75,6 +75,10 @@
 ; 	bkwd1: do not repeat the border values if the list has > 2 els
 ; EX: (setf a '(1 2 3)), (bkwd-lp 10 a) ===> '(1 2 3 3 2 1 1 2 3 3)
 ; EX: (setf a '(1 2 3 4)), (bkwd1-lp 10 a) ===> '(1 2 3 4 3 2 1 2 3 4)
+(defun bkwd-lp (nev l)
+  (let ((ll (reverse l)))
+    (lp nev (append l ll))))
+
 (defun bkwd1-lp (nev l)
   (if (< (length l) 3)
       (bkwd-lp nev l)
