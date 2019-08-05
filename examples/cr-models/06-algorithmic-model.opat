@@ -1,0 +1,13 @@
+
+(:patch
+ (:om-version 0.0111)
+ (:name "06-algorithmic-model")
+ (:doc "")
+ (:info
+  (:created "2019/08/05 14:17:17")
+  (:modified "2019/08/05 16:21:51"))
+ (:window (:size (500 500)) (:position (106 326)))
+ (:grid nil)
+ (:lock nil)
+ (:boxes)
+ (:connections))
