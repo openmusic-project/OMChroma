@@ -259,11 +259,14 @@
           (fq (if (listp sp) fq n)))
       (let ((result ())
             (fqn (nth (1- n) sp)))
-        (let ((ratio (/ fq fqn)))
+        (let ((ratio (/ fq (ifn fqn
+                               (progn (when (cr-print?) (print (format () "xpose-n: n ~a is above the last element ~a. Limited to last el: ~a" n (length sp) (car (last sp)))))
+                                        (car (last sp)))
+                             fqn))))
           (loop while sp
                 do (newl result (* ratio (nextl sp))) ))
-	(nreverse result)) ))
-    
+        (nreverse result)) ))
+
 ;-----------------------------------------------------------------------------
 
 ;-----------------------------------------------------------------------------
