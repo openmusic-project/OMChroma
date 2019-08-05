@@ -22,6 +22,16 @@
 (defun dbtolin (x)
   (expt 10.0 (/ x 20.0)))
 
+;------------------------------------------------------------------
+; interval
+
+(defun interval (val)
+"Return the interval of val [cents] as a scaler"
+  (nroot 12 (expt 2.0 (/ val 100.0))))
+
+(defun nroot (root base)
+"Compute the nth root of base"
+  (expt base (/ 1.0 root)))
 
 ;------------------------------------------------------------------
 ; FUNCTIONS (in alphabetical order):

@@ -75,9 +75,6 @@
 (defun disable-synthesis ()
    (set-gbl 'PROBLM t))
 
-
-
-
 ;******************************************************************
 ; GLOBAL VARIABLES FOR WHOLE SYSTEM
 ;------------------------------------------------------------------
@@ -126,4 +123,59 @@
 ;;; redefined in OM
 (set-gbl '*chroma-output* *standard-output*)
 
+;*****************************************************************************
+; TRANSPOSITION FACTORS FOR FUNCTION "xpose" (in spectrum.lisp)
+;		UPWARD TRANSPOSITION
+(set-gbl 'xp2- (interval 100))
+(set-gbl 'xp2+ (interval 200))
+(set-gbl 'xp3- (interval 300))
+(set-gbl 'xp3+ (interval 400))
+(set-gbl 'xp4 (interval 500))
+(set-gbl 'xp4+ (interval 600))
+(set-gbl 'xp5- (interval 600))
+(set-gbl 'xp5 (interval 700))
+(set-gbl 'xp6- (interval 800)) 
+(set-gbl 'xp6+ (interval 900))
+(set-gbl 'xp7- (interval 1000))
+(set-gbl 'xp7+ (interval 1100))
+(set-gbl 'xp8 (interval 1200))
+(set-gbl 'xp9- (interval 1300))
+(set-gbl 'xp9+ (interval 1400))
+(set-gbl 'xp10- (interval 1500))
+(set-gbl 'xp10+ (interval 1600))
+(set-gbl 'xp11 (interval 1700))
+(set-gbl 'xp11+ (interval 1800))
+(set-gbl 'xp12- (interval 1800))
+(set-gbl 'xp12 (interval 1900))
+(set-gbl 'xp13- (interval 2000)) 
+(set-gbl 'xp13+ (interval 2100))
+(set-gbl 'xp14- (interval 2200))
+(set-gbl 'xp14+ (interval 2300))
+
+;		DOWNWARD TRANSPOSITION
+(set-gbl '-xp2- (interval -100))
+(set-gbl '-xp2+ (interval -200))
+(set-gbl '-xp3- (interval -300))
+(set-gbl '-xp3+ (interval -400))
+(set-gbl '-xp4 (interval -500))
+(set-gbl '-xp4+ (interval -600))
+(set-gbl '-xp5- (interval -600))
+(set-gbl '-xp5 (interval -700))
+(set-gbl '-xp6- (interval -800)) 
+(set-gbl '-xp6+ (interval -900))
+(set-gbl '-xp7- (interval -1000))
+(set-gbl '-xp7+ (interval -1100))
+(set-gbl '-xp8 (interval -1200))
+(set-gbl '-xp9- (interval -1300))
+(set-gbl '-xp9+ (interval -1400))
+(set-gbl '-xp10- (interval -1500))
+(set-gbl '-xp10+ (interval -1600))
+(set-gbl '-xp11 (interval -1700))
+(set-gbl '-xp11+ (interval -1800))
+(set-gbl '-xp12- (interval -1800))
+(set-gbl '-xp12 (interval -1900))
+(set-gbl '-xp13- (interval -2000)) 
+(set-gbl '-xp13+ (interval -2100))
+(set-gbl '-xp14- (interval -2200))
+(set-gbl '-xp14+ (interval -2300))
 ;*****************************************************************************

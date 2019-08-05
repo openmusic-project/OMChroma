@@ -1,6 +1,4 @@
-
-
-(in-package :chroma)
+(in-package :cr)
 
 
 (defvar *cr-root* (ensure-directories-exist (merge-pathnames "Documents/Chroma/" (user-homedir-pathname))) )
