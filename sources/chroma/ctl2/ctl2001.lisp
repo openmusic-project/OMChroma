@@ -29,49 +29,41 @@
                  (by-time nil))     
   "Generate a synthesis object by combining a control and an analysis model.
 Write in the Intermediate-files folder by default."
-  (setf outfile (get-cr-path :out :name outfile :type ctl2))
+  (setf outfile (get-cr-path :out :name outfile :type "ctl2"))
                                 
   (let ((n-fql (1- (nev my-model)))      ; n-fql - 1 , nmarkers - 2
-        resc-min resc-max gblamp-val )
-    ; ? si outfile nil : stream pas vers fichier mais vers "load" ?
-    (with-open-file  (outstream  outfile :direction :output :if-exists :supersede)
+        resc-min resc-max 
+        gblamp-val)
+    
+    (with-open-file (outstream outfile :direction :output :if-exists :supersede)
       (format  outstream "(defun cr::ctl2-result() (list ~%")
+      
+      ;;; not used anywhere... ?
       (if by-time
         (setf resc-min (begin-time my-model) resc-max (get-nth-time my-model n-fql))
         (setf resc-min 0 resc-max n-fql))
-      ; FQL LOOP     
+      
       (loop for i from 0 to  n-fql
-           ; do (print i) 
             do (CTL2_compute self my-model ctl-model i outstream args-yaka-user))
+      
       (format outstream "))~%"))
+    
     (load outfile))
+  
   (cr::ctl2-result))
 
+(defun get-instance-keywords (o)
+  "get-keywords in control synthesis object instance (class slots + instance specific controls)"
+  (append (mapcar 
+           #'(lambda (x) (read-from-string (om::name x )))
+           (om::get-all-initargs-of-class (type-of o)))
+          (mapcar #'car (om::lcontrols o))
+          (list 'lprecision)))
 
-(defmethod CTL2_compute ((self om::class-array) (my-model chroma-model) 
-                         ctl-model my-rank outstream 
-                         args-yaka-user)
-  "ctl2 subroutine, process 1 ptl/fql"
-  (declare (special outstream my-model my-rank))
-  (let*((my-time (get-nth-time my-model my-rank))
-        (my-dur (get-nth-dur my-model my-rank))
-        (n-fql (1- (nev my-model)))      ; n-fql - 1 , nmarkers - 2
-        (my-fql (nth my-rank (fql-list my-model)))
-        (my-ptl nil)
-        (my-nev (length (the-list my-fql))))
-    (declare (special n-fql my-time my-dur my-nev my-fql my-ptl))
-    (when my-fql         ;to allow empty fql in models
-      (when args-yaka-user (apply #'yaka-user args-yaka-user))
-      (format outstream"(om::mk-array 'om::~a ~a ~%~%"
-              (type-of self) my-nev ) 
-      (if (get-gbl 'ctl2-print) (format t "~a~%" my-time))
-      ; A FAIRE : GLOBALSLOTS loop sur (first(multiple-value-list (om::get-slot-in-out-names self)))
-      (CTL2_global self ctl-model)
-      ; KEYWORDS LOOP
-      (CTL2_keywords_loop self ctl-model)
-      ))
-  (format  outstream ") ~%~%")
-)
+(defun get-global-keywords (o)
+  "get global controls in control synthesis object instance,
+except numrows and action-time (amptot, durtot, etc)"
+  (cddr (om::fixed-slots-list o)))
 
 
 (defmethod CTL2_compute ((self om::class-array) (my-model model-partials) 
@@ -91,18 +83,28 @@ Write in the Intermediate-files folder by default."
       (format outstream " (om::mk-array 'om::~a ~a ~% ~%"
               (type-of self) my-nev)
       (if (get-gbl 'ctl2-print) (format t "~a~%" my-time))
-      (CTL2_global self ctl-model)
+
+      (let ((global-args (om::get-global-keywords self)))
+        (CTL2_global ctl-model 
+                     global-args
+                     (mapcar #'(lambda (key) (funcall key self)) global-args)
+                     ))
+
       ; KEYWORDS LOOP
-      (CTL2_keywords_loop self ctl-model)
+      (CTL2_keywords_loop ctl-model (om::get-instance-keywords self))
+      
       ))
   (format  outstream ") ~%~%")
 )
 
-(defun CTL2_global (self ctl-model)
+
+(defun CTL2_global (ctl-model keywords defvals)
   (declare (special outstream my-model my-rank n-fql my-time my-dur my-nev my-fql my-ptl))
-  (let((keywords (get-global-keywords self)))
+
   (format outstream" (list ~a " (+ (offset my-model) my-time))
+
   (loop for k in keywords  
+        for def in defvals
        ; do (print k) 
         do (let* ((key k) (ex (assoc key ctl-model)))
              (declare (special key ex))
@@ -118,66 +120,56 @@ Write in the Intermediate-files folder by default."
                  (3 (ctl2G-variable-constant-a))
                  (0 nil)
                  (otherwise (error "UNKNOWN CTL2 (G-)STRUCTURE : ~a~%"ex)))
-               (ctl2G-default-value self)))
+               (ctl2G-default-value def)))
         finally (format outstream" )~%")
-        )))
+        ))
 
-(defun CTL2_keywords_loop (self ctl-model)
+
+(defun CTL2_keywords_loop (ctl-model keywords)
+
   (declare (special outstream my-model my-rank n-fql my-time my-dur my-nev my-fql my-ptl))
-  (let((keywords (get-instance-keywords self)))
-    ;(print ctl-model)
-      (loop for k in keywords  
-            ; do (print k) 
-            do (let* ((key k) 
-                      ;(ex (assoc key ctl-model))
-                      ;;MODIF SLM mars 2005 
-                      (ex (assoc key ctl-model :test #'(lambda (x y)(equal (symbol-name x)(symbol-name y)))))
-                      )
-                 (declare (special key ex))
-                 (case (length ex)
-                   (2 (if (or (numberp (cadr ex)) (symbolp (cadr ex)))
-                        (ctl2N-k)
-                        (cond ;(print (caadr ex))
-                          ((equal 'MIN (caadr ex)) (ctl2N-constant-variable))
-                          ((equal 'CALL (caadr ex)) (ctl2N-function))
-                          (t (ctl2N-kb))
-                          )))
-                   (4 (if (member 'MIN (second ex) :test 'equal)
-                        (if (member 'MIN-FUN (fourth ex) :test 'equal)
+  
+  (loop for k in keywords  
+        do (let* ((key k) 
+                  ;;MODIF SLM mars 2005 
+                  (ex (assoc key ctl-model :test #'(lambda (x y) (equal (symbol-name x) (symbol-name y))))))
+             
+             (declare (special key ex))
+            
+             (case (length ex)
+               (2 (if (or (numberp (cadr ex)) (symbolp (cadr ex)))
+                      (ctl2N-k)
+                    (cond ;(print (caadr ex))
+                     ((equal 'MIN (caadr ex)) (ctl2N-constant-variable))
+                     ((equal 'CALL (caadr ex)) (ctl2N-function))
+                     (t (ctl2N-kb))
+                     )))
+               (4 (if (member 'MIN (second ex) :test 'equal)
+                      (if (member 'MIN-FUN (fourth ex) :test 'equal)
                           (ctl2N-variable-variable-b)
-                          (ctl2N-variable-variable-ab)) 
-                        (ctl2N-variable-constant-b)))
-                   (3 (if (member 'MIN (second ex) :test 'equal)
-                        (ctl2N-variable-variable-aa)
-                        (ctl2N-variable-constant-a)))
-                   (0 nil)
-                   (otherwise (error "UNKNOWN CTL2 STRUCTURE : ~a~%"ex))))
-            )))
+                        (ctl2N-variable-variable-ab)) 
+                    (ctl2N-variable-constant-b)))
+               (3 (if (member 'MIN (second ex) :test 'equal)
+                      (ctl2N-variable-variable-aa)
+                    (ctl2N-variable-constant-a)))
+               (0 nil)
+               (otherwise (error "UNKNOWN CTL2 STRUCTURE : ~a~%"ex))))
+        ))
 
-(defun get-instance-keywords(o)
-  "get-keywords in control synthesis object instance (class slots + instance specific controls)"
-  (append (mapcar 
-           #'(lambda (x) (read-from-string (om::name x )))
-           (om::get-all-initargs-of-class (type-of o)))
-          (mapcar #'car (om::lcontrols o))
-          (list 'lprecision)))
 
-(defun get-global-keywords(o)
-  "get global controls in control synthesis object instance,
-except numrows and action-time (amptot, durtot, etc)"
-  (cddr (om::fixed-slots-list o)))
+
 
 (defun ctl2N-k ()                        ; CONSTANT
   (declare (special key outstream ex my-nev))
-  (format outstream ":~a '(~a )~%" key (eval(eval(cadr ex)))))
+  (format outstream ":~a '(~a )~%" key (eval (eval (cadr ex)))))
 
 (defun ctl2G-k ()                        ; CONSTANT
   (declare (special outstream ex))
-  (format outstream " ~a " (eval(eval(cadr ex)))))
+  (format outstream " ~a " (eval (eval (cadr ex)))))
 
-(defun ctl2G-default-value (self)                        ; VALEUR PAR DEFAUT
-  (declare (special key outstream ex ))
-  (format outstream " ~a " (funcall key self)))
+(defun ctl2G-default-value (def)                        ; VALEUR PAR DEFAUT
+  (declare (special key outstream ex))
+  (format outstream " ~a " def))
 
 (defun ctl2N-kb ()                        ; FONCTION EVALUATION RETARDEE
   (declare (special key outstream ex my-nev))
@@ -198,8 +190,8 @@ except numrows and action-time (amptot, durtot, etc)"
 
 (defun ctl2N-function ()                 ; HACK POUR TRAITER LES BPF, A REVOIR?
   (declare (special key outstream ex))
-  (let ((result (eval(cdadr ex))))
-    (if (numberp (car result))
+  (let ((result (eval (cdadr ex))))
+    (if (numberp (car result)) 
       (format outstream ":~a '~a ~%" key result)
       (format outstream ":~a ~a ~%" key result))))
       

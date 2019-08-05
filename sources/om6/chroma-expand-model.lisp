@@ -89,6 +89,8 @@
 
 
 
+
+
 (defmethod om-ctl2 ((self SynthesisEvt) (my-model cr-model) 
                     ctl-model my-rank outstream 
                     args-yaka-user)
@@ -105,10 +107,16 @@
       (when args-yaka-user (apply #'cr::yaka-user args-yaka-user))
       (format outstream "(om::mk-array 'om::~a ~a ~%~%" (type-of self) my-nev) 
       (if (cr::get-gbl 'cr::ctl2-print) (format t "~a~%" my-time))
+      
       ; A FAIRE : GLOBALSLOTS loop sur (first (multiple-value-list (om::get-slot-in-out-names self)))
-      (cr::CTL2_global self ctl-model)
+      (let ((global-args (om::get-global-keywords self)))
+        (cr::CTL2_global self ctl-model 
+                     global-args
+                     (mapcar #'(lambda (key) (funcall key self)) global-args)
+                     ))
+      
       ; KEYWORDS LOOP
-      (cr::CTL2_keywords_loop self ctl-model)
+      (cr::CTL2_keywords_loop ctl-model (cr::get-instance-keywords self))
       (format  outstream ") ~%~%")
       ))
   )
