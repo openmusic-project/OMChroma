@@ -2,6 +2,8 @@
 *.zip
 codesign
 
+#*.*#
+
 *.*fasl
 
 .DS_Store
@@ -14,7 +16,6 @@ Thumbs.db
 *~
 **/reference-pages/**
 **/reference/**
-#*
 
 docs/_site/**
 docs/Gemfile.lock
