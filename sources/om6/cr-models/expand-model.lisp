@@ -278,15 +278,18 @@
 ;;; MAKE MATRICES
 ;;;==================================================================
 
-(defmethod! expand-model ((my-model cr-model) ctl-model (target-class symbol))
+
+(defmethod! expand-model ((my-model cr-model) (ctl-model null) (target-class symbol))
   :icon 655
-  (expand-model my-model ctl-model (make-instance target-class)))
+  (if (data my-model)
+      (let ((n (length (elements (data my-model)))))
+        (remove nil 
+                (loop for i from 0 to (- n 1)
+                      collect (make-simple-synthesis-event target-class (car (nth i (time-struct my-model))) (nth i (elements (data my-model)))))))
+    (om-beep-msg "Warning : CR-MODEL is not initialized!")))
+
 
 (defmethod! expand-model ((my-model cr-model) (ctl-model cr-control) (target-class symbol))
-  :icon 655
-  (expand-model my-model ctl-model (make-instance target-class)))
-
-(defmethod! expand-model ((my-model cr-model) (ctl-model cr-control) (target-class t))
   :icon 655
    (if (data my-model)
        (let ((n (length (elements (data my-model)))))
@@ -297,21 +300,19 @@
      (om-beep-msg "Warning : CR-MODEL is not initialized!")
      ))
 
-(defmethod! expand-model ((my-model cr-model) (ctl-model null) (target-class SynthesisEvt))
+
+
+
+
+
+
+(defmethod! expand-model ((my-model cr-model) ctl-model (target-class SynthesisEvt))
   :icon 655
-  (if (data my-model)
-      (let ((n (length (elements (data my-model)))))
-        (remove nil 
-                (loop for i from 0 to (- n 1)
-                      collect (make-simple-synthesis-event target-class (car (nth i (time-struct my-model))) (nth i (elements (data my-model)))))))
-    (om-beep-msg "Warning : CR-MODEL is not initialized!")))
+  (expand-model my-model ctl-model (type-of target-class)))
 
-
-
-(defmethod! expand-model ((my-model cr-model) (ctl-model textfile) (target-class SynthesisEvt))
+(defmethod! expand-model ((my-model cr-model) (ctl-model textfile) target-class)
   :icon 655
   (expand-model my-model (exp-list ctl-model) target-class))
-
 
 
 ;;;;-------------------------------------------

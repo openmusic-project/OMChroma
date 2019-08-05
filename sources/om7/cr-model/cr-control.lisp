@@ -202,7 +202,7 @@ following conversion rules as defined in <ctl-model>."
     (if (cr::get-gbl 'cr::ctl2-print) (print my-time))
      
     ;;; another side-effect for Chroma
-    (setf outstream (make-string-output-stream))
+    (setf cr::outstream (make-string-output-stream))
     
     (let ((array (om::om-init-instance
                   (make-instance target-class
