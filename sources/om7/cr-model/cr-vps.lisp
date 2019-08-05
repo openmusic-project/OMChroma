@@ -460,7 +460,7 @@ NB: RPL, CIL and CRL must be previously converted.
 (defmethod! vps-low-pass (l freq) l)
 
 
-(defmethod! bvps-and-pass ((self cr::vps) freqlist)
+(defmethod! vps-band-pass ((self cr::vps) freqlist)
   :icon 656
   :indoc '("vps" "list of freqs (Hz)")
   :initvals '(nil (400.0 800.0))

@@ -28,7 +28,7 @@
 ;;; J. Bresson 2019
 ;;;============================
 
-;;; A wrapper-class around Chroma's VPS system
+;;; A super-simple alternative to the VPS system
 (defclass! cr-partials ()
   ((freqs :accessor freqs :initarg :freqs :initform nil :documentation "a list of frequencies")
    (amps :accessor amps :initarg :amps :initform nil :documentation "a list of amplitudes"))
@@ -62,7 +62,7 @@ It is used as element/data-frame for CR-MODELs.
 (defclass! cr-model (om::data-stream)
   ((data :accessor data :initarg :data :initform nil :documentation "model data: raw analysis data, or a list of CR-VPS instances")
    (time-struct :accessor time-struct :initarg :time-struct :initform nil :documentation "a list of time-markers or pairs of markers (begin/end)")
-   (data-type :accessor data-type :initform 'cr-partials)
+   (data-type :accessor data-type :initform 'cr::fql)
    (max-amp :accessor max-amp :initform 1.0) ;;; just useful for normalization 
    )
   (:default-initargs :default-frame-type 'cr-vps)
@@ -78,6 +78,8 @@ It is used as element/data-frame for CR-MODELs.
       (om::sec->ms (cadr (car (last (time-struct self)))))
     1000))
 
+;;; used in CR::ctl function... (?)
+;;; (defmethod offset ((self cr-model)) 0.0)
 
 ;;;=======================
 ;;; GET MODEL DATA IN
@@ -195,60 +197,31 @@ Data format:
 ;;; GET/ADJUST TIME STRUCTURE
 ;;;===================================
 
-;;; this is not super useful: om::getSDIFtimes direct would be easier...
-(defmethod! get-time-data ((sdiff t) sdiftype)
-  
-  :indoc '("an SDIF File object or pathname" "type of SDIF data")
-  :initvals '(nil "1TRC")
-  :menuins '((1 (("1TRC" "1TRC") ("1HRM" "1HRM") ("1MRK" "1MRK") ("1FOB" "1FOB") ("1REB" "1REB") ("1FQ0" "1FQ0"))))
-  :doc "Returns time list from <sdiftype> frames in <sdiff>."
-  
-  (cond 
-   ((string-equal sdiftype "1TRC")
-    (om::getSDIFtimes sdiff 0 "1TRC" "1TRC" 0.0 nil))
-
-   ((string-equal sdiftype "1HRM")
-    (om::getSDIFtimes sdiff 0 "1HRM" "1HRM" 0.0 nil))
-   
-   ((string-equal sdiftype "1MRK")
-    (om::getSDIFtimes sdiff 0 "1MRK" "1TRC" 0.0 nil))
-   
-   ((string-equal sdiftype "1FOB")
-    (om::getSDIFtimes sdiff 0 "1FOB" "1FOF" 0.0 nil))
-
-   ((string-equal sdiftype "1REB")
-    (om::getSDIFtimes sdiff 0 "1REB" "1RES" 0.0 nil))
-   
-   ((string-equal sdiftype "1FQ0")
-    (om::getSDIFtimes sdiff 0 "1FQ0" "1FQ0" 0.0 nil))
-   ))
-  
-
 (defun markers-to-segments (markers)
   (if (listp (car markers))
       markers ;; already formatted
     (loop for (a b) on markers by #'cdr
           when b collect (list a b))))
 
-
+;;; never used
 (defmethod adjust-model-segments (segments data)
   (let ((data-time-list (mapcar #'car data)))
     (if data-time-list
         (remove nil
                 (loop for seg in segments
-                      collect (let* ((diff_l1 (mapcar #'(lambda (x) (abs (- x (car seg)))) data-time-list))
-                                     (diff_l2 (mapcar #'(lambda (x) (abs (- x (cadr seg)))) data-time-list))
-                                     (min1 (om::list-min diff_l1))
-                                     (min2 (om::list-min diff_l2))
-                                     (pos1 (position min1 diff_l1))
-                                     (pos2 (position min2 diff_l2))
-                                     (t1 (nth pos1 data-time-list))
-                                     (t2 (nth pos2 data-time-list)))
+                      collect (let* 
+                                  ((diff_l1 (mapcar #'(lambda (x) (abs (- x (car seg)))) data-time-list))
+                                   (diff_l2 (mapcar #'(lambda (x) (abs (- x (cadr seg)))) data-time-list))
+                                   (min1 (om::list-min diff_l1))
+                                   (min2 (om::list-min diff_l2))
+                                   (pos1 (position min1 diff_l1))
+                                   (pos2 (position min2 diff_l2))
+                                   (t1 (nth pos1 data-time-list))
+                                   (t2 (nth pos2 data-time-list)))
                                 
                                 (unless (= t1 t2) (list t1 t2))))
                 ))
     ))
-
 
 ;;;===================================
 ;;; CR-MODEL INIT
@@ -291,7 +264,7 @@ Data format:
          
          ;;; adjust time-struct to the actual data
          ;;; (not sure we actually want to do this...)
-         (setf (time-struct self) (adjust-model-segments (time-struct self) (data self)))
+         ; (setf (time-struct self) (adjust-model-segments (time-struct self) (data self)))
          
          (loop for seg in (time-struct self)
                do (om::om-print (format nil "Segment : ~D -> ~D" (car seg) (cadr seg)))

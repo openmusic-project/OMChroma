@@ -341,8 +341,7 @@ my-nev : ...
 
 ;---------------------------------------------------------------;
 (defun user-defined-function ()         ; WRITE YOUR OWN
-(declare (special  my-nev))
-(rept my-nev .06))                      ; RETURN A LIST
+(declare (special my-nev)) ; RETURN A LIST
 
 
 (defun yaka-user (&key (dur-scaler 1.0) (min-dur 0.1))

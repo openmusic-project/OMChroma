@@ -37,6 +37,19 @@
 (defmethod om::get-editor-class ((self cr-model)) 'cr-model-editor)
 (defmethod om::editor-with-timeline ((self cr-model-editor)) nil)
 
+(defmethod om::make-left-panel-for-object ((editor cr-model-editor) (object cr-model))
+  (oa::om-make-view 'om::y-ruler-view :size (oa::omp 30 nil)
+                    :vmin 0 :vmax 22000
+                    :y1 (second (om::y-range-for-object object))
+                    :y2 (first (om::y-range-for-object object))))
+
+(defmethod om::init-editor-window ((self cr-model-editor))
+  (call-next-method)
+  (let* ((main-panel (om::get-g-component self :main-panel))
+         (y-ruler (om::left-view (om::get-g-component self :main-panel))))
+    (setf (om::related-views y-ruler)
+          (list main-panel)))
+  t)
 
 (defmethod om::data-frame-text-description ((self cr-frame))
   (list "MODEL VPS"

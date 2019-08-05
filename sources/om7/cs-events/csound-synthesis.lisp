@@ -50,20 +50,39 @@
     str))
 
 
+
+(defun normalize-output (path normalize format res)
+  (let ((s (make-instance 'om::sound :n-samples :n-channels))
+        (level (if (numberp normalize) normalize 0)))
+    (setf (om::file-pathname s) path)
+    (om::set-sound-info s path)
+    (om::om-print-format "Normalizing output to ~D" (list level))
+    (om::save-sound 
+     (om:sound-normalize s :level level)
+     path :format format :resolution res)))
+  
+
 ;;;===============================
 ;;; SYNTHESIZE CS-ARRAY
 ;;;===============================
 
-(defmethod cs-synthesize ((self cs-array) &key (name "my-synt") tables (run t) (format "aiff") 
-                          (inits nil) sr kr)
+(defmethod cs-synthesize ((self cs-array) &key (name "my-synt") (run t) 
+                          format resolution 
+                          (normalize nil normalize-supplied-p)
+                          inits tables
+                          sr kr)
   
   (declare (ignore inits sr kr)) ;;; this is already in the csound instrument
 
   (unwind-protect 
   
-      (let* ((path-aiff (if (equal :rt name) name
+      (let* ((out-format (string (or format (om::get-pref-value :audio :format))))
+             (out-res resolution) ;;; no resolution will keep the output in float format (or resolution (om::get-pref-value :audio :resolution))
+             (out-normalize (if normalize-supplied-p normalize (om::get-pref-value :audio :normalize)))
+             
+             (path-aiff (if (equal :rt name) name
                           (if (pathnamep name) name 
-                            (om::outfile name :type format))))
+                            (om::outfile name :type out-format))))
              (cs-basename (if (equal :rt name) "cs_temp" (pathname-name path-aiff)))
              (path-orc (if (pathnamep (source-code self)) (source-code self)
                          (om::handle-new-file-exists (om::tmpfile cs-basename :type "orc"))))
@@ -124,7 +143,12 @@
         (when run (om::add-tmp-file path-sco))
         
         (if run   
-            (om::csound-synth path-orc path-sco :out path-aiff :format format)
+            
+            (let ((out-final (om::csound-synth path-orc path-sco :out path-aiff :format out-format)))
+              (if out-normalize
+                  (normalize-output out-final out-normalize out-format out-res)
+                out-final))
+                  
           (probe-file path-sco))
         )
     
@@ -177,9 +201,10 @@
 ;;; - Events and their contents are DEEP-COPIED because the parsing might modify them and be applied in sequence (if several functions)
 ;;; - Components operations must therefore modify the event in place in order to be propagated
 ;;; - (also for tables to be collected correctly)
-(defmethod cs-synthesize ((self list) &key (name "my-synt") (run t) (format :aiff) 
-                          tables (inits nil) 
-                          resolution normalize
+(defmethod cs-synthesize ((self list) &key (name "my-synt") (run t) 
+                          format resolution 
+                          (normalize nil normalize-supplied-p)
+                          inits tables
                           sr kr)
   
   (if (not (om::list-subtypep self 'cs-evt))
@@ -187,7 +212,10 @@
    
     (unwind-protect 
   
-        (let* ((format-str (string-downcase format))
+        (let* ((out-format (string (or format (om::get-pref-value :audio :format))))
+               (out-res resolution) ;;; no resolution will keep the output in float format (or resolution (om::get-pref-value :audio :resolution))
+               (out-normalize (if normalize-supplied-p normalize (om::get-pref-value :audio :normalize)))
+               (format-str (string-downcase out-format))
                (path-aiff (if (equal :rt name) name
                             (if (pathnamep name) name 
                               (om::outfile name :type format-str))))
@@ -221,9 +249,11 @@
 
             (format out "<CsOptions>~%")
                 
-            (format out "~A ~A ~%" 
+            (format out "~A ~A ~A~%" 
                     (om::get-pref-value :externals :csound-flags)
-                    (if format (concatenate 'string "--format=" format-str) ""))
+                    (concatenate 'string "--format=" format-str)
+                    (case out-res (16 "-s") (24 "-3") (32 "-l") (otherwise ""))
+                    )
                 
             (format out "</CsOptions>~%")
 
@@ -330,9 +360,14 @@
           ;;;===========================================
               
           (if run   
-              (om::csd-synth path-csd :out path-aiff)
-            (probe-file path-csd))
               
+              (let ((out-final (om::csd-synth path-csd :out path-aiff)))
+                (if out-normalize
+                    (normalize-output out-final out-normalize out-format out-res)
+                  out-final))
+            
+            (probe-file path-csd))
+          
           )
     
       ;;; unwind-protect cleanup form(s)
@@ -340,11 +375,19 @@
     ))
 
 
-(defmethod cs-synthesize ((self cs-evt) &key (name "my-synt") (run t) (format :aiff) inits tables resolution normalize sr kr)
-  (cs-synthesize (list self) :name name :run run :format format 
+
+(defmethod cs-synthesize ((self cs-evt) &key (name "my-synt") (run t) 
+                          format resolution 
+                          (normalize nil normalize-supplied-p) 
+                          inits tables sr kr)
+
+  (cs-synthesize (list self) :name name :run run 
+                 :format format 
+                 :resolution resolution 
+                 :normalize (if normalize-supplied-p normalize (om::get-pref-value :audio :normalize))
                  :inits inits  :tables tables 
-                 :sr sr :kr kr 
-                 :resolution resolution :normalize normalize))
+                 :sr sr :kr kr))
+
 
 ;;; .. to make it work with the generic OM 'synthesize' method
 (defmethod om::synthesize-method ((self cs-evt)) 'cs-synthesize)
