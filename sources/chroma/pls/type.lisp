@@ -24,7 +24,7 @@
 ;-----------------------------------------------------------------------------
 
 ; types DVE, RAW added on March 2000
-(defvar *TYPES* '(WT CTL TBL FUN VE DVE RAW))
+(defvar *TYPES* '(WT CTL TBL FUN VE DVE RAW DVE))
 ;-----------------------------------------------------------------------------
 
 
