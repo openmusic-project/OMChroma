@@ -22,11 +22,103 @@
 
 (in-package :cr)
 
+
+;;; a version of CTL2 independent from OM classes and structures.
+;;; returns a list containing :
+;;; 1) the number of elements
+;;; 2) a list of global arguments as specified by <global-args> names
+;;; (note: <global-args> can already be a simple list of a list of pairs (value default)
+;;; 2) a list of synthesis parameters :keys and values as specified by <synth-args> e.g. (:freq (freq-list) :amp (amps-list) ...)
+
+(defmethod CTL2 ((my-model cr::chroma-model)
+                 global-args synth-args
+                 rules
+                 &key (outfile "yaka-out") (args-yaka-user nil)
+                 (by-time nil))     
+  "Generate a synthesis object by combining a control and an analysis model.
+Write in the Intermediate-files folder by default."
+  
+  (let ((out-path (get-cr-path :out :name outfile :type "ctl2"))
+        (n-fql (1- (nev my-model)))
+        ;; resc-min resc-max gblamp-val   ;; <= not used
+        )
+    
+    (with-open-file (outstream outfile :direction :output :if-exists :supersede)
+
+      ;;; outstream will be used by CTL functions
+      (declare (special outstream))
+      
+      (format outstream "(defun cr::ctl2-result() ~%")
+      (format outstream "(list ~%")
+
+      ;;; not used anywhere... ?
+      ;(if by-time
+      ;  (setf resc-min (begin-time my-model) resc-max (get-nth-time my-model n-fql))
+      ;  (setf resc-min 0 resc-max n-fql))
+      
+      (loop for i from 0 to n-fql
+            do (CTL2_compute_event my-model global-args synth-args 
+                                   rules i args-yaka-user))
+      
+      (format outstream "))~%"))
+    
+    (load out-path))
+  
+  (cr::ctl2-result))
+
+
+(defmethod CTL2_compute_event ((model cr::model-partials) 
+                               global-args synth-args 
+                               rules my-rank 
+                               args-yaka-user)
+  "ctl2 subroutine, process 1 ptl/fql"
+  (declare (special outstream my-model my-rank))
+  
+  (let* ((my-model model)
+         (my-time (get-nth-time my-model my-rank))
+         (my-dur (get-nth-dur my-model my-rank))
+         (n-fql (1- (nev my-model)))      ; n-fql - 1 , nmarkers - 2
+         (my-ptl (nth my-rank (ptl-list my-model)))
+         (my-fql my-ptl)
+         (my-nev (length (the-list my-ptl))))
+    
+    (declare (special my-model n-fql my-time my-dur my-nev my-fql my-ptl))
+    
+    (when my-ptl         ;to allow empty fql in models
+      
+      (when args-yaka-user (apply 'yaka-user args-yaka-user))
+      
+      (when (get-gbl 'ctl2-print) (format t "~a~%" my-time))
+
+      (format outstream "(list ~a ~%" my-nev)
+
+      (let ((global-args-names (loop for arg in global-args 
+                                     collect (if (listp arg) (car arg) arg)))
+            (global-args-defvals (loop for arg in global-args 
+                                       collect (if (listp arg) (cadr arg) NIL))))
+        
+        
+        (format outstream" (list ")
+        (CTL2_global rules global-args-names global-args-defvals)
+        (format outstream" )~%"))
+      
+      (format outstream" (list ")
+      (CTL2_keywords_loop rules synth-args)
+      (format outstream" )~%")
+      
+      (format  outstream ") ~%~%")
+
+      ))
+  )
+
+
 ;;; writes in <outstream> the time of the current model
 ;;; followed by chorma-processed values for a number of <keys>
 ;;; according to a given <ctl-model> (a list of list-formatted rules)
 ;;; and using the corresponding <defvals> as default values if needed
+
 (defun CTL2_global (ctl-model keys defvals)
+  
   (declare (special outstream my-model my-rank n-fql my-time my-dur my-nev my-fql my-ptl))
 
   (format outstream " ~a " (+ (offset my-model) my-time))
