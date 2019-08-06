@@ -277,27 +277,9 @@
 ;;;==================================================================
 ;;; MAKE MATRICES
 ;;;==================================================================
+;;; expand-model is the equivalent of Chroma's "CTL2" system
 
-(defmethod! expand-model ((my-model cr-model) ctl-model (target-class symbol))
-  :icon 655
-  (expand-model my-model ctl-model (make-instance target-class)))
-
-(defmethod! expand-model ((my-model cr-model) (ctl-model cr-control) (target-class symbol))
-  :icon 655
-  (expand-model my-model ctl-model (make-instance target-class)))
-
-(defmethod! expand-model ((my-model cr-model) (ctl-model cr-control) (target-class t))
-  :icon 655
-   (if (data my-model)
-       (let ((n (length (elements (data my-model)))))
-         (remove nil 
-                 (loop for i from 0 to (- n 1)
-                       collect (make-ctl-synthesis-event ctl-model target-class i my-model)
-                       )))
-     (om-beep-msg "Warning : CR-MODEL is not initialized!")
-     ))
-
-(defmethod! expand-model ((my-model cr-model) (ctl-model null) (target-class SynthesisEvt))
+(defmethod! expand-model ((my-model cr-model) (rules null) (target-class symbol))
   :icon 655
   (if (data my-model)
       (let ((n (length (elements (data my-model)))))
@@ -307,11 +289,23 @@
     (om-beep-msg "Warning : CR-MODEL is not initialized!")))
 
 
+(defmethod! expand-model ((my-model cr-model) (rules cr-control) (target-class symbol))
+  (if (data my-model)
+      (let ((n (length (elements (data my-model)))))
+        (remove nil 
+                (loop for i from 0 to (- n 1)
+                      collect (make-ctl-synthesis-event rules target-class i my-model)
+                      )))
+    (om-beep-msg "Warning : CR-MODEL is not initialized!")
+    ))
 
-(defmethod! expand-model ((my-model cr-model) (ctl-model textfile) (target-class SynthesisEvt))
-  :icon 655
-  (expand-model my-model (exp-list ctl-model) target-class))
 
+
+(defmethod! expand-model ((my-model cr-model) rules (target-class SynthesisEvt))
+  (expand-model my-model rules (type-of target-class)))
+
+(defmethod! expand-model ((my-model cr-model) (rules textfile) target-class)
+  (expand-model my-model (exp-list rules) target-class))
 
 
 ;;;;-------------------------------------------

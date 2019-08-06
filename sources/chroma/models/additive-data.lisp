@@ -133,7 +133,7 @@
 
 
 #|
-; Using OpenMusic SDIF tools we can also read and convert from an SDIF file with:
+; Using OpenMusic / SDIF tools we can also read and convert from an SDIF file with:
 
 (make-instance 
  'additive-data

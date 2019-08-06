@@ -56,12 +56,11 @@
 
    "sources/om6/cr-models/vps-tools"
    "sources/om6/cr-models/vpseditor"
-   "sources/om6/cr-models/models"
+   "sources/om6/cr-models/cr-model"
    "sources/om6/cr-models/processing"
-   "sources/om6/cr-models/controls"
+   "sources/om6/cr-models/expand-model"
    "sources/om6/cr-models/gen-model-data"
-
-   "sources/om6/chroma-expand-model"
+   "sources/om6/ctl"
    ))
 
 

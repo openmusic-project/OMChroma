@@ -340,7 +340,7 @@ my-nev : ...
             (lkp my-nev ed-fun))))
 
 ;---------------------------------------------------------------;
-(defun user-defined-function ()         ; WRITE YOUR OWN
+(defun user-defined-function ())       ; WRITE YOUR OWN
 (declare (special my-nev)) ; RETURN A LIST
 
 

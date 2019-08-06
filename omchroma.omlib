@@ -56,8 +56,9 @@
      (:packages 
      (:package 
       (:name "vps")
-      (:functions "cr::vps-high-pass" "cr::vps-low-pass" "cr::vps-band-pass" "cr::vps-main-partials" "cr::vps-n-main-partials" 
-                "cr::vps-stretch" "cr::vps-transpose" "cr::vps-revert" "cr::vps-mirror")
+      (:functions "cr::get-vps-freqs" "cr::get-vps-amps" 
+                  "cr::vps-high-pass" "cr::vps-low-pass" "cr::vps-band-pass" "cr::vps-main-partials" "cr::vps-n-main-partials" 
+                  "cr::vps-stretch" "cr::vps-transpose" "cr::vps-revert" "cr::vps-mirror")
       ))
     )
     ))

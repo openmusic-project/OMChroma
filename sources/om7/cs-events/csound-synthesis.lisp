@@ -207,7 +207,7 @@
                           inits tables
                           sr kr)
   
-  (if (not (om::list-subtypep self 'cs-evt))
+  (if (not (om::list-subtypep self '(cs-evt cs-string)))
       (om::om-beep-msg "CS-SYNTHESIZE requires only subtypes of CR:CS-EVT")
    
     (unwind-protect 
@@ -223,13 +223,14 @@
                (cs-basename (if (equal :rt name) "cs_temp" (pathname-name path-aiff)))
                (path-csd (om::handle-new-file-exists (om::tmpfile cs-basename :type "csd")))
                (csound-events (om::om-copy self))
-               (instlist (copy-list (get-unique-instrument-list csound-events))) ;;; 1 instance (copied) of each different class
+               (real-csound-events (remove 'cs-string csound-events :key 'type-of))
+               (instlist (copy-list (get-unique-instrument-list real-csound-events))) ;;; 1 instance (copied) of each different class
                (global-tables (csound-load-tables tables))
                
                (synth-sr (or sr (om::get-pref-value :audio :samplerate) 44100))
                (synth-kr (or kr synth-sr))
                
-               (all-inits (prepare-inits (om::flat (om::list! inits))  csound-events))
+               (all-inits (prepare-inits (om::flat (om::list! inits)) real-csound-events))
                
                (nch (or (get-num-channels-from-inits all-inits)
                         (get-num-channels-from-inst-list instlist))))
@@ -309,8 +310,13 @@
                 
             (loop for evt in csound-events
                   for e = 1 then (+ e 1) do
-                      
-                  (setf (om::attached-components evt) nil)
+                  
+                  (if (typep evt 'cs-string)
+                      (format out "~A~%" (str evt))
+                  
+                 (progn 
+                   
+                   (setf (om::attached-components evt) nil)
    
                   (dotimes (i (om::elts evt)) 
                     (om::get-comp evt i) ;;; this will "attach" a component to the array 
@@ -346,6 +352,7 @@
                     (reset-temp-table-id local-tables)
                     (setf (om::attached-components evt) nil)
                     ))
+                 ))
                 
             (format out "</CsScore>~%")
                 
@@ -389,9 +396,23 @@
                  :sr sr :kr kr))
 
 
+
+
+
 ;;; .. to make it work with the generic OM 'synthesize' method
 (defmethod om::synthesize-method ((self cs-evt)) 'cs-synthesize)
 
+
+;;;===============================================
+;;; allow simple-strings to include in CSound score (e.g. tempo, or comments) 
+
+(defclass! cs-string () 
+  ((str :accessor str :initarg :str :initform "" :type string)))
+
+;;; short-hand
+(defun cs-str (string) (make-instance 'cs-string :str string))
+
+(defmethod om::synthesize-method ((self cs-string)) 'cs-synthesize)
 
 
 
