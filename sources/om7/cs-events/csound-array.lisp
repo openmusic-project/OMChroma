@@ -25,13 +25,30 @@
  
 
 (om::defclass! cs-array (om::class-array om::timed-object)
-  ((source-code :initarg :source-code :accessor source-code :initform nil)
+  ((source-code :initarg :source-code :accessor source-code :initform nil :documentation "a Csound orchestra [pathname or string]")
    (cs-instr :accessor cs-instr :initform nil)
-   (instr-num :initarg :instr-num :accessor instr-num :initform 1)
+   (instr-num :initarg :instr-num :accessor instr-num :initform 1 :documentation "a csound instrument number [int]")
    ;;; repeat this slot from OM superclass, so that it appears on the box
    (om::elts :initarg :elts :accessor om::elts :initform 1 :type integer :documentation "number of elements (components) for the event")
    ;;; (orc-gens :accessor orc-gens :initform nil)
-   (precision :accessor precision :initform 4 :documentation "float precision in the Csound score")))
+   (precision :accessor precision :initform 4 :documentation "float precision in the Csound score"))
+  (:documentation 
+"
+CS-ARRAY is a special type of OM class-array, which initializes its fields automatically from a Csound instrument (#<instr-num>) found in <source-code>.
+Each p-field in the Csound instrument #<instr-num> (starting at p2: onset) becomes a field in the array. 
+
+In order to better initialize the array, the Csound code can contain formatted information in comment lines:
+
+; @PARAM <i> <name> <type> <defval> <doc>
+
+... where
+- i is the Csound p-field number
+- name is a string designating the corresponding name for the CS-ARRAY slot to be created
+- type is a Lisp type-designator for the CS-ARRAY slot to be created
+- defval is the default value for the CS-ARRAY slot to be created
+- doc is a string containing some firef documentation for the CS-ARRAY slot to be created
+
+"))
 
 
 ;; will appear as a keyword input (must be a valid slot)

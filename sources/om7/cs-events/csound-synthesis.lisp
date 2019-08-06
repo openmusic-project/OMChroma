@@ -66,17 +66,40 @@
 ;;; SYNTHESIZE CS-ARRAY
 ;;;===============================
 
-(defmethod cs-synthesize ((self cs-array) &key (name "my-synt") (run t) 
+(defmethod! cs-synthesize ((self cs-array) &key (name "my-synt") (run t) 
                           format resolution 
                           (normalize nil normalize-supplied-p)
                           inits tables
                           sr kr)
   
+  :icon :csound
+  :indoc '("a CS-ARRAY or subclass of CS-ARRAY" "the base-name of the csoudn and/or sound file generated"
+           "run selector (T/NIL)" "output audio format (:aiff/:wav)"
+           "output file resolution" "normalization level"
+           "csound init declarations" "csound table declarations"
+           "sample-rate (Hz)" "control rate (Hz)")
+  :outdoc '("a csound file (.csd) or sound file pathname") 
+  :doc "CS-SYNTHESIZE generates a Csound file containing the instrument from a CS-ARRAY (or subclass), and the score corresponding to it's field values.
+
+- <name> is a pathname or string for the output file name, where pathname and extension will be set from default values and preferences. 
+- <run> if T (default) and the library OM-CSOUND is installed and set, Csound is called to generate a sound file. otherwise, the Csound .csd file is returned.
+- <format> is the output audio format (currently :aiff or :wav). OM prefernces value used as default.
+- Resolution can be one of 16, 24 or 32 for the format of csound audio output. If NIL, audio output in floats.
+- <normalize> can be NIL (no normalization) or a normalization level. If <= 0, the level is considered in dB.
+- <inits> is a list of CS-INIT objects defining global variables, macros, user-defined opcodes or channel declarations.
+- <tables> is a list of Csound tables (CS-TABLE objects) used in the Csound score.
+- <sr> is the Csound sample rate (defaults to OM preference value).
+- <kr> is control rate  (defaults to <sr>).
+
+<inits>, <sr> and <kr> are ignored with CS-ARRAYS (already defined in the Csound orchestra) but used for all subclasses of CS-EVT.
+
+"
+  
   (declare (ignore inits sr kr)) ;;; this is already in the csound instrument
 
   (unwind-protect 
   
-      (let* ((out-format (string (or format (om::get-pref-value :audio :format))))
+      (let* ((out-format (string-downcase (or format (om::get-pref-value :audio :format))))
              (out-res resolution) ;;; no resolution will keep the output in float format (or resolution (om::get-pref-value :audio :resolution))
              (out-normalize (if normalize-supplied-p normalize (om::get-pref-value :audio :normalize)))
              
@@ -145,7 +168,7 @@
         (if run   
             
             (let ((out-final (om::csound-synth path-orc path-sco :out path-aiff :format out-format)))
-              (if out-normalize
+              (if (and out-final out-normalize)
                   (normalize-output out-final out-normalize out-format out-res)
                 out-final))
                   
@@ -201,7 +224,7 @@
 ;;; - Events and their contents are DEEP-COPIED because the parsing might modify them and be applied in sequence (if several functions)
 ;;; - Components operations must therefore modify the event in place in order to be propagated
 ;;; - (also for tables to be collected correctly)
-(defmethod cs-synthesize ((self list) &key (name "my-synt") (run t) 
+(defmethod! cs-synthesize ((self list) &key (name "my-synt") (run t) 
                           format resolution 
                           (normalize nil normalize-supplied-p)
                           inits tables
@@ -212,7 +235,7 @@
    
     (unwind-protect 
   
-        (let* ((out-format (string (or format (om::get-pref-value :audio :format))))
+        (let* ((out-format (string-downcase (or format (om::get-pref-value :audio :format))))
                (out-res resolution) ;;; no resolution will keep the output in float format (or resolution (om::get-pref-value :audio :resolution))
                (out-normalize (if normalize-supplied-p normalize (om::get-pref-value :audio :normalize)))
                (format-str (string-downcase out-format))
@@ -369,7 +392,7 @@
           (if run   
               
               (let ((out-final (om::csd-synth path-csd :out path-aiff)))
-                (if out-normalize
+                (if (and out-final out-normalize)
                     (normalize-output out-final out-normalize out-format out-res)
                   out-final))
             
