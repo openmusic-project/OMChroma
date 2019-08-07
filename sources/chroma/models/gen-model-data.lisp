@@ -1,13 +1,37 @@
-(in-package :om)
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+;=====================================================
+
+(in-package :cr)
+
+
 ;ms_1109
-(defmethod! gen-model-data (lvals fun-list arg-list &key (interpolmode) (markers) (test) (markermode 'delete) (timemode 'rel) (integeritp) (verbose))
-            :indoc '("Any list to be modified" "List of functions sequentially applied to lvals"
-                                               "List of dynamic control structures (see below)"
-                                               "Interpolation mode" "List of markers" "Test" "Markermode"
-                                               "Timemode" "Integer Interpolation Flag" "Verbose Flag")
-            :doc
+(defmethod gen-model-data (lvals fun-list arg-list &key (interpolmode) (markers) (test) 
+                                 (markermode 'delete) (timemode 'rel) (integeritp) (verbose))
+  
 "Process a list of values by sequentially applying all the functions in fun-list to each value,
 with the arguments dynamically computed according to the rules specified in arg-list.
+
+<lvals> : Any list to be modified
+<fun-list> : List of functions sequentially applied to lvals
+<arg-list> : List of dynamic control structures (see below)
 
 The first argument of each function is each element of lvals. The other arguments depend on the function.
 NB: the function must return an element of the same type as the input argument.
@@ -57,7 +81,7 @@ Flag, if t, the arguments computed by interpolation will be rounded to an intege
 :verbose
 Flag, if t, print only the args passed to the modifying functions, NOT the result.
 "
-            :icon 654
+
             (let ((fun-list (list! fun-list)))
               (let ((num-vals (length lvals))
 ; if timemode is a list, keep only as many args as functions (if too little, repeat the last arg)
@@ -74,7 +98,7 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
                                (setf res-arg-list (cons (fixed-list args num-vals) res-arg-list)))
                               ((equal time-mode 'rel)
                                (setf res-arg-list
-                                     (cons (interpolated-list
+                                     (cons (interpolated-list 
                                             args num-vals
                                             :itpmode interpol-mode
                                             :intitp integer-itp)
@@ -94,27 +118,18 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
  
                  (final-model-data lvals fun-list (nreverse res-arg-list) :markers markers :test test :markermode markermode)))))
 
-(defmethod! gen-model-data ((self cr-model) fun-list arg-list &key (interpolmode) (markers) (test) (markermode 'delete) (timemode 'rel) (integeritp) (verbose))
-  :icon 654
-  (gen-model-data (elements (data self)) fun-list arg-list
-                  :interpolmode interpolmode :markers markers
-                  :test test :markermode markermode
-                  :timemode timemode :integeritp integeritp
-                  :verbose verbose))
-
 
 (defun prepare-arg (arg n)
-  (cond
-   ((null arg) (repeat-n arg n))
-   ((listp arg) (cr::l-val n arg))
-   (t (repeat-n arg n))))
+  (if (consp arg) 
+      (cr::l-val n arg)
+    (make-list n :initial-element arg)))
 
 ;(prepare-arg '(1 2 3) 10)
 ;(prepare-arg '() 10)
 
 (defun prepare-interpolmode (arg n)
   (cond
-   ((null arg) (repeat-n arg n))
+   ((null arg) (make-list n :initial-element arg))
    ((and (listp arg) (symbolp (car arg)) (not (null (car arg)))) (repeat-n arg n))
    (t (cr::l-val n arg))))
 
@@ -139,7 +154,9 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
          (mapcar #'flat
                  (mat-trans
                   (loop for el in ctl-list ; el = (0 (10 15))
-                        collect (om::mat-trans (list (cadr el) (repeat-n (car el) (length (cadr el))))))
+                        collect (om::mat-trans (list (cadr el)
+                                                     (make-list (length (cadr el)) :initial-element (car el))
+                                                     )))
                   ))))
         (mat-trans ; interpolate each argument alone, then mat-trans them
          (if intitp
@@ -158,7 +175,8 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
          (mapcar #'flat
                  (mat-trans
                   (loop for el in ctl-list ; el = (0 (10 15))
-                        collect (om::mat-trans (list (cadr el) (repeat-n (car el) (length (cadr el))))))
+                        collect (om::mat-trans (list (cadr el) 
+                                                     (make-list (length (cadr el)) :initial-element (car el)))))
                   ))))
         (mat-trans ; interpolate each argument alone, then mat-trans them
          (if intitp
@@ -166,11 +184,11 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
                     collect 
                     (mapcar
                      #'round
-                     (loop for marker in markers do
+                     (loop for marker in markers
                            collect (cr::y-val_fun (cr::make_fun fun) marker itpmode))))
            (loop for fun in result
                  collect 
-                 (loop for marker in markers do
+                 (loop for marker in markers
                        collect (cr::y-val_fun (cr::make_fun fun) marker itpmode))))
          )))
 

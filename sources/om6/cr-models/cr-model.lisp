@@ -519,6 +519,18 @@
     filename))
 
 
+;;;====================================
+;;; CONNECTION TO CHROMA's FUNCTION
+;;;====================================
+
+(defmethod cr::gen-model-data ((self cr-model) fun-list arg-list &key (interpolmode) (markers) (test) 
+                            (markermode 'delete) (timemode 'rel) (integeritp) (verbose))
+  (cr::gen-model-data (elements (data self)) fun-list arg-list
+                  :interpolmode interpolmode :markers markers
+                  :test test :markermode markermode
+                  :timemode timemode :integeritp integeritp
+                  :verbose verbose))
+
 
 ;;;============================
 ;;; MODEL EDITOR

@@ -81,6 +81,10 @@ It is used as element/data-frame for CR-MODELs.
 ;;; used in CR::ctl function... (?)
 ;;; (defmethod offset ((self cr-model)) 0.0)
 
+(defmethod get-model-contents ((self cr-model))
+  (om::data-stream-get-frames self))
+
+
 ;;;=======================
 ;;; GET MODEL DATA IN
 ;;;=======================
@@ -287,7 +291,7 @@ Data format:
    )
 
    (setf (max-amp self)
-         (loop for frame in (om::data-stream-get-frames self) maximize
+         (loop for frame in (get-model-contents self) maximize
                (or (om::list-max (cr-partials-amps (vps frame))) 0.0)))
 
   (call-next-method))
@@ -316,9 +320,8 @@ Data format:
     rep))
 
 (defmethod! model-data ((self cr-model) &optional modif-func args)
-  :icon 654
   (model-data 
-   (mapcar #'vps (om::data-stream-get-frames self))
+   (mapcar #'vps (get-model-contents self))
    modif-func args))
 
 
@@ -333,7 +336,7 @@ Data format:
   (om::list-max (mapcar #'om::list-max (remove nil (mapcar #'cr-partials-amps (remove nil self))))))
 
 (defmethod! model-max-amp ((self cr-model))
-  (model-max-amp (mapcar #'vps (om::data-stream-get-frames self))))
+  (model-max-amp (mapcar #'vps (get-model-contents self))))
 
 ;;; MAX FREQ
 (defmethod! model-max-freq ((self list))
@@ -341,7 +344,7 @@ Data format:
   (om::list-max (mapcar #'om::list-max (remove nil (mapcar #'cr-partials-freqs (remove nil self))))))
 
 (defmethod! model-max-freq ((self cr-model))
-  (model-max-freq (mapcar #'vps (om::data-stream-get-frames self))))
+  (model-max-freq (mapcar #'vps (get-model-contents self))))
 
 ;;; MIN FREQ
 (defmethod! model-min-freq ((self list))
@@ -350,12 +353,12 @@ Data format:
 
 (defmethod! model-min-freq ((self cr-model))
   :icon 659
-  (model-min-freq (mapcar #'vps (om::data-stream-get-frames self))))
+  (model-min-freq (mapcar #'vps (get-model-contents self))))
 
 ;;; NB EVTS
 (defmethod! model-nb-evts ((self cr-model))
   :icon 659
-  (length (om::data-stream-get-frames self)))
+  (length (get-model-contents self)))
 
 ;;; NB EVTS
 (defmethod! model-total-dur ((self cr-model))
@@ -367,7 +370,7 @@ Data format:
 ; other inspection methods used in chroma CTL2
 
 (defmethod get-norm-amp ((self cr-model) rang &optional (scaling-factor 1))
-  (let ((thefql (nth rang (elements (data self)))))
+  (let ((thefql (nth rang (get-model-contents self))))
     (if thefql
       (mapcar #'(lambda (y) (/ y (/ (model-max-amp self) scaling-factor ))) (get-vps-amps thefql))
       nil)))
@@ -379,7 +382,7 @@ Data format:
   (car (nth i (time-struct self))))
 
 (defmethod get-nth-data-frame ((self cr-model) i)
-  (vps (nth i (om::data-stream-get-frames self))))
+  (vps (nth i (get-model-contents self))))
 
 
 ;;;====================================
@@ -403,12 +406,12 @@ Data format:
               (sdif::SdifFWriteAllASCIIChunks sdiffileptr)
                   
               (let ((datalist (loop for time in (time-struct self)
-                                    for frame in (om::data-stream-get-frames self)
+                                    for frame in (get-model-contents self)
                                     when (and frame (vps frame)) 
                                     collect (let ((vps (vps frame)))
-                                              (list time (loop for f in (cr-partials-freqs vps)
+                                              (list time (loop for f in (cr-partials-freqs  vps)
                                                                for i from 0
-                                                               collect (list i f (or (nth i (cr-frame-amps vps)) 1.0) 0))))
+                                                               collect (list i f (or (nth i (cr-partials-amps vps)) 1.0) 0))))
                                     )))
                     
                 (loop for frame in (om::make-1MRK-frames datalist) do
@@ -418,6 +421,20 @@ Data format:
           (sdif::SDIFFClose sdiffileptr))
       (om::om-beep-msg "Could not open file for writing: ~A" path))
     path))
+
+
+;;;====================================
+;;; CONNECTION TO CHROMA's FUNCTION
+;;;====================================
+
+(defmethod cr::gen-model-data ((self cr-model) fun-list arg-list &key 
+                            (interpolmode) (markers) (test) (markermode 'delete) (timemode 'rel) (integeritp) (verbose))
+  (cr::gen-model-data (get-model-contents self) fun-list arg-list
+                      :interpolmode interpolmode :markers markers
+                      :test test :markermode markermode
+                      :timemode timemode :integeritp integeritp
+                      :verbose verbose))
+
 
 
 
