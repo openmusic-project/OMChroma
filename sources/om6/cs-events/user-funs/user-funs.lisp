@@ -470,7 +470,7 @@ HISTORICAL NAME: InterFaCe between a WT object and Csound
      (let ((found? (find gen-nam (cr::get-gbl 'cr::WTL) :test #'equal :key #'first)))
        (if found?
          (comp-field c "wenv" (third found?))
-         (format t "Unknown table: ~a~%" (first gen-nam))))
+         (print (format () "Unknown table: ~a~%" (first gen-nam)))))
 #|
 ; INITIALIZE THE WT-FUN -> MOVED INTO WRITE-WT-FUN (my-methods.lisp)
 
@@ -503,8 +503,8 @@ HISTORICAL NAME: InterFaCe between a WT object and Csound
                   duration-wanted dur-of-transposed-win
                   (* dur-of-transposed-win cr::current-si)))))
       (t
-       (format t "~%Freezing comp. ~D: Wanted dur: ~6F, max dur: ~6F"
-               (index c) duration-wanted dur-of-transposed-win)
+       (print (format () "~%Freezing comp. ~D: Wanted dur: ~6F, max dur: ~6F"
+               (index c) duration-wanted dur-of-transposed-win))
        (if (cr::get-gbl 'cr::PRNFLG) ; IF NO PRINT-FLAG, PRINT MINIMUM INFORMATION IN SCORE
          (freeze-WT c)
          (append (list
@@ -785,7 +785,7 @@ HISTORICAL NAME: InterFaCe between a WT object and Csound
             (declare (special xin xout))
             (test-xin-xout)))
         (push (clone vo) result)
-        (format t "~%         Total of ~D chunks~%" (1+ index))
+        (print (format () "~%         Total of ~D chunks~%" (1+ index)))
         (unless print-flag  ; IF NO PRINT-FLAG, PRINT MINIMUM INFORMATION IN SCORE
           (push (format () "~%; %%%         Total of ~D chunks~%" (1+ index)) result))
 ;        (PrINX.wt vo)
@@ -1122,12 +1122,12 @@ durtot[e] < durmin => discard event
     (if (< durtot mindur)
 
 ; FOR LATER: TO BE PRINTED IN THE SCORE FILE
-      (format t ";;¥¥¥ERROR: DURTOT (~a) < durmin (~a)~%;    Event discarded~%"
+      (print (format () ";;--------ERROR: DURTOT (~a) < durmin (~a)~%;    Event discarded~%"
+              durtot mindur))
+      (format () ";;--------ERROR: DURTOT (~a) < durmin (~a)~%;    Event discarded~%"
               durtot mindur)
 
       t)))
-
-
 
 (defmethod amptot? ((c class-array))
 "
@@ -1139,7 +1139,10 @@ Two global variables:
    (if (<= (amptot c) (cr::get-gbl 'cr::gblamp))
      t
 ; FOR LATER: TO BE PRINTED IN THE SCORE FILE
-     (format t ";;¥¥¥ERROR: AMPTOT > ~a: ~a~%;    Event discarded~%"
+     (print (format () ";;--------ERROR: AMPTOT > ~a: ~a~%;    Event discarded~%"
+               (amptot c)
+               (cr::get-gbl 'cr::gblamp)))
+     (format () ";;--------ERROR: AMPTOT > ~a: ~a~%;    Event discarded~%"
                (amptot c)
                (cr::get-gbl 'cr::gblamp))))
 
@@ -1156,9 +1159,9 @@ e-dels[i] < 0.0	=> discard component
   (let ((curr-ed (comp-field c "e-dels")))
     (if (< curr-ed 0.0)
       (progn
-        (format t ";¥¥¥ERROR: E-DELS < 0.0: ~a~%;    Component discarded~%"
-                curr-ed)
-        (format () ";¥¥¥ERROR: E-DELS < 0.0: ~a~%;    Component discarded~%"
+        (print (format () ";--------ERROR: E-DELS < 0.0: ~a~%;    Component discarded~%"
+                curr-ed))
+        (format () ";--------ERROR: E-DELS < 0.0: ~a~%;    Component discarded~%"
                 curr-ed))
       c)))
 
@@ -1175,9 +1178,9 @@ e-dels[i] > durtot[e] - durmin => discard component
                   0.01))) 		; DEFAULT MINIMUM DURATION
     (if (> curr-ed (- durtot mindur))
       (progn
-        (format t ";¥¥¥ERROR: E-DELS [~a] > durtot [~a] - durmin [~a]~%;    Component discarded~%"
-                curr-ed durtot mindur)
-        (format () ";¥¥¥ERROR: E-DELS [~a] > durtot [~a] - durmin [~a]~%;    Component discarded~%"
+        (print (format () ";--------ERROR: E-DELS [~a] > durtot [~a] - durmin [~a]~%;    Component discarded~%"
+                curr-ed durtot mindur))
+        (format () ";--------ERROR: E-DELS [~a] > durtot [~a] - durmin [~a]~%;    Component discarded~%"
                 curr-ed durtot mindur))
       c)))
 
@@ -1200,9 +1203,9 @@ e-dels[i] > durtot[e] - durmin => discard component
                   0.01)))
      (if (< curr-dur mindur)
        (progn
-         (format t ";¥¥¥ERROR: DUR [~a] < durmin [~a]~%;    Component discarded~%"
-                 curr-dur mindur)
-         (format () ";¥¥¥ERROR: DUR [~a] < durmin [~a]~%;    Component discarded~%"
+         (print (format () ";--------ERROR: DUR [~a] < durmin [~a]~%;    Component discarded~%"
+                 curr-dur mindur))
+         (format () ";--------ERROR: DUR [~a] < durmin [~a]~%;    Component discarded~%"
                  curr-dur mindur))
        c)))
 
@@ -1236,10 +1239,10 @@ Two global variables:
   (let ((amp (comp-field c "amp")))
     (if (> amp (cr::get-gbl 'cr::maxamp))
       (progn
-        (format t ";¥¥¥ERROR: AMP > ~a: ~a~%;    Component discarded~%"
+        (print (format () ";--------ERROR: AMP > ~a: ~a~%;    Component discarded~%"
                 amp
-                (cr::get-gbl 'cr::maxamp))
-        (format () ";¥¥¥ERROR: AMP > ~a: ~a~%;    Component discarded~%"
+                (cr::get-gbl 'cr::maxamp)))
+        (format () ";--------ERROR: AMP > ~a: ~a~%;    Component discarded~%"
                 amp
                 (cr::get-gbl 'cr::maxamp)))
       c)))
@@ -1265,8 +1268,8 @@ fq[i] > SR/2 => discard component
                   22050)))
    (if (> (comp-field c "freq") sr2)
      (progn
-       (format t ";ERROR: FQ > Nyquist [SR = ~a]: ~a~%;    Component n. ~a discarded~%"
-               (* sr2 2) (comp-field c "freq") (index c))
+       (print (format () ";ERROR: FQ > Nyquist [SR = ~a]: ~a~%;    Component n. ~a discarded~%"
+               (* sr2 2) (comp-field c "freq") (index c)))
        (format () ";ERROR: FQ > Nyquist: ~a [SR = ~a]~%;    Component n. ~a discarded~%"
                (* sr2 2) (comp-field c "freq") (index c)))
        c)))
@@ -1283,8 +1286,8 @@ fq[i] < fqmin	discard component
                   15.0)))
      (if (< (comp-field c "freq") fqmin)
        (progn
-         (format t ";ERROR: FQ < fqmin [~a]: ~a~%;    Component discarded~%"
-                 fqmin (comp-field c "freq"))
+         (print (format () ";ERROR: FQ < fqmin [~a]: ~a~%;    Component discarded~%"
+                 fqmin (comp-field c "freq")))
          (format () ";ERROR: FQ < fqmin [~a]: ~a~%;    Component discarded~%"
                  fqmin (comp-field c "freq")))
        c)))
@@ -1365,8 +1368,8 @@ fq[i] > SR/2 => discard sub-component
                   22050)))
    (if (> (comp-field c "freq") sr2)
      (progn
-       (format t ";ERROR: FQ > Nyquist: ~,2F /  Sub-component discarded"
-               (comp-field c "freq"))
+       (print (format () ";ERROR: FQ > Nyquist: ~,2F /  Sub-component discarded"
+               (comp-field c "freq")))
        (format () ";ERROR: FQ > Nyquist: ~,2F /  Sub-component discarded"
                (comp-field c "freq")))
        c)))
@@ -1383,8 +1386,8 @@ fq[i] < fqmin	discard component
                   15.0)))
      (if (< (comp-field c "freq") fqmin)
        (progn
-         (format t ";ERROR: FQ < fqmin [~a]: ~a~%;    Sub-component discarded~%"
-                 fqmin (comp-field c "freq"))
+         (print (format () ";ERROR: FQ < fqmin [~a]: ~a~%;    Sub-component discarded~%"
+                 fqmin (comp-field c "freq")))
          (format () ";ERROR: FQ < fqmin [~a]: ~a~%;    Sub-component discarded~%"
                  fqmin (comp-field c "freq")))
        c)))

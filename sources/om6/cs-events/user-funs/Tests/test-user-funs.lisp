@@ -92,7 +92,7 @@ fq[i] > SR/2 => discard component
                   22050)))
    (if (> (comp-field c "fq") sr2)
      (list
-      (format () ";¥¥¥ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
+      (format () ";*****ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
               (comp-field c "fq") (index c))
       (progn (comp-field c "fq" (* -1.0 (comp-field c "fq")))
              "j'ai change")) ; TEST FOR TESTING: RETURN AN ERROR AND THE NEGATIVE FREQUENCY
@@ -110,7 +110,7 @@ fq[i] > SR/2 => discard component
    (if (> (comp-field c "fq") sr2)
      (list
       (comp-field c "fq" (* -1.0 (comp-field c "fq")))
-      (format () ";¥¥¥ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
+      (format () ";*****ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
               (comp-field c "fq") (index c))
       ) ; TEST FOR TESTING: RETURN THE NEGATIVE FREQUENCY AND AN ERROR
        c)))
@@ -121,7 +121,7 @@ fq[i] > SR/2 => discard component
 FOR TESTING PURPOSES ONLY
 fq[i] > SR/2 => discard component
 "
-(declare (special cr::sr/2)
+(declare (special cr::sr/2 index)
          )		; modified in the gen-user-fun  
    (let ((index (index c))
          (sr2 (if (find-package 'cr)
