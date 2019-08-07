@@ -2,7 +2,7 @@
 *.zip
 codesign
 
-#*.*#
+*.*#
 
 *.*fasl
 
