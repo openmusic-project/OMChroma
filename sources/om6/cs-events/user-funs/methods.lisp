@@ -17,7 +17,6 @@
 ; test-durmin
 ;******************************************************************
 
-
 ;------------------------------------------------------------------
 ; FUNCTIONS
 ;------------------------------------------------------------------
@@ -29,18 +28,20 @@
    specified by CSfun to be passed as an argument to synthesize.
 The files should be strings without extension. A default extension .lisp is
    automatically loaded"
-  (let ((dir (get-cr-path :csfun)))
-    (append (list (make-pathname :directory (pathname-directory dir)
-                                 :name "DEF-funs" :type "lisp"))
-            (loop for fun in fun-list
-                  collect (let ((file
-                                 (make-pathname
-                                  :directory (pathname-directory dir)
-                                  :name (string fun) :type "lisp")))
-                            (if (probe-file file)
-                              file
-                              (error "Hello! Can you tell me, please, what I should do with an inexistant function file?~%~a~%"
-                                     file)))))))
+  (let ((dir (cr::get-cr-path :csfun)))
+    (if dir 
+        (append (list (make-pathname :directory (pathname-directory dir)
+                                     :name "DEF-funs" :type "lisp"))
+                (loop for fun in fun-list
+                      collect (let ((file
+                                     (make-pathname
+                                      :directory (pathname-directory dir)
+                                      :name (string fun) :type "lisp")))
+                                (if (probe-file file)
+                                    file
+                                  (error "Hello! Would you, please, tell me, sir ~a, what I should do with an inexistant function file?~%       ~a~%"
+                                         (cr::get-gbl 'cr::USER) file)))))
+      (print (format () "WARNING: THE DIRECTORY WHERE TO LOOK FOR FILE DOES NOT EXIST")))))
 
 ;------------------------------------------------------------------
 ; METHODS
