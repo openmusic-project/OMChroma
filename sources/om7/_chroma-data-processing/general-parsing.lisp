@@ -21,15 +21,13 @@
 ;Authors: C. Agon, M. Stroppa, J. Bresson, S. Lemouton
 
 
-
 (in-package :cr)
-
 
 
 (defun make-remove-fields (list remove-fields)
   
   (if remove-fields
-
+      
       (flet ((remove-index (list position comp)
                (setf (val-list comp)
                      (loop for item in list
@@ -54,11 +52,12 @@
         (current-comp comp))
     (loop for item in predicates
           while (component-p current-comp) do
-          (let ((temp-rep (cond ((or (symbolp item) (functionp item)) (funcall item current-comp))
-                                ((consp item)
-                                 (if (equal 'lambda (car item))
-                                     (funcall (eval item) current-comp)
-                                   (apply (car item) (cons current-comp (cdr item))))))))
+          (let ((temp-rep 
+                 (cond ((or (symbolp item) (functionp item)) (funcall item current-comp))
+                       ((consp item)
+                        (if (equal 'lambda (car item))
+                            (funcall (eval item) current-comp)
+                          (apply (car item) (cons current-comp (cdr item))))))))
             (cond
              ((null temp-rep)
               (setf current-comp nil))
@@ -78,34 +77,6 @@
                 ))
              (t (setf current-comp nil)))))
     (list current-comp comp-list)))
-
-
-
-(defmethod! general-parsing ((self component) (predicates list) (modifiers list) &key (remove-duplicatas t) (remove-fields nil))
-   :initvals '(nil nil nil t)
-   (let ((comp-list nil)
-         (current-comp self))
-     (loop for item in predicates
-           while (component-p current-comp) do
-           (let ((temp-rep (funcall item current-comp)))
-             (cond
-              ((component-p temp-rep) 
-               (setf current-comp temp-rep))
-              ((stringp temp-rep)
-               (setf comp-list (append comp-list (list temp-rep)))
-               (setf current-comp nil))
-              ((listp  temp-rep)
-               (setf current-comp (car temp-rep))
-               (setf comp-list (append comp-list (cdr temp-rep))))
-              (t (setf current-comp nil)))))
-     (when current-comp
-       (loop for item in modifiers do
-             (setf comp-list (append comp-list (list! (funcall item current-comp))))))
-     (when remove-duplicatas
-       (setf comp-list (remove-duplicates comp-list :test 'equal)))
-     (make-remove-fields comp-list remove-fields)
-     comp-list))
-
 
 
 (defmethod! gen-user-fun ((tests list) (sub-comp list) &key (sub-tests nil) (remove-fields nil))
