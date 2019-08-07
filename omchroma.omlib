@@ -22,6 +22,7 @@
   "sources/om7/cs-events/csound-inits"
   "sources/om7/cs-events/csound-event"
   "sources/om7/cs-events/csound-synthesis"
+  "sources/om7/cs-events/general-parsing"
   "sources/om7/cs-events/csound-sss"
   "sources/om7/cs-events/load-classes"
   "sources/om7/cs-events/compatibility"
@@ -39,7 +40,7 @@
   (:packages 
    (:package 
     (:name "cs-events")
-    (:functions "cr::cs-synthesize" "cr::merge-cs-events") 
+    (:functions "cr::cs-synthesize" "cr::merge-cs-events" "cr::gen-user-fun") 
     (:classes "cr::cs-array" "cr::cs-init")
     (:packages 
      (:package 

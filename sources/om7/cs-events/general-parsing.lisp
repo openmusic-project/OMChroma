@@ -29,7 +29,7 @@
   (if remove-fields
       
       (flet ((remove-index (list position comp)
-               (setf (val-list comp)
+               (om::comp-list comp
                      (loop for item in list
                            for i = 0 then (+ i 1)
                            when (not (member i position)) collect item))
@@ -37,12 +37,11 @@
           
         (let (indexlist)
           (loop for item in list
-                collect (if (component-p item)
+                collect (if (om::component-p item)
                             (progn
                               (unless indexlist
-                                (setf indexlist (loop for label in remove-fields
-                                                      collect (label2index item label))))
-                              (remove-index (val-list item) indexlist item))
+                                (setf indexlist (loop for label in remove-fields collect (om::get-field-id item label))))
+                              (remove-index (om::comp-list item) indexlist item))
                           item))))
     list))
 
@@ -51,7 +50,7 @@
   (let ((comp-list nil)
         (current-comp comp))
     (loop for item in predicates
-          while (component-p current-comp) do
+          while (om::component-p current-comp) do
           (let ((temp-rep 
                  (cond ((or (symbolp item) (functionp item)) (funcall item current-comp))
                        ((consp item)
@@ -61,13 +60,13 @@
             (cond
              ((null temp-rep)
               (setf current-comp nil))
-             ((component-p temp-rep)
+             ((om::component-p temp-rep)
               (setf current-comp temp-rep))
              ((stringp temp-rep)
               (setf comp-list (cons temp-rep comp-list))
               (setf current-comp nil))
              ((listp  temp-rep)
-              (if (component-p (car temp-rep))
+              (if (om::component-p (car temp-rep))
                 (progn
                   (setf current-comp (car temp-rep))
                   (setf comp-list (append comp-list (cdr temp-rep))))
@@ -115,7 +114,7 @@ a list of strings for fields that will not be written in the scr file
    #'(lambda (matrix index)
 ; ***ADDED TO ALLOW TO ACCESS THIS VARIABLE FROM USER-FUNS, MARCO, 010914
        (declare (special index))
-       (let* ((component (get-comp matrix index))
+       (let* ((component (om::get-comp matrix index))
               (filtercomp (filtre-test component tests ))
               (current-comp (car filtercomp))
               (comp-list (second filtercomp)))
@@ -125,7 +124,7 @@ a list of strings for fields that will not be written in the scr file
                        subcomplist)
                    (setf subcomplist
                          (loop for subc in subcomp
-                               append (if (component-p subc)
+                               append (if (om::component-p subc)
                                         (let* ((filtersubcomp (filtre-test subc sub-tests ))
                                                (succ-sub (first filtersubcomp))
                                                (subcomp-list (second filtersubcomp)))
