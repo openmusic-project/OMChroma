@@ -19,8 +19,8 @@
                 (:userfun *cr-userfun-dir*)
                 (:tmp *cr-tmp-dir*)
                 (t nil))))
-    (make-pathname :directory (append (pathname-directory root) subdirs)
-                   :name name :type type)))
+    (when root (make-pathname :directory (append (pathname-directory root) subdirs)
+                   :name name :type type))))
 
 
 
