@@ -1114,19 +1114,16 @@ HISTORICAL NAME: InterFaCe between a WT object and Csound
 durtot[e] < durmin => discard event
 (real test before sending the list of events to synthesize)
   "
-(declare (special cr::durmin))  
+  (declare (special cr::durmin))  
   (let ((mindur (if (find-package 'cr)	; IF CHROMA WAS LOADED, USE ITS DEFAULT
                   (cr::get-gbl 'cr::durmin)
                   0.01))
         (durtot (durtot c)))
     (if (< durtot mindur)
 
-; FOR LATER: TO BE PRINTED IN THE SCORE FILE
-      (print (format () ";;--------ERROR: DURTOT (~a) < durmin (~a)~%;    Event discarded~%"
+; IT IS NOT PRINTED IN THE SCORE FILE, SINCE THE EVENT IS NOT CREATED
+      (print (format () "~%~%~%~%~%;;--------ERROR: DURTOT (~a) < durmin (~a)~%;            EVENT DISCARDED.~%~%~%~%~%"
               durtot mindur))
-      (format () ";;--------ERROR: DURTOT (~a) < durmin (~a)~%;    Event discarded~%"
-              durtot mindur)
-
       t)))
 
 (defmethod amptot? ((c class-array))
@@ -1138,13 +1135,10 @@ Two global variables:
 "
    (if (<= (amptot c) (cr::get-gbl 'cr::gblamp))
      t
-; FOR LATER: TO BE PRINTED IN THE SCORE FILE
-     (print (format () ";;--------ERROR: AMPTOT > ~a: ~a~%;    Event discarded~%"
+; IT IS NOT PRINTED IN THE SCORE FILE, SINCE THE EVENT IS NOT CREATED
+     (print (format () "~%~%~%~%~%;;--------ERROR: AMPTOT ~a > GBLAMP: ~a~%;            EVENT DISCARDED.~%~%~%~%~%"
                (amptot c)
-               (cr::get-gbl 'cr::gblamp)))
-     (format () ";;--------ERROR: AMPTOT > ~a: ~a~%;    Event discarded~%"
-               (amptot c)
-               (cr::get-gbl 'cr::gblamp))))
+               (cr::get-gbl 'cr::gblamp)))))
 
 
 ;------------------------------------------------------------------
@@ -1158,11 +1152,8 @@ e-dels[i] < 0.0	=> discard component
 "
   (let ((curr-ed (comp-field c "e-dels")))
     (if (< curr-ed 0.0)
-      (progn
-        (print (format () ";--------ERROR: E-DELS < 0.0: ~a~%;    Component discarded~%"
-                curr-ed))
-        (format () ";--------ERROR: E-DELS < 0.0: ~a~%;    Component discarded~%"
-                curr-ed))
+        (print (format () ";ed-0? --------ERROR: E-DELS < 0.0: ~a~%;    Component n. ~a discarded~%"
+                curr-ed (index c)))
       c)))
 
 
@@ -1177,11 +1168,11 @@ e-dels[i] > durtot[e] - durmin => discard component
                   (cr::get-gbl 'cr::durmin)
                   0.01))) 		; DEFAULT MINIMUM DURATION
     (if (> curr-ed (- durtot mindur))
-      (progn
-        (print (format () ";--------ERROR: E-DELS [~a] > durtot [~a] - durmin [~a]~%;    Component discarded~%"
+;      (progn
+        (print (format () ";ed-durmin? --------ERROR: E-DELS [~a] > durtot [~a] - durmin [~a]~%;    Component discarded~%"
                 curr-ed durtot mindur))
-        (format () ";--------ERROR: E-DELS [~a] > durtot [~a] - durmin [~a]~%;    Component discarded~%"
-                curr-ed durtot mindur))
+;        (format () ";--------ERROR: E-DELS [~a] > durtot [~a] - durmin [~a]~%;    Component discarded~%"
+;                curr-ed durtot mindur))
       c)))
 
 
@@ -1202,11 +1193,11 @@ e-dels[i] > durtot[e] - durmin => discard component
                   (cr::get-gbl 'cr::durmin)
                   0.01)))
      (if (< curr-dur mindur)
-       (progn
-         (print (format () ";--------ERROR: DUR [~a] < durmin [~a]~%;    Component discarded~%"
+;       (progn
+         (print (format () ";dur-durmin? --------ERROR: DUR [~a] < durmin [~a]~%;    Component discarded~%"
                  curr-dur mindur))
-         (format () ";--------ERROR: DUR [~a] < durmin [~a]~%;    Component discarded~%"
-                 curr-dur mindur))
+;         (format () ";--------ERROR: DUR [~a] < durmin [~a]~%;    Component discarded~%"
+;                 curr-dur mindur))
        c)))
 
 
@@ -1223,7 +1214,7 @@ Correct the component if its duration is beyond durtot.
       c
       (list 
        (comp-field c "durs" (- durtot curr-ed))
-       (format () ";---> WARNING / Reduced DUR: old-dur = ~a, new-dur = ~a~% "
+       (format () ";ed+dur? ---> WARNING / Reduced DUR: old-dur = ~a, new-dur = ~a~% "
                   curr-dur (- durtot curr-ed)))
        )))
 
@@ -1238,13 +1229,13 @@ Two global variables:
 "
   (let ((amp (comp-field c "amp")))
     (if (> amp (cr::get-gbl 'cr::maxamp))
-      (progn
-        (print (format () ";--------ERROR: AMP > ~a: ~a~%;    Component discarded~%"
+;      (progn
+        (print (format () ";amp? --------ERROR: AMP > ~a: ~a~%;    Component discarded~%"
                 amp
                 (cr::get-gbl 'cr::maxamp)))
-        (format () ";--------ERROR: AMP > ~a: ~a~%;    Component discarded~%"
-                amp
-                (cr::get-gbl 'cr::maxamp)))
+;        (format () ";--------ERROR: AMP > ~a: ~a~%;    Component discarded~%"
+;                amp
+;                (cr::get-gbl 'cr::maxamp)))
       c)))
 
 
@@ -1257,23 +1248,104 @@ Two global variables:
 			 (comp-field c "amp"))))
 
 
-;;; ***	
-(defmethod fq-sr? ((c component))
+;;; ***	NEW, ms1908
+(defmethod fq-sr? ((c component) &rest mode)
 "
-fq[i] > SR/2 => discard component
+IF fq > NYQUIST
+(fq-sr?) with no args, discard the fq is > Nyquist
+(fq-sr? 0) transpose the fq until it falls within the range of Nyquist
+(fq-sr? <i>) transpose the fq <n> octaves down
+(fq-sr? <f>) transpose the fq until below <f>
+
+IF fq > val
+(fq-sr? (val)) tranpose the fq until below <val> independently on the Nyquist frequency"
+
+(declare (special cr::sr/2))
+   (let ((sr2 (if (find-package 'cr)
+                  (cr::get-gbl cr::sr/2)
+                  22050))
+         (mode (car mode)))
+
+     (cond ((null mode)
+            (if (> (comp-field c "freq") sr2)
+;                (progn
+                  (print (format () ";fq-sr? --------ERROR: FQ ~a > Nyquist [~a]~%;    Component n. ~a discarded~%"
+                                 (comp-field c "freq") sr2 (index c)))
+;       (format () ";ERROR: FQ > Nyquist: ~a [SR = ~a]~%;    Component n. ~a discarded~%"
+;               (* sr2 2) (comp-field c "freq") (index c)))
+                  c))
+
+           ((= mode 0)
+            (let ((currfq (comp-field c "freq"))
+                  (oldfq (comp-field c "freq")))
+                          (if (> (comp-field c "freq") sr2)
+                              (progn
+                                (loop while (> currfq sr2) do
+                                      (setf currfq (/ currfq 2.0)))
+                                (list
+                                 (comp-field c "freq" currfq)
+                                 (print (format () ";fq-sr? ==========WARNING: FQ ~a > Nyquist [~a], --> transposed to ~a~%" oldfq sr2 currfq))))
+                          c)))
+
+           ((integerp mode)
+            (let* ((oldfq (comp-field c "freq"))
+                   (newfq (/ oldfq (expt 2 mode))))
+              (if (> oldfq sr2)
+                  (list
+                   (comp-field c "freq" newfq)
+                   (print (format () ";fq-sr? ==========WARNING: FQ ~a > Nyquist [~a], --> transposed ~a octaves down to ~a~%" oldfq sr2 mode newfq)))
+                c)))
+
+           ((floatp mode)
+            (let ((currfq (comp-field c "freq"))
+                  (oldfq (comp-field c "freq")))
+                          (if (> currfq sr2)
+                              (progn
+                                (loop while (> currfq mode) do
+                                      (setf currfq (/ currfq 2.0)))
+                                (list
+                                 (comp-field c "freq" currfq)
+                                 (print (format () ";fq-sr? ==========WARNING: FQ ~a > Nyquist [~a], --> transposed below ~a to ~a~%" oldfq sr2 mode currfq))))
+                          c)))
+
+           ((listp mode)
+            (print mode)
+            (let ((currfq (comp-field c "freq"))
+                  (oldfq (comp-field c "freq"))
+                  (threshold (car mode)))
+                          (if (> currfq threshold)
+                              (progn
+                                (loop while (> currfq threshold) do
+                                      (setf currfq (/ currfq 2.0)))
+                                (list
+                                 (comp-field c "freq" currfq)
+                                 (print (format () ";fq-sr? ==========WARNING: FQ ~a > threshold [~a], --> transposed to ~a~%" oldfq threshold currfq))))
+                          c)))
+           (t
+            (error ";fq-sr? *****ILLEGAL MODE ~a in component n. ~a ~%" mode (index c))))
+     ))
+
+
+
+#|
+(defmethod fq-sr? ((c component) &rest mode)
+"
+If mode = () fq[i] > SR/2 => discard component
+   otherwise transpose it by <mode> octaves
+   (if mode = 0, until it falls below the Nyquist frequency)
 "
 (declare (special cr::sr/2))
    (let ((sr2 (if (find-package 'cr)
                   (cr::get-gbl cr::sr/2)
                   22050)))
-   (if (> (comp-field c "freq") sr2)
-     (progn
-       (print (format () ";ERROR: FQ > Nyquist [SR = ~a]: ~a~%;    Component n. ~a discarded~%"
-               (* sr2 2) (comp-field c "freq") (index c)))
-       (format () ";ERROR: FQ > Nyquist: ~a [SR = ~a]~%;    Component n. ~a discarded~%"
-               (* sr2 2) (comp-field c "freq") (index c)))
-       c)))
-
+            (if (> (comp-field c "freq") sr2)
+                (progn
+                  (print (format () ";fq-sr? - ERROR: FQ ~a > Nyquist [~a]~%;    Component n. ~a discarded~%"
+                                 (comp-field c "freq") (* sr2 2) (index c)))
+;       (format () ";ERROR: FQ > Nyquist: ~a [SR = ~a]~%;    Component n. ~a discarded~%"
+;               (* sr2 2) (comp-field c "freq") (index c)))
+                  c))))
+|#
 
 ;;; ***
 (defmethod fqmin? ((c component))
