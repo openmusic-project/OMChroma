@@ -1275,7 +1275,7 @@ IF fq > val
 ;               (* sr2 2) (comp-field c "freq") (index c)))
                   c))
 
-           ((= mode 0)
+           ((and (numberp mode) (= mode 0))
             (let ((currfq (comp-field c "freq"))
                   (oldfq (comp-field c "freq")))
                           (if (> (comp-field c "freq") sr2)
@@ -1309,7 +1309,6 @@ IF fq > val
                           c)))
 
            ((listp mode)
-            (print mode)
             (let ((currfq (comp-field c "freq"))
                   (oldfq (comp-field c "freq"))
                   (threshold (car mode)))
@@ -1324,8 +1323,6 @@ IF fq > val
            (t
             (error ";fq-sr? *****ILLEGAL MODE ~a in component n. ~a ~%" mode (index c))))
      ))
-
-
 
 #|
 (defmethod fq-sr? ((c component) &rest mode)

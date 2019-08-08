@@ -79,7 +79,8 @@ a list of strings for fields that will not be written in the scr file
               (comp-list (second filtercomp)))
          (when current-comp
            (loop for item in sub-comp do
-                 (let ((subcomp (funcall item current-comp))
+;                 (let ((subcomp (funcall item current-comp))
+                 (let ((subcomp (funcall item (cons (car current-comp) (cdr current-comp))))
                        subcomplist)
                    (setf subcomplist
                          (loop for subc in subcomp
