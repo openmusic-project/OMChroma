@@ -5,8 +5,8 @@
  (:doc "")
  (:info
   (:created "2019/08/04 14:05:25")
-  (:modified "2019/08/05 16:47:50"))
- (:window (:size (1018 588)) (:position (691 92)))
+  (:modified "2019/08/13 18:46:20"))
+ (:window (:size (1050 583)) (:position (691 92)))
  (:grid nil)
  (:lock nil)
  (:boxes
@@ -37,7 +37,7 @@
      (:value :choose-file)
      (:reactive nil)))
    (:outputs (:output (:name "SELF") (:reactive nil)))
-   (:window (:size (nil nil)) (:position (nil nil)))
+   (:window (:size (1265 406)) (:position (356 368)))
    (:edition-params)
    (:value
     (:object
@@ -117,7 +117,7 @@
      (:value :choose-file)
      (:reactive nil)))
    (:outputs (:output (:name "SELF") (:reactive nil)))
-   (:window (:size (nil nil)) (:position (nil nil)))
+   (:window (:size (985 281)) (:position (335 345)))
    (:edition-params)
    (:value
     (:object
@@ -32017,7 +32017,7 @@
    (:group-id nil)
    (:name nil)
    (:x 372)
-   (:y 457)
+   (:y 456)
    (:w 163)
    (:h 59)
    (:color nil)
@@ -32069,7 +32069,7 @@
            "my-workspace"
            "out-files"))
          (:device :unspecific)
-         (:host nil)
+         (:host :unspecific)
          (:name "synth-model_rules")
          (:type "aiff")))
        (:sample-rate 44100)
@@ -32144,8 +32144,8 @@
    (:type :function)
    (:group-id nil)
    (:name "expand-model")
-   (:x 716)
-   (:y 348)
+   (:x 686)
+   (:y 308)
    (:w 108)
    (:h 30)
    (:color nil)
@@ -32178,8 +32178,8 @@
    (:type :function)
    (:group-id nil)
    (:name "synthesize")
-   (:x 748)
-   (:y 416)
+   (:x 766)
+   (:y 372)
    (:w 89)
    (:h 30)
    (:color nil)
@@ -32207,8 +32207,8 @@
    (:type :object)
    (:group-id nil)
    (:name nil)
-   (:x 706)
-   (:y 458)
+   (:x 724)
+   (:y 414)
    (:w 163)
    (:h 59)
    (:color nil)
@@ -32242,7 +32242,7 @@
        (:default-frame-type marker-frame)
        (:frames nil)
        (:buffer nil)
-       (:n-samples 106960)
+       (:n-samples 138800)
        (:n-channels 1)
        (:sample-rate 44100)
        (:smpl-type :float)
@@ -32265,7 +32265,7 @@
          (:type "aiff")))
        (:sample-rate 44100)
        (:n-channels 1)
-       (:n-samples 106960)
+       (:n-samples 138800)
        (:gain 1.0)
        (:access-from-file nil)))))
    (:id 21))
@@ -32274,8 +32274,8 @@
    (:type :value)
    (:group-id nil)
    (:name "value box")
-   (:x 780)
-   (:y 306)
+   (:x 750)
+   (:y 266)
    (:w 46)
    (:h 30)
    (:color
@@ -32294,8 +32294,8 @@
    (:type :value)
    (:group-id nil)
    (:name "value box")
-   (:x 822)
-   (:y 372)
+   (:x 840)
+   (:y 328)
    (:w 138)
    (:h 30)
    (:color
@@ -32314,10 +32314,10 @@
    (:type :object)
    (:group-id nil)
    (:name nil)
-   (:x 702)
-   (:y 204)
-   (:w 147)
-   (:h 56)
+   (:x 672)
+   (:y 194)
+   (:w 146)
+   (:h 60)
    (:color nil)
    (:border nil)
    (:roundness nil)
@@ -32349,12 +32349,18 @@
     (:output (:name "SELF") (:reactive nil))
     (:output (:name "CONTENTS") (:reactive nil))
     (:output (:name "output-mode") (:reactive nil)))
-   (:window (:size (nil nil)) (:position (nil nil)))
+   (:window (:size (392 192)) (:position (314 322)))
    (:edition-params (:output-mode :lines))
    (:value
     (:object
      (:class textbuffer)
-     (:slots ((:contents (:list "(DURS (* cr::my-dur 2))"))))
+     (:slots
+      ((:contents
+        (:list
+         "(DURS (* my-dur 2))"
+         "(FREQ (call get-vps-freqs my-fql))"
+         "(amp (call get-vps-amps my-fql))"
+         ""))))
      (:add-slots ((:input-mode :lines-cols)))))
    (:id 24))
   (:box
