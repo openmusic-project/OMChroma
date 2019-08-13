@@ -1122,7 +1122,7 @@ durtot[e] < durmin => discard event
     (if (< durtot mindur)
 
 ; IT IS NOT PRINTED IN THE SCORE FILE, SINCE THE EVENT IS NOT CREATED
-      (print (format () "~%~%~%~%~%;;--------ERROR: DURTOT (~a) < durmin (~a)~%;            EVENT DISCARDED.~%~%~%~%~%"
+      (print (format () "~%~%~%~%~%;;durtot? --------ERROR: DURTOT (~a) < durmin (~a)~%;            EVENT DISCARDED.~%~%~%~%~%"
               durtot mindur))
       t)))
 
@@ -1136,7 +1136,7 @@ Two global variables:
    (if (<= (amptot c) (cr::get-gbl 'cr::gblamp))
      t
 ; IT IS NOT PRINTED IN THE SCORE FILE, SINCE THE EVENT IS NOT CREATED
-     (print (format () "~%~%~%~%~%;;--------ERROR: AMPTOT ~a > GBLAMP: ~a~%;            EVENT DISCARDED.~%~%~%~%~%"
+     (print (format () "~%~%~%~%~%;;amptot? --------ERROR: AMPTOT ~a > GBLAMP: ~a~%;            EVENT DISCARDED.~%~%~%~%~%"
                (amptot c)
                (cr::get-gbl 'cr::gblamp)))))
 
@@ -1436,10 +1436,7 @@ fq[i] > SR/2 => discard sub-component
                   (cr::get-gbl cr::sr/2)
                   22050)))
    (if (> (comp-field c "freq") sr2)
-     (progn
-       (print (format () ";ERROR: FQ > Nyquist: ~,2F /  Sub-component discarded"
-               (comp-field c "freq")))
-       (format () ";ERROR: FQ > Nyquist: ~,2F /  Sub-component discarded"
+       (print (format () ";s-fq-sr? -------- ERROR: FQ > Nyquist: ~,2F /  Sub-component discarded"
                (comp-field c "freq")))
        c)))
 
@@ -1454,10 +1451,7 @@ fq[i] < fqmin	discard component
                   (cr::get-gbl 'cr::minfq)
                   15.0)))
      (if (< (comp-field c "freq") fqmin)
-       (progn
-         (print (format () ";ERROR: FQ < fqmin [~a]: ~a~%;    Sub-component discarded~%"
-                 fqmin (comp-field c "freq")))
-         (format () ";ERROR: FQ < fqmin [~a]: ~a~%;    Sub-component discarded~%"
+         (print (format () ";s-fqmin? ------- ERROR: FQ < fqmin [~a]: ~a~%;    Sub-component discarded~%"
                  fqmin (comp-field c "freq")))
        c)))
 
