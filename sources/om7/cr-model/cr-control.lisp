@@ -90,7 +90,7 @@ following conversion rules as defined in <ctl-model>."
 
 
 ;;;==================================================================
-;;; VISUAL RULE
+;;; VISUAL RULES
 ;;;==================================================================
 
 ;;; MODEL-DATA
@@ -199,7 +199,7 @@ following conversion rules as defined in <ctl-model>."
   
   (when my-fql
     
-    (if (cr::get-gbl 'cr::ctl2-print) (print my-time))
+    (if (cr::get-gbl 'cr::ctl2-print) my-time)
      
     ;;; another side-effect for Chroma
     (setf cr::outstream (make-string-output-stream))
@@ -212,17 +212,23 @@ following conversion rules as defined in <ctl-model>."
       ;;; we don't need to do this one as the action-time and nelts are already set
       ;;; (cr::CTL2_global array ctl-model)
       
-      (cr::CTL2_keywords_loop ctl-model (mapcar #'(lambda (field) (intern (string-upcase (om::array-field-name field))))
-                                                (om::data array)))
-      
+      (cr::CTL2_keywords_loop 
+       (cr-interne-list ctl-model :cr) 
+       (mapcar #'(lambda (field) 
+                   (intern (string-upcase (om::array-field-name field))))
+               (om::data array)))
+
       (om::om-init-instance 
        array
        (om::group-list 
-       (om::om-read-list-from-string (get-output-stream-string outstream)) 
+       (mapcar #'eval (om::om-read-list-from-string (get-output-stream-string outstream)))
        2 'om::linear))
 
       ))
   )
 
+
+(defun freqfoisN (fql n)
+  (mapcar #'(lambda (x) (* x n)) (get-vps-freqs fql)))
 
 
