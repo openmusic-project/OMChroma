@@ -280,25 +280,37 @@ dir: directory where the file is to be written (default: value of CSfun).
 
 
 ;*****************************************************************************
+; Convert a csound GEN 5 or 7 (string) into a Chroma FUN object
+; If it is a GEN 5 and the Y value =< EXPZERO, replace it with 0
 (defun csgen->fun (csgen)
-  (let ((str (string-to-list csgen)))
-    (if (or (= (fourth str) 7) (= (fourth str) 5))
-        (make-crfun (fifth str) (cdr (cddddr str)) (third str))
-    (progn (print (format () "I can only use GEN 5 or 7. You gave me a GEN ~a~%" (fourth str)))
+  (let* ((str (string-to-list csgen))
+         (type (fourth str)))
+    (if (or (= type 7) (= type 5))
+        (make-crfun (fifth str) (cdr (cddddr str)) (third str) type)
+    (progn (print (format () "I can only use GEN 5 or 7. You gave me a GEN ~a~%" type))
       str))))
 
 ;-------------------------------------------------------------------
-(defun make-crfun (begval othervals gensize)
-  (let ((l-vals (list begval 0.0))
+(defun make-crfun (begval othervals gensize type)
+  (let ((l-vals (list (dezeroexp begval type) 0.0)) ; first pair, y1 x1
         (numels (1- (length othervals)))
-        (cnt 0)
+        (cnt 0) ; X
         (result ()))
     (make_fun
      (append l-vals
              (loop for i from 0 to numels by 2 do
-                   append (list (nth (1+ i) othervals) (setf cnt (+ cnt (nth i othervals)))))))))
+                   append (list (dezeroexp (nth (1+ i) othervals) type) (setf cnt (+ cnt (nth i othervals)))))))))
+
+(defun dezeroexp (val type)
+      (if (and (= type 5) (<= val (cr::get-gbl 'cr::EXPZERO)))
+          0.0
+        val))
 ;
 #|
+(dezeroexp 12 5)
+(dezeroexp 0.0001 5)
+(dezeroexp 0.00001 5)
+(dezeroexp 0.00001 7)
 (streamp "f11 0 513 7  -1 513 0")
 (stringp "f11 0 513 7  -1 513 0")
 (listp '(1 2 3))
@@ -312,8 +324,12 @@ dir: directory where the file is to be written (default: value of CSfun).
    "f13 0 513 7   0 512 1"
    "f14 0 513 5   0 512 1"
    "f15 0 513 1   0 512 1"
-   "f16 0 513 7   0 512 -1") )
-(csgen->fun (nth 0 (test-gen2fun))  )
+   "f16 0 513 7   0 512 -1"
+   "f17 0 513 7  0.00001 256 1   128 0.001  64 1  64 0.00001"
+   "f18 0 513 5  0.00001 256 1   128 0.001  64 1  64 0.00001"
+   ) )
+(csgen->fun (nth 7 (test-gen2fun))  )
+(csgen->fun (nth 8 (test-gen2fun))  )
 (first (string-to-list "f11 0 7 513 0 2 3 4 5"))
 (fun->gen-cs-table (make_fun '(-1 0  0 2048  1 4097)) )
 (fun-points (make_fun '(-1 0  0 2048  1 4096)) 4097)
@@ -334,6 +350,31 @@ dir: directory where the file is to be written (default: value of CSfun).
            (if (listen str)
                (cons (read str) (internal-string-to-list str))
              nil)))
+;*****************************************************************************
+; transform a csgen into a Virtual Envelope
+; if gennum is given, use this number as the VE num,
+;   otherwise, derive it from the strinf fN (where N is the function number)
+(defun csgen->ve (csgen &optional gennum)
+  (if gennum
+      (make_ve (csgen->fun csgen) gennum)
+    (make_ve (csgen->fun csgen) (getnum csgen))))
+
+(defun getnum (csgen)
+  (read-from-string (subseq csgen 1)))
+
+#|
+(defun test-gen2fun ()
+  '(
+   "f10 0 4097 7  -1 2048 0 2048 1"
+   "f11 0 513 7  -1 256 0 256 1"
+   "f12 0 513 7   1 512 0"
+   "f13 0 513 7   0 512 1"
+   "f14 0 513 5   0 512 1"
+   "f15 0 513 1   0 512 1"
+   "f16 0 513 7   0 512 -1") )
+(csgen->ve (nth 0 (test-gen2fun))  )
+(csgen->ve (nth 0 (test-gen2fun)) 111 )
+|#
 ;*********************************************************************
 
 
