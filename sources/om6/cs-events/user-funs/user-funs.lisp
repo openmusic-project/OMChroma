@@ -167,7 +167,7 @@ The following subtests are however recommended: s-fq-sr?, s-fq-min?
                 (dtot (durtot (comp-array c))))
             (if (> curr-ed (- dtot mindur))
               (progn (setf continue? ())
-                     (push (format () ";    Sub-comps+: ed2 (~a) too large for durtot = ~a and durmin = ~a
+                     (push (format () ";    Sub-comps+ (fq-lin-dev+): ed2 (~a) too large for durtot = ~a and durmin = ~a
                   Generation of sub-components interrupted at sub-comp n. ~a~%" curr-ed dtot mindur i)
                     result))
               (push (progn
@@ -289,12 +289,12 @@ ATTENTION
 The following tests are performed within this function and ought not to be performed
    in the list of sub-tests (drawback: the sub-component cannot be discarded, and
    the tests will try to find a solution if an error is detected. No error message will
-   appear in the score as a result of such tests.
+   appear in the score as a result of such tests).
 
 IMPORTANT
-The list of subtests should not contain the following subtests: computer-dur!,
+The list of subtests should not contain the following subtests: compute-dur!,
    ed-durmin?, amp?, compute-amp!
-The following subtests are however recommended: sub-fq-sr?, sub-fq-min?
+The following subtests are however recommended: s-fq-sr?, s-fqmin?
 
 "
   (append
@@ -1412,7 +1412,7 @@ Detune the value of N2 by a percentage of STON2
 n2[i] = n2[i] + (n2[i] * (ran ston2[i])
 
 If the class has a global slot called gbl-N2, call <gbl->N2!> BEFORE
-  using this function to initialise this field.
+  using this function to initialize this field.
 
    "
   (let ((n2 (comp-field c "n2"))
@@ -1427,31 +1427,38 @@ If the class has a global slot called gbl-N2, call <gbl->N2!> BEFORE
 ;------------------------------------------------------------------
 
 ;;; ***
-(defmethod s-fq-sr? ((c component))
+(defmethod s-fq-sr? ((c component) &rest fqmax)
 "
-fq[i] > SR/2 => discard sub-component
+fq[i] > fqmax => discard sub-component
+fqmax is either given as an argument, or = Nyquist
+
 "
 (declare (special cr::sr/2))
-   (let ((sr2 (if (find-package 'cr)
-                  (cr::get-gbl cr::sr/2)
-                  22050)))
-   (if (> (comp-field c "freq") sr2)
-       (print (format () ";s-fq-sr? -------- ERROR: FQ > Nyquist: ~,2F /  Sub-component discarded"
-               (comp-field c "freq")))
+   (let ((sr2 (if (car fqmax)
+                  (car fqmax)
+                (if (find-package 'cr)
+                    (cr::get-gbl cr::sr/2)
+                  22050))))
+     (if (> (comp-field c "freq") sr2)
+         (print (format () ";s-fq-sr? -------- ERROR: FQ ~,2F > MAX FQ ~a  /  Sub-component discarded"
+                        (comp-field c "freq") sr2))
        c)))
 
 
 ;;; ***
-(defmethod s-fqmin? ((c component))
+(defmethod s-fqmin? ((c component) &rest fqmin)
 "
-fq[i] < fqmin	discard component
+fq[i] < fqmin	discard sub-component
+fqmin is either given as an argument, or fetched from cr::minfq,
 "
 (declare (special cr::minfq))  
-   (let ((fqmin (if (find-package 'cr)
-                  (cr::get-gbl 'cr::minfq)
-                  15.0)))
+   (let ((fqmin (if (car fqmin)
+                    (car fqmin)
+                  (if (find-package 'cr)
+                      (cr::get-gbl 'cr::minfq)
+                    15.0))))
      (if (< (comp-field c "freq") fqmin)
-         (print (format () ";s-fqmin? ------- ERROR: FQ < fqmin [~a]: ~a~%;    Sub-component discarded~%"
+         (print (format () ";s-fqmin? ------- ERROR: FQ ~a < fqmin [~a]~%;    Sub-component discarded~%"
                  fqmin (comp-field c "freq")))
        c)))
 

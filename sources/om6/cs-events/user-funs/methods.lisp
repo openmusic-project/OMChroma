@@ -41,7 +41,7 @@ The files should be strings without extension. A default extension .lisp is
                                     file
                                   (error "Hello! Would you, please, tell me, sir ~a, what I should do with an inexistant function file?~%       ~a~%"
                                          (cr::get-gbl 'cr::USER) file)))))
-      (print (format () "WARNING: THE DIRECTORY WHERE TO LOOK FOR FILE DOES NOT EXIST")))))
+      (print (format () "funs-from-db - WARNING: THE DIRECTORY WHERE TO LOOK FOR FILE DOES NOT EXIST")))))
 
 ;------------------------------------------------------------------
 ; METHODS
