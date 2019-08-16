@@ -1390,7 +1390,7 @@ If the slot does not exist, be tolerant and do nothing!
    "
 Compute the closest value of N1 given the current :f0 and :fq
 If the class has a global slot called gbl-f0, call <gbl-f0!> BEFORE
-  using this function to initialise this field.
+  using this function to initialize this field.
    "
 
      (let ((f0 (comp-field c "f0"))
