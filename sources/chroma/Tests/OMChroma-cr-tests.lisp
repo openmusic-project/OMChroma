@@ -294,7 +294,8 @@
 
 (get-gbl 'USER)	; USER'S NAME FOR PERSONALIZED MESSAGES
 
-;-----------------------------------------------------------------------------;-----------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Temporary place for the dynamically computed GENS of a WT object
 ;(get-gbl 'WTL)		; A-LIST OF WT OBJECTS
 ;(get-gbl 'WTIND)		; INDEX OF CURRENT WT OBJECT

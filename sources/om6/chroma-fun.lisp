@@ -130,8 +130,6 @@ bpf to incremental x-points is correct.
 ;========================================
 ; CREATE A GEN-CS-TABLE FROM VE
 ;========================================
-
-
 ;====================
 ; auxiliary functions
 ;====================
