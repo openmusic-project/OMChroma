@@ -292,7 +292,7 @@ Data format:
 
    (setf (max-amp self)
          (loop for frame in (get-model-contents self) maximize
-               (or (om::list-max (cr-partials-amps (vps frame))) 0.0)))
+               (or (and frame (om::list-max (cr-partials-amps (vps frame)))) 0.0)))
 
   (call-next-method))
  
