@@ -70,7 +70,6 @@
 (defmethod extract-ptl ((x model-partials) (y additive-data) a b
                         &key sort weighed-avg durmin)
   (let (npartials 
-        npartials0
         freq_moyenne max_amp freq_fun edel dur amp_fun time_list triplets subdata
         (amps nil)
         (edels nil)
@@ -83,7 +82,7 @@
           ;(format t "markers->~a~%" (list (cdr a) (cdr b)))
       (setf subdata (subseq (data y) (car a) (1+ (car b))))
           ;pour chaque paire de marker
-      (setf npartials0 (nombre_de_partiels_max subdata))
+      
       (setf npartials (numero_de_partiels_max subdata))
           ;(format t "~a partiels (~a) ~%" npartials npartials0)
           ;pour chaque partiel

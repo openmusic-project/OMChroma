@@ -163,7 +163,7 @@
       
       (when (om::find-value-in-kv-list (cdr classes-entries) :entries)
         ;;; top level items (not in a section)
-        (loop for item in (om::find-value-in-kv-list data :entries) do
+        (loop for item in (om::find-value-in-kv-list (cdr ref-entries) :entries) do
               (write-line (concatenate 'string "<a href=" (om::special-path-check (string-downcase (string item))) ".html>" 
                                        (om::special-html-check (string item)) "</a> ") index))
         )
@@ -200,7 +200,7 @@
 
       (when (om::find-value-in-kv-list (cdr ref-entries) :entries)
         ;;; top level items (not in a section)
-        (loop for item in (om::find-value-in-kv-list data :entries) do
+        (loop for item in (om::find-value-in-kv-list (cdr ref-entries) :entries) do
               (write-line (concatenate 'string "<a href=" (om::special-path-check (string-downcase (string item))) ".html>" 
                                        (om::special-html-check (string item)) "</a> ") index))
         )

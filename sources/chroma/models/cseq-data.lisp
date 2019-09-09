@@ -52,14 +52,15 @@
 
 
 (defun convertToAsFormat (data-from-sdif)
-  (let ((res (loop for i in data-from-sdif
-                   do (setf fq  (first i) amp  (lintodb (fourth i)))
-                   collect (list "points" 2 (second i) fq amp (third i) fq amp))))
-
-    (setf res (sort res #'< :key #'fourth))
-    (setf res (stable-sort res #'< :key #'third))
-    (append (list "partials" (length res)) res)
-    ))
+  (let (fq amp)
+    (let ((res (loop for i in data-from-sdif
+                     do (setf fq (first i) amp  (lintodb (fourth i)))
+                     collect (list "points" 2 (second i) fq amp (third i) fq amp))))
+      
+      (setf res (sort res #'< :key #'fourth))
+      (setf res (stable-sort res #'< :key #'third))
+      (append (list "partials" (length res)) res)
+      )))
 
 ; (converttoasformat '((1 2 3 0.5)(5 6 7 0.25) (5 2 3 0.25)))
 

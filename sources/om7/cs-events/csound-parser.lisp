@@ -167,7 +167,7 @@
       (multiple-value-setq (in line) (om::string-until-char (om::delete-spaces line) ","))
       (setq out (om::delete-spaces line))
       (if (not (and name in out))
-          (om::om-beep-msg (concatenate 'string "Error in UDO" (if name (string+ " " name) "") ": unsupported or wrong format"))
+          (om::om-beep-msg (concatenate 'string "Error in UDO" (if name (om::string+ " " name) "") ": unsupported or wrong format"))
         (let ((endfound nil)) 
           (setf line (om::delete-spaces (read-line fileptr)))
           (loop while (and (not endfound) (not (oa:om-stream-eof-p fileptr))) do
@@ -176,7 +176,7 @@
                   (setf body (if body (concatenate 'string body (format nil "~%") line) line)
                         line (om::delete-spaces (read-line fileptr)))))
           (if (null body)
-              (om-beep-msg (concatenate 'string "Error in UDO " name ": no opcode source found"))
+              (om::om-beep-msg (concatenate 'string "Error in UDO " name ": no opcode source found"))
             (unless endfound
               (print (format nil "Error in UDO ~S: no 'endop' found" name))
               (setf body nil)))

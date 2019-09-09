@@ -438,7 +438,8 @@ ms_110902
 When l is not recognized, simply do nothing and pass it over
 ms_1109
 "
-   l)
+(declare (ignore approx))
+l)
 
 (defmethod change-resolution ((ptl ptl) &key (approx nil))
 "
