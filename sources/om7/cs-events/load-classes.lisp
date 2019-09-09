@@ -23,8 +23,7 @@
 
 (in-package :cr)
 
-(let ((cs-dir (om-api:om-make-pathname
-                 :directory (append (butlast (pathname-directory *load-pathname*) 3) '("Csound")))))
+(let ((cs-dir (om::om-relative-path '("Csound") nil (om::mypathname (om::find-library "OMChroma"))))) 
     
     ;;; => DEFINE CLASSES FROM .ORC FILES 
     (def-all-cs-classes cs-dir :name "Classes")
