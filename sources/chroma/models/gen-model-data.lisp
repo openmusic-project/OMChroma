@@ -82,41 +82,45 @@ Flag, if t, the arguments computed by interpolation will be rounded to an intege
 Flag, if t, print only the args passed to the modifying functions, NOT the result.
 "
 
-            (let ((fun-list (list! fun-list)))
-              (let ((num-vals (length lvals))
-; if timemode is a list, keep only as many args as functions (if too little, repeat the last arg)
-                    (timemode (prepare-arg (list! timemode) (length fun-list)))
-                    (interpolmode (prepare-interpolmode (list! interpolmode) (length fun-list)))
-                    (integeritp (prepare-arg (list! integeritp) (length fun-list)))
-                    (res-arg-list))
-                (loop for args in arg-list do
-                      (let ((time-mode (nextl timemode))
-                            (interpol-mode (nextl interpolmode))
-                            (integer-itp (nextl integeritp)))
-                        (cond ((and (equal time-mode 'rel) (null interpol-mode))
-                             ; fixed list, no interpolation of arguments
-                               (setf res-arg-list (cons (fixed-list args num-vals) res-arg-list)))
-                              ((equal time-mode 'rel)
-                               (setf res-arg-list
-                                     (cons (interpolated-list 
-                                            args num-vals
-                                            :itpmode interpol-mode
-                                            :intitp integer-itp)
-                                           res-arg-list)))
-                              ((and (equal time-mode 'abs))
-                               (setf res-arg-list
-                                     (cons (interpolated-list-markers
-                                            args markers
-                                            :itpmode interpol-mode
-                                            :intitp integer-itp)
-                                           res-arg-list)))
+ (flet ((list! (l) (if (listp l) l (list l))))
 
-                              (t (error "Unknown case, sir, timemode=~a, interpolmode=~a~%" timemode interpolmode)))))
-                (if verbose
-                    (nreverse res-arg-list)
-;                 (print (list lvals fun-list (nreverse res-arg-list) :markers markers :test test :markermode markermode))))))
+   (let* ((fun-list (list! fun-list))
+          (num-vals (length lvals))
+; if timemode is a list, keep only as many args as functions (if too little, repeat the last arg)
+          (timemode (prepare-arg (list! timemode) (length fun-list)))
+          (interpolmode (prepare-interpolmode (list! interpolmode) (length fun-list)))
+          (integeritp (prepare-arg (list! integeritp) (length fun-list)))
+          (res-arg-list))
+     (loop for args in arg-list do
+           (let ((time-mode (nextl timemode))
+                 (interpol-mode (nextl interpolmode))
+                 (integer-itp (nextl integeritp)))
+             (cond ((and (equal time-mode 'rel) (null interpol-mode))
+                             ; fixed list, no interpolation of arguments
+                    (setf res-arg-list (cons (fixed-list args num-vals) res-arg-list)))
+                   ((equal time-mode 'rel)
+                    (setf res-arg-list
+                          (cons (interpolated-list 
+                                 args num-vals
+                                 :itpmode interpol-mode
+                                 :intitp integer-itp)
+                                res-arg-list)))
+                   ((and (equal time-mode 'abs))
+                    (setf res-arg-list
+                          (cons (interpolated-list-markers
+                                 args markers
+                                 :itpmode interpol-mode
+                                 :intitp integer-itp)
+                                res-arg-list)))
+
+                   (t (error "Unknown case, sir, timemode=~a, interpolmode=~a~%" timemode interpolmode)))))
+     (if verbose
+         (nreverse res-arg-list)
+       ; (print (list lvals fun-list (nreverse res-arg-list) :markers markers :test test :markermode markermode))))))
  
-                 (final-model-data lvals fun-list (nreverse res-arg-list) :markers markers :test test :markermode markermode)))))
+       (final-model-data lvals fun-list (nreverse res-arg-list) :markers markers :test test :markermode markermode))
+     )
+  ))
 
 
 (defun prepare-arg (arg n)
@@ -130,7 +134,7 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
 (defun prepare-interpolmode (arg n)
   (cond
    ((null arg) (make-list n :initial-element arg))
-   ((and (listp arg) (symbolp (car arg)) (not (null (car arg)))) (repeat-n arg n))
+   ((and (listp arg) (symbolp (car arg)) (not (null (car arg)))) (make-list n :initial-element arg))
    (t (cr::l-val n arg))))
 
 ;(prepare-interpolmode '(exp 1.0) 10)
@@ -138,7 +142,7 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
 
 (defun fixed-list (l length)
   (let* ((result)
-         (curr-l (clone l))
+         (curr-l (copy-list l))
          (el1 (nextl curr-l))
          (el2 (nextl curr-l)))
     (loop for i = 0 then (+ i 1)
