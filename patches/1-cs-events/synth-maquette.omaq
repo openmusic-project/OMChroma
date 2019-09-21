@@ -5,12 +5,13 @@
  (:doc "")
  (:info
   (:created "2018/08/10 12:33:39")
-  (:modified "2019/08/06 14:34:48"))
- (:window (:size (1616 757)) (:position (389 483)))
+  (:modified "2019/09/21 23:17:55"))
+ (:window (:size (1479 553)) (:position (160 211)))
  (:grid nil)
  (:lock nil)
  (:boxes
   (:box
+   (:type :abstraction)
    (:reference
     (:patch
      (:om-version 0.010301)
@@ -22,9 +23,9 @@
      (:lock nil)
      (:boxes
       (:box
+       (:type :io)
        (:reference
         (:out (:type omout) (:name "out") (:index 1) (:doc "")))
-       (:type :io)
        (:group-id nil)
        (:name "out")
        (:x 153)
@@ -49,8 +50,8 @@
        (:outputs)
        (:id 0))
       (:box
-       (:reference om-random)
        (:type :function)
+       (:reference om-random)
        (:group-id nil)
        (:name "om-random")
        (:x 72)
@@ -78,16 +79,8 @@
        (:outputs (:output (:name "out") (:reactive nil)))
        (:id 1))
       (:box
-       (:reference
-        (:object
-         (:class repeater)
-         (:slots
-          ((:name "repeat-n")
-           (:protected-p nil)
-           (:icon nil)
-           (:n-iter 10)
-           (:scope :local)))))
        (:type :special)
+       (:reference repeat-n)
        (:group-id nil)
        (:name "repeat-n")
        (:x 135)
@@ -107,19 +100,19 @@
        (:inputs
         (:input
          (:type :standard)
-         (:name "program to repeat")
+         (:name "self")
          (:value nil)
          (:reactive nil))
         (:input
          (:type :standard)
-         (:name "n")
-         (:value 0)
+         (:name "num")
+         (:value 10)
          (:reactive nil)))
        (:outputs (:output (:name "collected results") (:reactive nil)))
        (:id 2))
       (:box
-       (:reference fixnum)
        (:type :value)
+       (:reference fixnum)
        (:group-id nil)
        (:name "value box")
        (:x 213)
@@ -140,16 +133,8 @@
        (:value 10)
        (:id 3))
       (:box
-       (:reference
-        (:object
-         (:class repeater)
-         (:slots
-          ((:name "repeat-n")
-           (:protected-p nil)
-           (:icon nil)
-           (:n-iter 10)
-           (:scope :local)))))
        (:type :special)
+       (:reference repeat-n)
        (:group-id nil)
        (:name "repeat-n")
        (:x 248)
@@ -169,19 +154,19 @@
        (:inputs
         (:input
          (:type :standard)
-         (:name "program to repeat")
+         (:name "self")
          (:value nil)
          (:reactive nil))
         (:input
          (:type :standard)
-         (:name "n")
-         (:value 0)
+         (:name "num")
+         (:value 10)
          (:reactive nil)))
        (:outputs (:output (:name "collected results") (:reactive nil)))
        (:id 4))
       (:box
-       (:reference om-random)
        (:type :function)
+       (:reference om-random)
        (:group-id nil)
        (:name "om-random")
        (:x 222)
@@ -210,8 +195,8 @@
        (:id 5))
       (:box
        (:library "OMChroma")
-       (:reference (:symbol "FM-1" "CHROMA"))
        (:type :object)
+       (:reference (:symbol "FM-1" "CHROMA"))
        (:group-id nil)
        (:name nil)
        (:x 86)
@@ -267,7 +252,7 @@
         (:output (:name "USER-FUN") (:reactive nil))
         (:output (:name "e-dels") (:reactive nil))
         (:output (:name "f0") (:reactive nil)))
-       (:window (:size nil) (:position nil))
+       (:window (:size (nil nil)) (:position (nil nil)))
        (:edition-params)
        (:value
         (:object
@@ -361,7 +346,7 @@
                 (:class (:symbol "GEN05" "CHROMA"))
                 (:slots
                  ((:onset 0)
-                  (:duration 0)
+                  (:duration 4096.0)
                   (:interpol
                    (:number-or-nil (:number 50) (:t-or-nil nil)))
                   (:action nil)
@@ -388,7 +373,7 @@
                 (:class (:symbol "GEN05" "CHROMA"))
                 (:slots
                  ((:onset 0)
-                  (:duration 0)
+                  (:duration 4096.0)
                   (:interpol
                    (:number-or-nil (:number 50) (:t-or-nil nil)))
                   (:action nil)
@@ -407,8 +392,8 @@
               (:data nil))))))))
        (:id 6))
       (:box
-       (:reference length)
        (:type :function)
+       (:reference length)
        (:group-id nil)
        (:name "length")
        (:x 70)
@@ -467,13 +452,12 @@
        (:from (:box 7 :out 0))
        (:to (:box 6 :in 1))
        (:attributes (:color nil :style nil :modif nil))))))
-   (:type :patch)
    (:group-id 1)
    (:name "new-patch")
    (:x 8596)
    (:y 47.56469)
    (:w 3849)
-   (:h -10)
+   (:h 28)
    (:color nil)
    (:border nil)
    (:roundness nil)
@@ -490,7 +474,7 @@
     (:object
      (:class (:symbol "FM-1" "CHROMA"))
      (:slots
-      ((:onset 8576)
+      ((:onset 8596)
        (:elts 10)
        (:field-names
         (:list
@@ -519,16 +503,16 @@
           (:default 0.0)
           (:data
            (:list
-            1.443258
-            0.032104254
-            0.8569286
-            0.39408195
-            0.6871666
-            0.27547896
-            2.0528474
-            2.8490162
-            2.8005939
-            0.9022393)))
+            2.9533232
+            2.9069045
+            1.2482697
+            0.5023191
+            0.6610644
+            1.4608952
+            2.0583024
+            0.1449523
+            2.6688314
+            0.10204518)))
          (:array-field
           (:name "durs")
           (:doc "duration [sec]")
@@ -552,7 +536,7 @@
           (:decimals 4)
           (:default 55.0)
           (:data
-           (:list 1510 1470 1996 1751 547 474 1702 567 621 1774)))
+           (:list 1984 1731 748 239 882 1036 1838 720 1488 1012)))
          (:array-field
           (:name "n1")
           (:doc "N1")
@@ -1037,6 +1021,7 @@
                (:stime 0)))))))))))))
    (:id 0))
   (:box
+   (:type :abstraction)
    (:reference
     (:patch
      (:om-version 0.010301)
@@ -1048,9 +1033,9 @@
      (:lock nil)
      (:boxes
       (:box
+       (:type :io)
        (:reference
         (:out (:type omout) (:name "out") (:index 1) (:doc "")))
-       (:type :io)
        (:group-id nil)
        (:name "out")
        (:x 236)
@@ -1075,8 +1060,8 @@
        (:outputs)
        (:id 0))
       (:box
-       (:reference fixnum)
        (:type :value)
+       (:reference fixnum)
        (:group-id nil)
        (:name "value box")
        (:x 182)
@@ -1097,8 +1082,8 @@
        (:value 2)
        (:id 1))
       (:box
-       (:reference om-random)
        (:type :function)
+       (:reference om-random)
        (:group-id nil)
        (:name "om-random")
        (:x 123)
@@ -1126,16 +1111,8 @@
        (:outputs (:output (:name "out") (:reactive nil)))
        (:id 2))
       (:box
-       (:reference
-        (:object
-         (:class repeater)
-         (:slots
-          ((:name "repeat-n")
-           (:protected-p nil)
-           (:icon nil)
-           (:n-iter 10)
-           (:scope :local)))))
        (:type :special)
+       (:reference repeat-n)
        (:group-id nil)
        (:name "repeat-n")
        (:x 241)
@@ -1155,19 +1132,19 @@
        (:inputs
         (:input
          (:type :standard)
-         (:name "program to repeat")
+         (:name "self")
          (:value nil)
          (:reactive nil))
         (:input
          (:type :standard)
-         (:name "n")
-         (:value 0)
+         (:name "num")
+         (:value 10)
          (:reactive nil)))
        (:outputs (:output (:name "collected results") (:reactive nil)))
        (:id 3))
       (:box
-       (:reference fixnum)
        (:type :value)
+       (:reference fixnum)
        (:group-id nil)
        (:name "value box")
        (:x 353)
@@ -1188,16 +1165,8 @@
        (:value 10)
        (:id 4))
       (:box
-       (:reference
-        (:object
-         (:class repeater)
-         (:slots
-          ((:name "repeat-n")
-           (:protected-p nil)
-           (:icon nil)
-           (:n-iter 10)
-           (:scope :local)))))
        (:type :special)
+       (:reference repeat-n)
        (:group-id nil)
        (:name "repeat-n")
        (:x 354)
@@ -1217,19 +1186,19 @@
        (:inputs
         (:input
          (:type :standard)
-         (:name "program to repeat")
+         (:name "self")
          (:value nil)
          (:reactive nil))
         (:input
          (:type :standard)
-         (:name "n")
-         (:value 0)
+         (:name "num")
+         (:value 10)
          (:reactive nil)))
        (:outputs (:output (:name "collected results") (:reactive nil)))
        (:id 5))
       (:box
-       (:reference om-random)
        (:type :function)
+       (:reference om-random)
        (:group-id nil)
        (:name "om-random")
        (:x 379)
@@ -1258,8 +1227,8 @@
        (:id 6))
       (:box
        (:library "OMChroma")
-       (:reference (:symbol "ADD-1" "CHROMA"))
        (:type :object)
+       (:reference (:symbol "ADD-1" "CHROMA"))
        (:group-id nil)
        (:name nil)
        (:x 198)
@@ -1614,8 +1583,8 @@
                    (:stime 0)))))))))))))
        (:id 7))
       (:box
-       (:reference single-float)
        (:type :value)
+       (:reference single-float)
        (:group-id nil)
        (:name "value box")
        (:x 323)
@@ -1636,8 +1605,8 @@
        (:value 0.2)
        (:id 8))
       (:box
-       (:reference fixnum)
        (:type :value)
+       (:reference fixnum)
        (:group-id nil)
        (:name "value box")
        (:x 406)
@@ -1698,13 +1667,12 @@
        (:from (:box 9 :out 0))
        (:to (:box 7 :in 7))
        (:attributes (:color nil :style nil :modif nil))))))
-   (:type :patch)
    (:group-id 2)
    (:name "new-patch")
    (:x 2655)
    (:y 97.56469)
    (:w 2790)
-   (:h -10)
+   (:h 28)
    (:color nil)
    (:border nil)
    (:roundness nil)
@@ -1721,7 +1689,7 @@
     (:object
      (:class (:symbol "ADD-1" "CHROMA"))
      (:slots
-      ((:onset 2635)
+      ((:onset 2655)
        (:elts 10)
        (:field-names (:list "e-dels" "durs" "amp" "freq" "aenv"))
        (:source-code nil)
@@ -1739,16 +1707,16 @@
           (:default 0.0)
           (:data
            (:list
-            2.212381
-            0.3059975
-            1.8225846
-            2.464438
-            2.5902977
-            0.55332757
-            0.7576479
-            1.6725748
-            1.0227199
-            2.013287)))
+            2.323868
+            0.85204447
+            1.2727997
+            2.2645393
+            2.0900483
+            2.0789888
+            2.4797883
+            1.3762561
+            2.444385
+            2.3046837)))
          (:array-field
           (:name "durs")
           (:doc "duration [sec]")
@@ -1770,8 +1738,7 @@
           (:type number)
           (:decimals 4)
           (:default 440.0)
-          (:data
-           (:list 1408 659 1269 832 1229 1007 1796 626 1116 1090)))
+          (:data (:list 1287 1063 327 275 1039 975 431 895 630 807)))
          (:array-field
           (:name "aenv")
           (:doc "amplitude envelope [GEN table]")
@@ -2001,14 +1968,14 @@
                (:stime 0)))))))))))))
    (:id 1))
   (:box
-   (:reference sound)
    (:type :object)
+   (:reference sound)
    (:group-id 4)
    (:name nil)
-   (:x 1108)
-   (:y 22.564698)
-   (:w 10537.506)
-   (:h -10)
+   (:x 0)
+   (:y 25)
+   (:w 12549.297)
+   (:h 10)
    (:color nil)
    (:border nil)
    (:roundness nil)
@@ -2034,13 +2001,13 @@
     (:object
      (:class sound)
      (:slots
-      ((:onset 1088)
+      ((:onset 0)
        (:duration 0)
        (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))
        (:default-frame-type marker-frame)
        (:frames nil)
        (:buffer nil)
-       (:n-samples 464704)
+       (:n-samples 553424)
        (:n-channels 1)
        (:sample-rate 44100)
        (:smpl-type :float)
@@ -2049,34 +2016,27 @@
       ((:markers nil)
        (:file-pathname
         (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "out-files"))
+         (:directory (:absolute "Users" "bresson" "OM" "out-files"))
          (:device :unspecific)
          (:host :unspecific)
          (:name "my-synth")
          (:type "aiff")))
        (:sample-rate 44100)
        (:n-channels 1)
-       (:n-samples 464704)
+       (:n-samples 553424)
        (:gain 1.0)
        (:access-from-file nil)))))
    (:value
     (:object
      (:class sound)
      (:slots
-      ((:onset 1088)
+      ((:onset 0)
        (:duration 0)
        (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))
        (:default-frame-type marker-frame)
        (:frames nil)
        (:buffer nil)
-       (:n-samples 464704)
+       (:n-samples 553424)
        (:n-channels 1)
        (:sample-rate 44100)
        (:smpl-type :float)
@@ -2085,21 +2045,14 @@
       ((:markers nil)
        (:file-pathname
         (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "out-files"))
+         (:directory (:absolute "Users" "bresson" "OM" "out-files"))
          (:device :unspecific)
          (:host :unspecific)
          (:name "my-synth")
          (:type "aiff")))
        (:sample-rate 44100)
        (:n-channels 1)
-       (:n-samples 464704)
+       (:n-samples 553424)
        (:gain 1.0)
        (:access-from-file nil)))))
    (:id 2)))
@@ -2116,9 +2069,9 @@
    (:lock nil)
    (:boxes
     (:box
+     (:type :io)
      (:reference
       (:in (:type ommaqin) (:index 0) (:name "MAQUETTE") (:doc "")))
-     (:type :io)
      (:group-id nil)
      (:name "MAQUETTE")
      (:x 134)
@@ -2136,9 +2089,9 @@
      (:outputs (:output (:name "out") (:reactive nil)))
      (:id 0))
     (:box
+     (:type :io)
      (:reference
       (:out (:type omout) (:name "out") (:index 1) (:doc "")))
-     (:type :io)
      (:group-id nil)
      (:name "out")
      (:x 173)
@@ -2161,8 +2114,8 @@
      (:outputs)
      (:id 1))
     (:box
-     (:reference synthesize)
      (:type :function)
+     (:reference synthesize)
      (:group-id nil)
      (:name "synthesize")
      (:x 226)
@@ -2185,11 +2138,11 @@
      (:outputs (:output (:name "out") (:reactive nil)))
      (:id 2))
     (:box
-     (:reference sound)
      (:type :object)
+     (:reference sound)
      (:group-id nil)
      (:name nil)
-     (:x 197)
+     (:x 196)
      (:y 230)
      (:w 148)
      (:h 52)
@@ -2218,13 +2171,13 @@
       (:object
        (:class sound)
        (:slots
-        ((:onset 1088)
+        ((:onset 0)
          (:duration 0)
          (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))
          (:default-frame-type marker-frame)
          (:frames nil)
          (:buffer nil)
-         (:n-samples 464704)
+         (:n-samples 553424)
          (:n-channels 1)
          (:sample-rate 44100)
          (:smpl-type :float)
@@ -2233,27 +2186,20 @@
         ((:markers nil)
          (:file-pathname
           (:pathname
-           (:directory
-            (:absolute
-             "Users"
-             "bresson"
-             "_SHARED-FILES"
-             "WORKSPACES"
-             "my-workspace"
-             "out-files"))
+           (:directory (:absolute "Users" "bresson" "OM" "out-files"))
            (:device :unspecific)
            (:host :unspecific)
            (:name "my-synth")
            (:type "aiff")))
          (:sample-rate 44100)
          (:n-channels 1)
-         (:n-samples 464704)
+         (:n-samples 553424)
          (:gain 1.0)
          (:access-from-file nil)))))
      (:id 3))
     (:box
-     (:reference m-add)
      (:type :function)
+     (:reference m-add)
      (:group-id nil)
      (:name "m-add")
      (:x 163)
@@ -2286,8 +2232,8 @@
      (:outputs (:output (:name "out") (:reactive nil)))
      (:id 4))
     (:box
-     (:reference m-objects)
      (:type :function)
+     (:reference m-objects)
      (:group-id nil)
      (:name "m-objects")
      (:x 226)
@@ -2310,8 +2256,8 @@
      (:outputs (:output (:name "out") (:reactive nil)))
      (:id 5))
     (:box
-     (:reference m-flush)
      (:type :function)
+     (:reference m-flush)
      (:group-id nil)
      (:name "m-flush")
      (:x 22)
@@ -2339,8 +2285,8 @@
      (:outputs (:output (:name "out") (:reactive nil)))
      (:id 6))
     (:box
-     (:reference fixnum)
      (:type :value)
+     (:reference fixnum)
      (:group-id nil)
      (:name "value box")
      (:x 103)
@@ -2359,8 +2305,8 @@
      (:value 4)
      (:id 7))
     (:box
-     (:reference seq)
      (:type :function)
+     (:reference seq)
      (:group-id nil)
      (:name "seq")
      (:x 100)
