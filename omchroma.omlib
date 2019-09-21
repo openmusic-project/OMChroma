@@ -1,10 +1,10 @@
 ;;;===========================================================================
-;;; OMChroma lib for om7o
+;;; OMChroma lib for om7
 ;;;===========================================================================
 
 (:om-lib
  
- (:version 5.02)
+ (:version 5.1)
 
  (:doc "High-level control of sound synthesis in OM.")
 
