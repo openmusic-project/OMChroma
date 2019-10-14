@@ -81,8 +81,13 @@
          (dur (- t2 t1))
          (ncols nil)
          (instance (make-instance target-class))
-         (fixedargs (make-list (- (length (fixed-slots-list instance)) 1)))
+         (fixed-slots-list (fixed-slots-list instance))
+         (fixedargs-size (if (find 'numcols fixed-slots-list)
+                             (- (length fixed-slots-list) 1)
+                           (length fixed-slots-list)))
+         (fixedargs (make-list fixedargs-size))
          (data (nth i (elements (data model)))))
+
     (when data 
       (let ((modeldata (make-instance 'virtual-modeldata :local-time t1 
                                       :local-dur dur
@@ -92,6 +97,7 @@
             slotslist
             argslist 
             (i -1))
+
         (setf (global-model modeldata) model)
         (setf slotslist (multiple-value-list (apply (intern (string (code (ctl cr-ctrl))) :om) (cons modeldata (args cr-ctrl)))))
         
@@ -101,10 +107,11 @@
         (let ((pos (position "numcols" slotslist :key 'car :test 'string-equal)))
           (when pos 
             (setf ncols (cadr (nth pos slotslist)))
-            (setf slotslist (append (first-n slotslist pos) (nthcdr (+ pos 1) slotslist)))))
+            (setf slotslist (append (first-n slotslist pos) (nthcdr (+ pos 1) slotslist)))
+          ))
         
         
-        (loop for fsl in (fixed-slots-list instance) do
+        (loop for fsl in fixed-slots-list do
               (unless (equal 'numcols fsl)
                 (incf i)
                 (let ((pos (position (string fsl) slotslist :key 'car :test 'string-equal)))
@@ -120,14 +127,23 @@
         (loop for oneslot in slotslist do
               (when (member (car oneslot) realslots :test 'string-equal)
                 (setf argslist (append argslist (list (string2initarg (car oneslot)) (cadr oneslot))))
-            ;(setf (slot-value rep (intern (car oneslot) :om)) (cadr oneslot))
                 ))
         
-        (apply 'mk-array (append 
-                          (list target-class 
-                                (or ncols (max 1 (length (get-vps-freqs data))))
-                                fixedargs)
-                          argslist))
+        (if (subtypep target-class 'class-array)
+            (apply 'mk-array (append 
+                              (list target-class 
+                                    (or ncols (max 1 (length (get-vps-freqs data))))
+                                    fixedargs)
+                              argslist))
+          (let ((rep (make-instance target-class)))
+            (loop for fsl in fixed-slots-list 
+                  for i from 0 do
+                  (setf (slot-value rep fsl) (nth i fixedargs)))
+            rep)
+          )
+          
+
+        
         ))))
 
 

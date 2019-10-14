@@ -301,7 +301,7 @@
 
 
 
-(defmethod! expand-model ((my-model cr-model) rules (target-class SynthesisEvt))
+(defmethod! expand-model ((my-model cr-model) rules (target-class internSynthEvt))
   (expand-model my-model rules (type-of target-class)))
 
 (defmethod! expand-model ((my-model cr-model) (rules textfile) target-class)
