@@ -717,7 +717,7 @@
          (instlist (get-event-list (copy-list elements)))
          (path-aiff (if (equal :rt name) name
                       (if (pathnamep name) name 
-                        (corrige-sound-filename (string+ name ".aiff") *om-outfiles-folder*))))
+                        (corrige-sound-filename (string+ name (format nil ".~A" *def-snd-format*)) *om-outfiles-folder*))))
          (cs-basename (if (equal :rt name) "cs_temp" (pathname-name path-aiff)))
          (path-orc (handle-new-file-exists (tmpfile (string+ cs-basename ".orc"))))
          (path-sco (handle-new-file-exists (tmpfile (string+ cs-basename ".sco"))))  
