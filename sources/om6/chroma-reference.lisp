@@ -51,138 +51,137 @@
          collect (list (name pack) (gen-subpack-entries pack :exclude-packages exclude-packages)))))
 
 (defun gen-chroma-reference (ref-entries classes-entries dir &key title general-doc doc-base appendix)
+
   (let ((pagetitle (string+ (or title "") " Reference")))
-    (setf *credit-line* (concatenate 'string "<center><font size=-2>" "Auto doc generation by OpenMusic " *version-string* " © 2010 IRCAM"  "</font></center>"))
+    
     (when (probe-file dir) (om-delete-directory dir))
     (om-create-directory dir)
-    (let ((indexpath (make-pathname :directory (pathname-directory dir)
-                                  :name "index" :type "html"))
-        (alphaindexpath (make-pathname :directory (pathname-directory dir)
-                                  :name "ind-alpha" :type "html"))
-        (allclasses (remove nil (loop for pack in classes-entries append
-                                      (loop for group in (cadr pack) append (cadr group)))))
-        (allsymbols (remove nil (loop for pack in ref-entries append
-                                      (loop for group in (cadr pack) append (cadr group)))))
-        )
-      
-      
-    (with-open-file (index indexpath :direction :output)
-      (write-line "<html>" index)
-      (write-line (concatenate 'string "<head><title>" pagetitle "</title>") index)
-      (write-line *om-ref-css* index)
-      (write-line "</head>" index)
-      (write-line "<body bgcolor=BBBBBB>" index)
-      (write-line "<table align=center bgcolor=FFFFFF width=87%><tr>" index)
-      (write-line "<td>" index)
-      (write-line (concatenate 'string "<H1>" pagetitle "</H1>") index)
-      (write-line "<p style=\"text-align: right;\"><a href=ind-alpha.html>Alphabetical Index</a></p>" index)
-      (write-line "</td>" index)
-      (write-line (concatenate 'string "<td><img src=./omlogo.gif width=100 align=right></td></tr>")
-                  index)
-
-      (write-line "<tr><td colspan=2>" index)
-      (write-line "<hr>" index)
-      (loop for lll in (om-text-to-lines general-doc) do (write-line (string+ lll "<br>") index))
-      (write-line "</td></tr>" index)
-      
-      
-      
-      (write-line "<tr><td colspan=2>" index)
-      (write-line "<hr><h2>Synthesis Classes<h2>" index)
-      (loop for pack in classes-entries do
-            (when (car pack)
-              (write-line (concatenate 'string "<h3>" (string (car pack)) "</h3>") index))
-            (loop for group in (cadr pack) do
-                  (when (car group)
-                    (write-line (concatenate 'string "<h4>" (string (car group)) "</h4>") index))
-                  (loop for item in (cadr group) do
-                        (write-line (concatenate 'string "<a href=" 
-                                                 (special-path-check
-                                                  (string-downcase (string item))) ".html>" 
-                                                 (special-html-check (string item)) "</a>") index)
-                        ))
-            (write-line "<br><br>" index)
-            )
-      
-      (write-line "</td></tr><tr><td colspan=2>" index)
-      (write-line "<hr><h2>Other Objects and Functions<h2>" index)
-
-      (loop for pack in ref-entries do
-            (let ((name (if (consp (car pack)) (first (car pack)) (car pack)))
-                  (doc (if (consp (car pack)) (second (car pack)) nil)))
-            (when name
-              (write-line (concatenate 'string "<h3>" (string-upcase (string name)) "</h3>") index))
-            (when doc
-              (write-line (concatenate 'string "<p>" doc "</p>") index))
-            (loop for group in (cadr pack) do
-                  (let ((n (if (consp (car group)) (first (car group)) (car group)))
-                        (d (if (consp (car group)) (second (car group)) nil)))
-                  (when n
-                    (write-line (concatenate 'string "<h4>" (string n) "</h4>") index))
-                  (when d
-                    (write-line (concatenate 'string "<p>" (string d) "</p>") index))
-                  (loop for item in (cadr group) do
-                        (write-line (concatenate 'string "<a href=" 
-                                                 (special-path-check
-                                                  (string-downcase (string item))) ".html>" 
-                                                 (special-html-check (string item)) "</a> ") index)
-                        )
-                  ))
-            (write-line "<br><br>" index)
-            ))
-
-      (write-line "</td></tr><tr>" index)
-      (write-line "<tr><td colspan=2 class=center><br><br><br>" index)
-      (write-line *credit-line* index)
-      (write-line "</td></tr>" index)
-      (write-line "</table>" index)
-      (write-line "</body></html>" index))
-    (with-open-file (index alphaindexpath :direction :output)
-      (write-line "<html>" index)
-      (write-line (concatenate 'string "<head><title>" title "</title>") index)
-      (write-line *om-ref-css* index)
-      (write-line "</head>" index)
-      (write-line "<body bgcolor=BBBBBB>" index)
-      (write-line "<table align=center bgcolor=FFFFFF width=87%><tr>" index)
-      (write-line "<td>" index)
-      (write-line (concatenate 'string "<H3>Alphabetical Index</H3>") index)
-      (write-line "<p style=\"text-align: right;\"><a href=index.html>Back to main Reference</a></p>" index) 
-      (write-line "</td>" index)
-      (write-line (concatenate 'string "<td><img src=./omlogo.gif width=100 align=right></td></tr>")
-                  index)
-      
-      (write-line "<tr><td colspan=2>" index)
-      (write-line "<hr>" index)
-      (loop for lll in (om-text-to-lines (or general-doc "")) do (write-line (string+ lll "<br>") index))
-      (write-line "</td></tr>" index)
-      
-      (write-line "<tr><td colspan=2><hr><br>" index)
-      (mapcar #'(lambda (item) (write-line (concatenate 'string "<b><a href=" (special-path-check
-                                                                               (string-downcase (string item))) ".html>" 
-                                                        (string item) "</a></b><br>") index))
-              (sort (copy-list (append allsymbols allclasses)) 'string<)
-              )
-      (write-line "</td></tr>" index)
-      (write-line "<tr><td colspan=2 class=center><br><br><br>" index)
-      (write-line *credit-line* index)
-      (write-line "</td></tr>" index)
-      (write-line "</table>" index)
-      (write-line "</body></html>" index))
-
-    (let ((logopict (make-pathname :directory (pathname-directory *om-pict-folder*) :name "omlogo" :type "gif")))
+    
+    ;;; copy OMChroma logo in ref-pages
+    (let ((logopict (make-pathname :directory (pathname-directory (lib-resources-folder (find-library "OMChroma"))) :name "logo" :type "png")))
       (when (probe-file logopict)
-        (om-copy-file logopict
-                      (make-pathname :directory (pathname-directory dir) :name "omlogo" :type "gif"))))  
+        (om-copy-file logopict (make-pathname :directory (pathname-directory dir) :name "logo" :type "png"))))
     
-    (setf *chroma-slots-list* nil)
+    (setf *credit-line* (concatenate 'string "<center><font size=-2>" "OMChroma auto-doc generation for OpenMusic " *version-string* "</font></center>"))
+    
+    (let ((indexpath (make-pathname :directory (pathname-directory dir)
+                                    :name "index" :type "html"))
+          (alphaindexpath (make-pathname :directory (pathname-directory dir)
+                                         :name "ind-alpha" :type "html"))
+          (allclasses (remove nil (loop for pack in classes-entries append
+                                        (loop for group in (cadr pack) append (cadr group)))))
+          (allsymbols (remove nil (loop for pack in ref-entries append
+                                        (loop for group in (cadr pack) append (cadr group))))))
       
-    (mapcar #'(lambda (symb) (make-chroma-ref-page symb dir pagetitle doc-base appendix)) allclasses)
-    (mapcar #'(lambda (symb) (make-ref-page symb dir title)) allsymbols)
+      (with-open-file (index indexpath :direction :output)
+        (write-line "<html>" index)
+        (write-line (concatenate 'string "<head><title>" pagetitle "</title>") index)
+        (write-line *om-ref-css* index)
+        (write-line "</head>" index)
+        (write-line "<body bgcolor=BBBBBB>" index)
+        (write-line "<table align=center bgcolor=FFFFFF width=87%><tr>" index)
+        (write-line "<td>" index)
+        (write-line (concatenate 'string "<H1>" pagetitle "</H1>") index)
+        (write-line "<p style=\"text-align: right;\"><a href=ind-alpha.html>Alphabetical Index</a></p>" index)
+        (write-line "</td>" index)
+        (write-line "<td><img src=./logo.png width=100 align=right></td></tr>" index)
 
-    (make-slots-ref-page dir title)
-    (when appendix (make-cstables-ref-page dir title appendix))
+        (write-line "<tr><td colspan=2>" index)
+        (write-line "<hr>" index)
+        (loop for lll in (om-text-to-lines general-doc) do (write-line (string+ lll "<br>") index))
+        (write-line "</td></tr>" index)
+      
+        (write-line "<tr><td colspan=2>" index)
+        (write-line "<hr><h2>Synthesis Classes<h2>" index)
+        (loop for pack in classes-entries do
+              (when (car pack)
+                (write-line (concatenate 'string "<h3>" (string (car pack)) "</h3>") index))
+              (loop for group in (cadr pack) do
+                    (when (car group)
+                      (write-line (concatenate 'string "<h4>" (string (car group)) "</h4>") index))
+                    (loop for item in (cadr group) do
+                          (write-line (concatenate 'string "<a href=" 
+                                                   (special-path-check
+                                                    (string-downcase (string item))) ".html>" 
+                                                   (special-html-check (string item)) "</a>") index)
+                          ))
+              (write-line "<br><br>" index)
+              )
+      
+        (write-line "</td></tr><tr><td colspan=2>" index)
+        (write-line "<hr><h2>Other Objects and Functions<h2>" index)
+
+        (loop for pack in ref-entries do
+              (let ((name (if (consp (car pack)) (first (car pack)) (car pack)))
+                    (doc (if (consp (car pack)) (second (car pack)) nil)))
+                (when name
+                  (write-line (concatenate 'string "<h3>" (string-upcase (string name)) "</h3>") index))
+                (when doc
+                  (write-line (concatenate 'string "<p>" doc "</p>") index))
+                (loop for group in (cadr pack) do
+                      (let ((n (if (consp (car group)) (first (car group)) (car group)))
+                            (d (if (consp (car group)) (second (car group)) nil)))
+                        (when n
+                          (write-line (concatenate 'string "<h4>" (string n) "</h4>") index))
+                        (when d
+                          (write-line (concatenate 'string "<p>" (string d) "</p>") index))
+                        (loop for item in (cadr group) do
+                              (write-line (concatenate 'string "<a href=" 
+                                                       (special-path-check
+                                                        (string-downcase (string item))) ".html>" 
+                                                       (special-html-check (string item)) "</a> ") index)
+                              )
+                        ))
+                (write-line "<br><br>" index)
+                ))
+
+        (write-line "</td></tr><tr>" index)
+        (write-line "<tr><td colspan=2 class=center><br><br><br>" index)
+        (write-line *credit-line* index)
+        (write-line "</td></tr>" index)
+        (write-line "</table>" index)
+        (write-line "</body></html>" index))
+
+      (with-open-file (index alphaindexpath :direction :output)
+        (write-line "<html>" index)
+        (write-line (concatenate 'string "<head><title>" title "</title>") index)
+        (write-line *om-ref-css* index)
+        (write-line "</head>" index)
+        (write-line "<body bgcolor=BBBBBB>" index)
+        (write-line "<table align=center bgcolor=FFFFFF width=87%><tr>" index)
+        (write-line "<td>" index)
+        (write-line (concatenate 'string "<H3>Alphabetical Index</H3>") index)
+        (write-line "<p style=\"text-align: right;\"><a href=index.html>Back to main Reference</a></p>" index) 
+        (write-line "</td>" index)
+        (write-line "<td><img src=./logo.png width=100 align=right></td></tr>" index)
+      
+        (write-line "<tr><td colspan=2>" index)
+        (write-line "<hr>" index)
+        (loop for lll in (om-text-to-lines (or general-doc "")) do (write-line (string+ lll "<br>") index))
+        (write-line "</td></tr>" index)
+      
+        (write-line "<tr><td colspan=2><hr><br>" index)
+        (mapcar #'(lambda (item) (write-line (concatenate 'string "<b><a href=" (special-path-check
+                                                                                 (string-downcase (string item))) ".html>" 
+                                                          (string item) "</a></b><br>") index))
+                (sort (copy-list (append allsymbols allclasses)) 'string<)
+                )
+        (write-line "</td></tr>" index)
+        (write-line "<tr><td colspan=2 class=center><br><br><br>" index)
+        (write-line *credit-line* index)
+        (write-line "</td></tr>" index)
+        (write-line "</table>" index)
+        (write-line "</body></html>" index))  
     
-    indexpath)))
+      (setf *chroma-slots-list* nil)
+      
+      (mapcar #'(lambda (symb) (make-chroma-ref-page symb dir pagetitle doc-base appendix)) allclasses)
+      (mapcar #'(lambda (symb) (make-ref-page symb dir title)) allsymbols)
+
+      (make-slots-ref-page dir title)
+      (when appendix (make-cstables-ref-page dir title appendix))
+    
+      indexpath)))
 
 (defmethod get-additional-slots ((self t)) nil)
 
@@ -191,13 +190,24 @@
 
 
 (defun make-chroma-ref-page (symbol dir &optional title doc-base appendix)
-  (let ((title (or title "Class Reference"))
-        (pagepath (make-pathname :directory (pathname-directory dir)
-                                 :name (special-path-check
-                                        (string-downcase (string symbol)))
-                                 :type "html"))
-        (dummy-instance (make-instance symbol))
-        (doc (om-get-documentation symbol)))
+  (let* ((title (or title "Class Reference"))
+         (pagepath (make-pathname :directory (pathname-directory dir)
+                                  :name (special-path-check
+                                         (string-downcase (string symbol)))
+                                  :type "html"))
+         (dummy-instance (make-instance symbol))
+         (doc (om-get-documentation symbol))
+         
+         (classicon (and (find-class symbol nil) (omclass-p (find-class symbol nil)) (icon (find-class symbol nil))))
+         (icon (if (consp classicon) (car classicon) classicon))
+         (iconfile (and icon (probe-file (make-pathname :directory (pathname-directory (lib-icons-folder (find-library "OMChroma")))
+                                                       :name (integer-to-string icon)
+                                                       :type "png"))))   ;;; !!! currently all icons are TIF
+         
+         (graph-pict (probe-file (make-pathname :directory (append (pathname-directory (lib-resources-folder (find-library "OMChroma"))) '("doc-picts"))
+                                                :name (string symbol)
+                                                :type "gif"))))
+    
     (with-open-file (index pagepath :direction :output)
       (write-line "<html>" index)
       (write-line (concatenate 'string "<head><title>" (special-html-check (string symbol)) " - " title "</title>") index)
@@ -211,16 +221,11 @@
       (write-line (concatenate 'string "<h2>" (special-html-check (string symbol)) "</h2>") index)
           
       (write-line "</td><td width=130>" index)
-      (let* ((classicon (and (find-class symbol nil) (omclass-p (find-class symbol nil))
-                             (icon (find-class symbol nil))))
-             (icon (if (consp classicon) (car classicon) classicon))
-             (iconfile (and icon (probe-file (make-pathname :directory (append (butlast (pathname-directory dir) 2) '("doc-pictures"))
-                                                            :name (integer-to-string icon)
-                                                            :type "jpg")))))
-        (if iconfile 
-            (write-line (concatenate 'string "<img src=../../doc-pictures/" (integer-to-string icon) ".jpg width=64>") index)
-          (write-line (concatenate 'string "<img src=./omlogo.gif width=64>") index))
-        )      
+      
+      (if iconfile 
+          (write-line (concatenate 'string "<img src=\""  (namestring iconfile) "\" type=\"image/tiff\" width=64>") index)
+        (write-line "<img src=./logo.png width=64>" index))
+    
       (write-line "</td></tr>" index)
       (write-line "<tr><td colspan=2>" index)
       (write-line "<table width=100% border=0>" index)
@@ -279,16 +284,13 @@
               (write-line (concatenate 'string "" (special-html-check str) "<br>") index))
         )
       
-      (write-line "</p></td></tr>" index)
+      (write-line "</td></tr>" index)
 
-      (let ((graph (probe-file (make-pathname :directory (append (butlast (pathname-directory dir)) '("doc-pictures"))
-                                              :name (string symbol)
-                                              :type "gif"))))
-        (when graph
-          (write-line "<tr><td colspan=2 class=center><hr>" index)
-          (write-line (concatenate 'string "<img src=../doc-pictures/" (string-downcase (string symbol)) ".gif align=center width=600>") index)
+      (when graph-pict
+          (write-line "<tr><td colspan=2 class=center>" index)
+          (write-line (concatenate 'string "<img src=\"" (namestring graph-pict) "\" align=center width=600>") index)
           (write-line "</td></tr>" index)
-          ))
+          )
       
       (when appendix
         (write-line (concatenate 'string "<tr><td colspan=2 class=center><hr><br>see <a href=appendix.html>" (car appendix) "</a><br><br><br></td></tr>") index))
@@ -325,7 +327,7 @@
       (write-line (concatenate 'string "<H3>Class Slots</H3>") index)
       (write-line "<a href=index.html>Back to main Reference</a>" index)
       (write-line "</td>" index)
-      (write-line (concatenate 'string "<td><img src=./omlogo.gif width=100 align=right></td></tr>") index)
+      (write-line "<td><img src=./logo.png width=100 align=right></td></tr>" index)
       (write-line "<tr><td colspan=3><hr><br></td></tr>" index)
       
       (loop for item in (sort *chroma-slots-list* 'string< :key 'car) do
@@ -363,7 +365,7 @@
       (write-line (concatenate 'string "<H3>" (car appendix) "</H3>") index)
       (write-line "<a href=index.html>Back to main Reference</a>" index)
       (write-line "</td>" index)
-      (write-line (concatenate 'string "<td><img src=./omlogo.gif width=100 align=right></td></tr>") index)
+      (write-line "<td><img src=./logo.png width=100 align=right></td></tr>" index)
       (write-line "<tr><td colspan=2><hr><br></td></tr>" index)
       
       (write-line "<tr><td colspan=2><table align=center>" index)
@@ -375,6 +377,7 @@
                                          "<td>" (if (second item) (string (second item)) "") "</td>") index)
               (write-line (concatenate 'string "<td colspan=2>" (if (or (null item) (and (stringp item) (string-equal item ""))) "&nbsp;" (string item)) "</td>") index))
             (write-line "</tr>" index))
+
       (write-line "</table></td></tr>" index)
       (write-line "<tr><td colspan=2 class=center><br><br><br>" index)
       (write-line *credit-line* index)
