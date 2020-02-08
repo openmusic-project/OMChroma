@@ -80,7 +80,7 @@
                                                              main-partials n-main-partials stretch-vps pitch-transpose
                                                              xpose-begin xpose-end
                                                              revert-vps mirror-vps) nil)
-                      ("Conversions" nil nil (pch->fq fq->pch fq->ratio) nil))
+                      ("Conversions" nil nil (cr::pch->fq cr::fq->pch cr::fq->ratio) nil))
                      nil
                      nil nil)
                     ("Models" 
