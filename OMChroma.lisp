@@ -80,9 +80,16 @@
                                                              main-partials n-main-partials stretch-vps pitch-transpose
                                                              xpose-begin xpose-end
                                                              revert-vps mirror-vps) nil)
-                      ("Conversions" nil nil (cr::pch->fq cr::fq->pch cr::fq->ratio) nil))
-                     nil
-                     nil nil)
+                      ("Conversions"
+                         (("FQ" nil nil (cr::fq->pch cr::fq->midi cr::fq->ratio cr::fq->midic cr::fq->itvl cr::fq->semitones) nil)
+                          ("PCH" nil nil (cr::pch->fq cr::pch->midi cr::pch->midic cr::pch->itvl cr::pch->semitones cr::pch->pch-class cr::pch->ratio) nil)
+                          ("MIDI" nil nil (cr::midi->pch cr::midi->semitones cr::midi->pch-class cr::midi->midic cr::midi->fq cr::midi->ratio cr::midi->itvl) nil)
+                          ("MIDIC" nil nil (cr::midic->midi cr::midic->fq cr::midic->pch cr::midic->ratio cr::midic->itvl cr::midic->semitones cr::midic->pch-class) nil)
+                          ("IVTL" nil nil (cr::itvl->fq cr::itvl->midi cr::itvl->midic cr::itvl->ratio cr::itvl->pch cr::itvl->semitones) nil)
+                          ("RATIO" nil nil (cr::ratio->fq cr::ratio->itvl cr::ratio->semitones cr::ratio->midi cr::ratio->midic cr::ratio->pch) nil)
+                          ("SEMITONES" nil nil (cr::semitones->ratio cr::semitones->itvl cr::semitones->fq cr::semitones->midi cr::semitones->midic ) nil)
+                          ("PCH-CLASS" nil nil (cr::pch-class->pch cr::pch-class->midi cr::pch-class->fq)) nil)
+                         )))
                     ("Models" 
                      (("Inspect" nil nil (model-max-amp model-max-freq model-min-freq model-nb-evts) nil)
                       ("Tools" nil nil (make-cr-fun time-map-fun add-random) nil))
