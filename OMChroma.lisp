@@ -62,6 +62,64 @@
    "sources/om6/cr-models/ctl"
    ))
 
+(import '(cr::fq->pch 
+          cr::fq->midi
+          cr::fq->ratio
+          cr::fq->midic
+          cr::fq->itvl
+          cr::fq->semitones
+          
+          cr::pch->fq
+          cr::pch->midi
+          cr::pch->midic
+          cr::pch->itvl
+          cr::pch->semitones
+          cr::pch->pch-class
+          cr::pch->ratio
+          
+          cr::midi->pch
+          cr::midi->semitones
+          cr::midi->pch-class
+          cr::midi->midic
+          cr::midi->fq
+          cr::midi->ratio
+          cr::midi->itvl
+          
+          cr::midic->midi
+          cr::midic->fq
+          cr::midic->pch
+          cr::midic->ratio
+          cr::midic->itvl
+          cr::midic->semitones
+          cr::midic->pch-class
+          
+          cr::ratio->fq
+          cr::ratio->itvl
+          cr::ratio->semitones
+          cr::ratio->midi
+          cr::ratio->midic
+          cr::ratio->pch
+          
+          cr::itvl->fq
+          cr::itvl->midi
+          cr::itvl->midic
+          cr::itvl->ratio
+          cr::itvl->pch
+          cr::itvl->semitones
+          
+          cr::semitones->ratio
+          cr::semitones->itvl
+          cr::semitones->fq
+          cr::semitones->midi
+          cr::semitones->midic 
+          
+          cr::pch-class->pch
+          cr::pch-class->midi
+          cr::pch-class->fq)
+        )
+
+(import '(cr::spsht))
+
 
 (om::fill-library '((nil nil nil (synthesize chroma-prisma) nil)
                     ("Csound" 
