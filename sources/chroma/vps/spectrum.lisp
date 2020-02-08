@@ -24,9 +24,6 @@
 (in-package :cr)
 
 
-(export '(fql ptl crl arl) :cr)
-
-
 (defclass SPECTRUM
   (VPS)
   ((amplitudes :initform nil

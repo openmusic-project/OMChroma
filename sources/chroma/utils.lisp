@@ -10,8 +10,6 @@
 
 (in-package :cr)
 
-(export '(within-p) :chroma)
-
 
 ;;; The same function exist in OM
 ;;; here we have them in the CR package
