@@ -129,16 +129,7 @@
                       ("Multi Channels" nil nil nil nil))
                      nil nil nil)
                     ("Vertical Pitch Structures" 
-                     (("Inspect" nil nil (get-vps-freqs get-vps-freq-ratios get-vps-intervals 
-                                                        get-vps-amps get-vps-maxamp get-vps-minamp
-                                                        ;;; Lisp functions:
-                                                        cr::get-homogeneity cr::get-harmonicity cr::get-surface 
-                                                        cr::get-density cr::get-sd cr::get-cs cr::get-virt-fund cr::match) nil)
-                      ("Processing" nil nil (low-pass-filter high-pass-filter band-pass-filter
-                                                             main-partials n-main-partials stretch-vps pitch-transpose
-                                                             xpose-begin xpose-end
-                                                             revert-vps mirror-vps) nil)
-                      ("Conversions"
+                     (("Conversions"
                          (("FQ" nil nil (cr::fq->pch cr::fq->midi cr::fq->ratio cr::fq->midic cr::fq->itvl cr::fq->semitones) nil)
                           ("PCH" nil nil (cr::pch->fq cr::pch->midi cr::pch->midic cr::pch->itvl cr::pch->semitones cr::pch->pch-class cr::pch->ratio) nil)
                           ("MIDI" nil nil (cr::midi->pch cr::midi->semitones cr::midi->pch-class cr::midi->midic cr::midi->fq cr::midi->ratio cr::midi->itvl) nil)
@@ -147,7 +138,17 @@
                           ("RATIO" nil nil (cr::ratio->fq cr::ratio->itvl cr::ratio->semitones cr::ratio->midi cr::ratio->midic cr::ratio->pch) nil)
                           ("SEMITONES" nil nil (cr::semitones->ratio cr::semitones->itvl cr::semitones->fq cr::semitones->midi cr::semitones->midic ) nil)
                           ("PCH-CLASS" nil nil (cr::pch-class->pch cr::pch-class->midi cr::pch-class->fq)) nil)
-                         )))
+                         )
+
+                      ("Inspect" nil nil (get-vps-freqs get-vps-freq-ratios get-vps-intervals 
+                                                        get-vps-amps get-vps-maxamp get-vps-minamp
+                                                        ;;; Lisp functions:
+                                                        cr::get-homogeneity cr::get-harmonicity cr::get-surface 
+                                                        cr::get-density cr::get-sd cr::get-cs cr::get-virt-fund cr::match) nil)
+                      ("Processing" nil nil (low-pass-filter high-pass-filter band-pass-filter
+                                                             main-partials n-main-partials stretch-vps pitch-transpose
+                                                             xpose-begin xpose-end
+                                                             revert-vps mirror-vps) nil)))
                     ("Models" 
                      (("Inspect" nil nil (model-max-amp model-max-freq model-min-freq model-nb-evts) nil)
                       ("Tools" nil nil (make-cr-fun time-map-fun add-random) nil))
