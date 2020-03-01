@@ -392,7 +392,7 @@ specified by the environment variable LLwt"
 ;from mikhail malt:
 ;(defun decs-to-bignum (liste)
 ;"conversion d'une liste d'entiers en un bignum.
-;Le premier élément est le plus representatif et le dernier le moins"
+;Le premier element est le plus representatif et le dernier le moins"
 ;(let ((long (1- (length liste))))
 ;  (cond
 ;   ((null liste) 0)

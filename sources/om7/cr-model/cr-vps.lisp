@@ -626,7 +626,7 @@ WARNING: AT THE MOMENT IT DOES NOT TAKE AMPS and BWS INTO ACCOUNT"
 "Transpose each frequency in <range> by aleatorically selecting one interval [cents] in the list.
 The transposition is MULTIPLIED to the original list, hence it works better with freqs.
 If remove-dup=t, if the process generates some duplicated notes, remove them.
-If remove-dup=number, if the process generates some duplicated notes ± <number>, remove them.
+If remove-dup=number, if the process generates some duplicated notes +/- <number>, remove them.
 Ex: (mul-randomize '(100 200 300 400 500 600) '(200 500) '(100 0 -100))
 WARNING: AT THE MOMENT IT DOES NOT TAKE AMPS and BWS INTO ACCOUNT"
   (let ((result

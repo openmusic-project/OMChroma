@@ -90,7 +90,7 @@
             initially (setf amps nil freqs nil amp_funs nil freq_funs nil edels nil durs nil)
             do
                 ;(format t "~%partiel n~a~%" i)
-                ;moyenne pondre frequence
+                ;moyenne ponderee frequence
             (setf freq_fun (get_freq_fun subdata i))
                 ;amplitude moyenne
             (setf amp_fun (get_amp_fun subdata i))
@@ -99,7 +99,7 @@
             (setf triplets  (mapcar #'list amp_fun time_list freq_fun))
                 ;delete breakpoints absents de l'analyse
             (setf triplets (delete nil triplets :key 'car))
-            (when (> (length triplets) 1) ;nombre minimum de points dans les bpf (pourrait tre 2)
+            (when (> (length triplets) 1) ;nombre minimum de points dans les bpf (pourrait etre 2)
               (setf time_list (mapcar #'second triplets))
               (setf dur  (- (car (last time_list)) (first time_list)))
               (when (> dur durmin)

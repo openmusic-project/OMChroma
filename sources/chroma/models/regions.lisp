@@ -127,11 +127,11 @@
     )))
 
 (defmethod check-regions ((self regions))
-  ;1.la fin de chaque region est elle bien avant le début ?
+  ;1.la fin de chaque region est elle bien avant le debut ?
   (loop for region in (region-list self) do
         (let((region (second region))) ; debut-fin
           (if (> (first region)(second region)) (error "region end before start !~a"region))))
-  ;2.virer les régions trop courtes
+  ;2.virer les regions trop courtes
   (setf (region-list self)(remove-if #'(lambda (x) (eq (first (second x))(second (second x)))) (region-list self)))
 )              
 

@@ -82,7 +82,7 @@
 (defmethod set_regions_to_closest_frame ((x regions-cseq) (a analysis-data))
   (let*((result nil)
        (f (get_add_time (data a)))
-       (f (subseq f 0 (- (length f) 2))) ; attention ˆ la derniere trame d'analyse !
+       (f (subseq f 0 (- (length f) 2))) ; attention a la derniere trame d'analyse !
        )
     (loop for region in (region-list x)
           do (let*((mark1 (first (second region)))

@@ -430,8 +430,8 @@
 
 (defmethod main-partials ((x spectrum) &key reference diapason
                           (max-nn *MAX-NN*)(threshold nil) &allow-other-keys)
-  ;threshold : lineaire et absolu
-  ;thresholdB : en dB et relatif ˆ max-amp (doit etre negatif) MANQUE!!!!
+  ;threshold : linear and absolute
+  ;thresholdB : in dB and relative to max-amp (must be negative) MANQUE!!!!
   (declare(ignore reference))
   (if (null (fql x))(error "MISSING ABSOLUTE FREQUENCY in ~a~%" (class-of x)))
   (let((fq-and-amps nil)

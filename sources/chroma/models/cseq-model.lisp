@@ -138,7 +138,7 @@ There are as many ranks as events in a model"
             do
             (when (get-gbl 'prnflg)
             (format t "partiel n ~a~%" i))
-            ;moyenne pondérée frequence
+            ;moyenne ponderee frequence
             (setf freq_fun (get_freq_fun subdata i))
              ;amplitude moyenne
             (setf amp_fun (get_amp_fun subdata i))
@@ -187,7 +187,7 @@ There are as many ranks as events in a model"
             do
             ;(when (get-gbl 'prnflg)
             ;(format t "partiel n ~a~%" i))
-            ;moyenne pondérée frequence
+            ;moyenne ponderee frequence
             (setf freq_fun (get_freq_fun subdata i))
              ;amplitude moyenne
             (setf amp_fun (get_amp_fun subdata i))
@@ -278,7 +278,7 @@ There are as many ranks as events in a model"
 (defmethod set_markers_to_closest_frame ((x model-cseq) (a analysis-data) markers)
   (let*((result nil)
        (f (get_add_time (data a)))
-       (f (subseq f 0 (- (length f) 2))) ; attention à la derniere trame d'analyse !
+       (f (subseq f 0 (- (length f) 2))) ; attention a la derniere trame d'analyse !
        )
     (loop for mark in markers
           do (let*(( diff_l (mapcar #'(lambda (x) (abs (- x mark))) f))

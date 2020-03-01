@@ -84,14 +84,14 @@
 
 
 (defun within? (val segment epsilon)
-"If val is contained within the time segment ± espilon, return the segment"
+"If val is contained within the time segment +/- epsilon, return the segment"
   (when (and val (and (>= val (- (car segment) epsilon)) (<= val (+ (cadr segment) epsilon)))) segment))
 
 ; (within? () '(1.1 2.0) 0.31)
 ; (within? 2.3'(1.1 2.0) 0.01)
 
 (defun within-list? (val lsegs epsilon)
-"If val is contained within the list of time segment ± espilon, return the corresponding segment"
+"If val is contained within the list of time segment +/- epsilon, return the corresponding segment"
   (loop for seg in lsegs
         for within = (within? val seg epsilon)
         until within
@@ -101,7 +101,7 @@
 ; (within-list? 1.3 '((0.0 1.0) (1.1 2.0) (2.2 3.0)) 0.01)
 
 (defun within-times? (seg ltimes epsilon)
-"If a time of list of time values ± espilon is contained within the time segment, return it"
+"If a time of list of time values +/- epsilon is contained within the time segment, return it"
   (loop for tim in ltimes
         for within = (within? tim seg epsilon)
         until within
