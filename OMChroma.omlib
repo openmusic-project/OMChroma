@@ -1,0 +1,89 @@
+;;;===========================================================================
+;;; OMChroma lib for om7
+;;;===========================================================================
+
+(:om-lib
+ 
+ (:version 5.1)
+
+ (:doc "High-level control of sound synthesis in OM.")
+
+ (:author "M. Stroppa, C. Agon, J. Bresson, S. Lemouton, IRCAM (2000-2019)")
+
+ ;;; SOURCE FILES TO LOAD
+ (:source-files
+  "sources/package"
+  
+  "sources/chroma/load"
+
+  "sources/om7/cs-events/csound-parser"
+  "sources/om7/cs-events/csound-array"
+  "sources/om7/cs-events/csound-tables"
+  "sources/om7/cs-events/csound-inits"
+  "sources/om7/cs-events/csound-event"
+  "sources/om7/cs-events/csound-synthesis"
+  "sources/om7/cs-events/general-parsing"
+  "sources/om7/cs-events/csound-sss"
+  "sources/om7/cs-events/load-classes"
+  "sources/om7/cs-events/compatibility"
+  
+  "sources/om7/cr-model/cr-model"
+  "sources/om7/cr-model/cr-model-editor"
+  "sources/om7/cr-model/cr-vps"
+  "sources/om7/cr-model/cr-control"
+
+  "sources/om7/function-reference"
+  )
+
+ ;;; DECLARED SYMBOLS VISIBLE AND ACCESSIBLE THROUGH THE OM PACKAGE TREE
+ (:symbols
+  (:packages 
+  
+   (:package 
+    (:name "cs-events")
+    (:functions "cr::cs-synthesize" "cr::merge-cs-events" "cr::gen-user-fun") 
+    (:classes "cr::cs-array" "cr::cs-init")
+    (:packages 
+     (:package 
+      (:name "tables")
+      (:functions) 
+      (:classes "cr::text-cs-table" "cr::gen-cs-table" "cr::gen01" "cr::gen-01" "cr::gen02" "cr::gen-02" "cr::gen05" "cr::gen-05" "cr::gen07" "cr::gen-07")
+      ))
+    )
+  
+    (:package 
+      (:name "cr-models")
+      (:functions "cr::get-analysis-data" "cr::model-data" "cr::model-total-dur" "cr::model-nb-evts"
+                  "cr::model-min-freq" "cr::model-max-freq" "cr::model-max-amp" "cr::expand-model" "cr::out-slot") 
+      (:classes "cr::cr-model" "cr::model-ctl"))
+
+    (:package (:name "VPS")
+      (:packages
+        (:package (:name "Conversions")
+          (:packages
+            (:package (:name "FQ")
+              (:functions "cr::fq->pch" "cr::fq->midi" "cr::fq->ratio" "cr::fq->midic" "cr::fq->itvl" "cr::fq->semitones"))
+            (:package (:name "PCH")
+              (:functions "cr::pch->fq" "cr::pch->midi" "cr::pch->midic" "cr::pch->itvl" "cr::pch->semitones" "cr::pch->pch-class" "cr::pch->ratio"))
+            (:package (:name "MIDI")
+              (:functions "cr::midi->pch" "cr::midi->semitones" "cr::midi->pch-class" "cr::midi->midic" "cr::midi->fq" "cr::midi->ratio" "cr::midi->itvl"))
+            (:package (:name "MIDIC")
+              (:functions "cr::midic->midi" "cr::midic->fq" "cr::midic->pch" "cr::midic->ratio" "cr::midic->itvl" "cr::midic->semitones" "cr::midic->pch-class"))
+            (:package (:name "ITVL")
+              (:functions "cr::itvl->fq" "cr::itvl->midi" "cr::itvl->midic" "cr::itvl->ratio" "cr::itvl->pch" "cr::itvl->semitones"))
+            (:package (:name "RATIO")
+              (:functions "cr::ratio->fq" "cr::ratio->itvl" "cr::ratio->semitones" "cr::ratio->midi" "cr::ratio->midic" "cr::ratio->pch"))
+            (:package (:name "SEMITONES")
+              (:functions "cr::semitones->ratio" "cr::semitones->itvl" "cr::semitones->fq" "cr::semitones->midi" "cr::semitones->midic"))
+            (:package (:name "PCH-CLASS")
+              (:functions "cr::pch-class->pch" "cr::pch-class->midi" "cr::pch-class->fq"))
+              ))
+        (:package (:name "Inspect")
+            (:functions "cr::get-vps-freqs" "cr::get-vps-amps"))
+
+        (:package (:name "Processing")
+            (:functions "cr::vps-high-pass" "cr::vps-low-pass" "cr::vps-band-pass" "cr::vps-main-partials" "cr::vps-n-main-partials" 
+                "cr::vps-stretch" "cr::vps-transpose" "cr::vps-revert" "cr::vps-mirror"))
+          ))
+  ))
+)
