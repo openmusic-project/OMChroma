@@ -1,5 +1,5 @@
 ;;;===========================================================================
-;;; OMChroma lib for om7
+;;; OMChroma lib for om#
 ;;;===========================================================================
 
 (:om-lib
@@ -16,23 +16,23 @@
   
   "sources/chroma/load"
 
-  "sources/om7/cs-events/csound-parser"
-  "sources/om7/cs-events/csound-array"
-  "sources/om7/cs-events/csound-tables"
-  "sources/om7/cs-events/csound-inits"
-  "sources/om7/cs-events/csound-event"
-  "sources/om7/cs-events/csound-synthesis"
-  "sources/om7/cs-events/general-parsing"
-  "sources/om7/cs-events/csound-sss"
-  "sources/om7/cs-events/load-classes"
-  "sources/om7/cs-events/compatibility"
+  "sources/omsharp/cs-events/csound-parser"
+  "sources/omsharp/cs-events/csound-array"
+  "sources/omsharp/cs-events/csound-tables"
+  "sources/omsharp/cs-events/csound-inits"
+  "sources/omsharp/cs-events/csound-event"
+  "sources/omsharp/cs-events/csound-synthesis"
+  "sources/omsharp/cs-events/general-parsing"
+  "sources/omsharp/cs-events/csound-sss"
+  "sources/omsharp/cs-events/load-classes"
+  "sources/omsharp/cs-events/compatibility"
   
-  "sources/om7/cr-model/cr-model"
-  "sources/om7/cr-model/cr-model-editor"
-  "sources/om7/cr-model/cr-vps"
-  "sources/om7/cr-model/cr-control"
+  "sources/omsharp/cr-model/cr-model"
+  "sources/omsharp/cr-model/cr-model-editor"
+  "sources/omsharp/cr-model/cr-vps"
+  "sources/omsharp/cr-model/cr-control"
 
-  "sources/om7/function-reference"
+  "sources/omsharp/function-reference"
   )
 
  ;;; DECLARED SYMBOLS VISIBLE AND ACCESSIBLE THROUGH THE OM PACKAGE TREE
