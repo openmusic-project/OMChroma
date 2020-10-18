@@ -346,7 +346,7 @@ pch-class   *   *   *     *     *    *      *           \
 
 
 ; COMPOUND CONVERSIONS, ms 0906
-(defmethod midic->fqmidic- (l)
+(defmethod midic->fq (l)
   (midi->fq (midic->midi l)))
 
 (defmethod midic->pch (l)
