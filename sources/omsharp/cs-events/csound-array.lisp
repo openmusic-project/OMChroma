@@ -86,7 +86,7 @@ In order to better initialize the array, the Csound code can contain formatted i
     (parse-csound-instruments s)))
 
 (defmethod get-cs-descriptions ((source pathname))
-  (when (om::file-exist-p source)
+  (when (om::file-exists-p source)
     (with-open-file (s source)
       (parse-csound-instruments s))))
 

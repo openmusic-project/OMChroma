@@ -22,7 +22,7 @@
 
 (in-package :om)
 
-(require-library "om-csound")
+(require-library "csound")
 
 (in-package :cr)
 
