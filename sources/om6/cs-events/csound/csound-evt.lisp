@@ -91,24 +91,10 @@
           (when (subtypep (thetype slot?) 'cs-table)
             (prepare-table (slot-value self (internp (name slot?) (slot-package slot?))))))))
 
-
-(defmethod erase-temp-id-tables ((self CS-Evt))
-  (let* ((initargs (get-all-initargs-of-class (type-of self))))
-    (loop for slot? in initargs do
-          (when (subtypep (thetype slot?) 'cs-table)
-            (erase-temp-id-table (slot-value self (internp (name slot?) (slot-package slot?))))))))
-
-
 (defmethod prepare-table ((self t)) nil)
 
 (defmethod prepare-table ((self list)) 
   (mapcar 'prepare-table self))
-
-(defmethod erase-temp-id-table ((self t)) t)
-
-(defmethod erase-temp-id-table ((self list)) 
-   (loop for item in self do
-         (erase-temp-id-table item)))
 
         
 ;;;=======================================================
