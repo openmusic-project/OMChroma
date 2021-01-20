@@ -85,12 +85,6 @@
 
 ;;;;==============================================================
 
-(defmethod prepare-tables ((self CS-Evt))
-  (let* ((initargs (get-all-initargs-of-class (type-of self))))
-    (loop for slot? in initargs do
-          (when (subtypep (thetype slot?) 'cs-table)
-            (prepare-table (slot-value self (internp (name slot?) (slot-package slot?))))))))
-
 (defmethod prepare-table ((self t)) nil)
 
 (defmethod prepare-table ((self list)) 
