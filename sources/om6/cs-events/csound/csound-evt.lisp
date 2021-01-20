@@ -82,14 +82,6 @@
      (round (* (+ (action-time self) dura) 1000))
      ))
 
-
-;;;;==============================================================
-
-(defmethod prepare-table ((self t)) nil)
-
-(defmethod prepare-table ((self list)) 
-  (mapcar 'prepare-table self))
-
         
 ;;;=======================================================
 ;CS TABLES
@@ -101,7 +93,6 @@
 (defvar *auto-init-table-id* 1000)
 (defvar *bpf-cs-coerce* 'gen07)
 
-;;;=======================================================
 
 (defmethod get-table-id ((self CS-table)) 
    (car (list! (id self))))
@@ -110,7 +101,6 @@
 ;;; PREPARE TABLES:
 ;;; SET ID TO A LIST if "?"
 ;;; STORE IN THE TEMP HASH TABLE
-
 
 (defmethod prepare-array-tables (array)
   (loop for r from 0 to (1- (num-array-slots array)) do
@@ -139,6 +129,11 @@
    ((integerp (id self))
     (setf (gethash (id self) *dynamic-cs-table-table*) (cs-table-string self))
     (id self))))
+
+(defmethod prepare-table ((self list)) 
+  (mapcar 'prepare-table self))
+
+(defmethod prepare-table ((self t)) nil)
 
 
 ;;; ERASE TABLES:
