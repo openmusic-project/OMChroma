@@ -82,34 +82,6 @@
      (round (* (+ (action-time self) dura) 1000))
      ))
 
-
-;;;;==============================================================
-
-(defmethod prepare-tables ((self CS-Evt))
-  (let* ((initargs (get-all-initargs-of-class (type-of self))))
-    (loop for slot? in initargs do
-          (when (subtypep (thetype slot?) 'cs-table)
-            (prepare-table (slot-value self (internp (name slot?) (slot-package slot?))))))))
-
-
-(defmethod erase-temp-id-tables ((self CS-Evt))
-  (let* ((initargs (get-all-initargs-of-class (type-of self))))
-    (loop for slot? in initargs do
-          (when (subtypep (thetype slot?) 'cs-table)
-            (erase-temp-id-table (slot-value self (internp (name slot?) (slot-package slot?))))))))
-
-
-(defmethod prepare-table ((self t)) nil)
-
-(defmethod prepare-table ((self list)) 
-  (mapcar 'prepare-table self))
-
-(defmethod erase-temp-id-table ((self t)) t)
-
-(defmethod erase-temp-id-table ((self list)) 
-   (loop for item in self do
-         (erase-temp-id-table item)))
-
         
 ;;;=======================================================
 ;CS TABLES
@@ -121,7 +93,6 @@
 (defvar *auto-init-table-id* 1000)
 (defvar *bpf-cs-coerce* 'gen07)
 
-;;;=======================================================
 
 (defmethod get-table-id ((self CS-table)) 
    (car (list! (id self))))
@@ -130,7 +101,6 @@
 ;;; PREPARE TABLES:
 ;;; SET ID TO A LIST if "?"
 ;;; STORE IN THE TEMP HASH TABLE
-
 
 (defmethod prepare-array-tables (array)
   (loop for r from 0 to (1- (num-array-slots array)) do
@@ -159,6 +129,11 @@
    ((integerp (id self))
     (setf (gethash (id self) *dynamic-cs-table-table*) (cs-table-string self))
     (id self))))
+
+(defmethod prepare-table ((self list)) 
+  (mapcar 'prepare-table self))
+
+(defmethod prepare-table ((self t)) nil)
 
 
 ;;; ERASE TABLES:
@@ -225,16 +200,17 @@
 
 (defmethod coerce-array-data ((array cs-evt) controlvalue defdata type)
   (cond ((subtypep type 'cs-table) 
-         (corece-to-cs-table controlvalue defdata type))
+         (coerce-to-cs-table controlvalue defdata type))
         ((subtypep type 'multi-cs-table)  
-         (corece-to-multi-cs-table controlvalue defdata type))
+         (coerce-to-multi-cs-table controlvalue defdata type))
         (t (call-next-method))))
 
-(defun corece-to-cs-table (controlvalue defdata type)
-  (if (bpf-p controlvalue) 
-      (loop for i from 1 to (length defdata) collect (data-to-cstable controlvalue type))
-    (mapcar #'(lambda (item) (data-to-cstable item type)) defdata)))
+(defmethod coerce-to-cs-table ((controlvalue t) defdata type)
+  (mapcar #'(lambda (item) (data-to-cstable item type)) defdata))
 
+(defmethod coerce-to-cs-table ((controlvalue BPF) defdata type)
+  (loop for i from 1 to (length defdata) collect (data-to-cstable controlvalue type)))
+  
                 
 (defmethod data-to-cstable ((self t) &optional type) nil)
 (defmethod data-to-cstable ((self integer) &optional type) self)
@@ -249,20 +225,24 @@
      table))
 
 
-(defun corece-to-multi-cs-table (controlvalue defdata type)  
-  (cond ((or (bpf-p controlvalue) 
-             (subtypep (type-of controlvalue) 'bpf-lib)
-             ;(subtypep (type-of controlvalue) 'multi-cs-table)   ;;; multi-cs-table is a bpf-lib
-             )
-         (let ((mcst (data-to-multi-cs-table controlvalue)))
-           (loop for i from 1 to (length defdata) collect mcst)))
-        ((listp controlvalue)
-         (cond ((numberp (car controlvalue))
-                (make-list (length defdata) :initial-element controlvalue))
-               ((bpf-p (car controlvalue))
-                (make-list (length defdata) :initial-element (data-to-multi-cs-table (make-instance 'bpf-lib :bpf-list controlvalue))))
-               (t (loop for item in defdata collect (data-to-multi-cs-table item)))))
-        (t (mapcar #'(lambda (item) (data-to-cstable item type)) defdata))))
+(defmethod coerce-to-multi-cs-table ((controlvalue BPF) defdata type)  
+  (let ((mcst (data-to-multi-cs-table controlvalue)))
+    (loop for i from 1 to (length defdata) collect mcst)))
+
+(defmethod coerce-to-multi-cs-table ((controlvalue bpf-lib) defdata type)  
+  (let ((mcst (data-to-multi-cs-table controlvalue)))
+    (loop for i from 1 to (length defdata) collect mcst)))
+
+(defmethod coerce-to-multi-cs-table ((controlvalue list) defdata type)  
+  (cond ((numberp (car controlvalue))
+         (make-list (length defdata) :initial-element controlvalue))
+        ((bpf-p (car controlvalue))
+         (make-list (length defdata) :initial-element (data-to-multi-cs-table (make-instance 'bpf-lib :bpf-list controlvalue))))
+        (t (loop for item in defdata collect (data-to-multi-cs-table item)))))
+
+(defmethod coerce-to-multi-cs-table ((controlvalue t) defdata type)  
+  (mapcar #'(lambda (item) (data-to-cstable item type)) defdata))
+
 
 (defmethod data-to-multi-cs-table ((self bpf-lib))
   (make-instance 'multi-cs-table 

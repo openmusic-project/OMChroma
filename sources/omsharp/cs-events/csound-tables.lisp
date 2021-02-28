@@ -266,12 +266,12 @@
 
 (defmethod coerce-array-data ((array cs-evt) controlvalue defdata type)
   (cond ((subtypep type 'cs-table) 
-         (corece-to-cs-table controlvalue defdata type))
+         (coerce-to-cs-table controlvalue defdata type))
         ((subtypep type 'multi-cs-table)  
-         (corece-to-multi-cs-table controlvalue defdata type))
+         (coerce-to-multi-cs-table controlvalue defdata type))
         (t (call-next-method))))
 
-(defun corece-to-cs-table (controlvalue defdata type)
+(defun coerce-to-cs-table (controlvalue defdata type)
   (if (bpf-p controlvalue) 
       (loop for i from 1 to (length defdata) collect (data-to-cstable controlvalue type))
     (mapcar #'(lambda (item) (data-to-cstable item type)) defdata)))
@@ -290,7 +290,7 @@
      table))
 
 
-(defun corece-to-multi-cs-table (controlvalue defdata type)  
+(defun coerce-to-multi-cs-table (controlvalue defdata type)  
   (cond ((or (bpf-p controlvalue) 
              (subtypep (type-of controlvalue) 'bpf-lib)
              ;(subtypep (type-of controlvalue) 'multi-cs-table)   ;;; multi-cs-table is a bpf-lib

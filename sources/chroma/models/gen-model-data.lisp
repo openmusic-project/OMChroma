@@ -158,7 +158,7 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
          (mapcar #'flat
                  (mat-trans
                   (loop for el in ctl-list ; el = (0 (10 15))
-                        collect (om::mat-trans (list (cadr el)
+                        collect (mat-trans (list (cadr el)
                                                      (make-list (length (cadr el)) :initial-element (car el))
                                                      )))
                   ))))
@@ -179,8 +179,8 @@ Flag, if t, print only the args passed to the modifying functions, NOT the resul
          (mapcar #'flat
                  (mat-trans
                   (loop for el in ctl-list ; el = (0 (10 15))
-                        collect (om::mat-trans (list (cadr el) 
-                                                     (make-list (length (cadr el)) :initial-element (car el)))))
+                        collect (mat-trans (list (cadr el) 
+                                                 (make-list (length (cadr el)) :initial-element (car el)))))
                   ))))
         (mat-trans ; interpolate each argument alone, then mat-trans them
          (if intitp

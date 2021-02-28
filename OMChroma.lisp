@@ -189,7 +189,7 @@
 
 (unless (fboundp 'om::set-lib-release) (defmethod om::set-lib-release (version &optional lib) nil))
 
-(om::set-lib-release 5.1 (find-library "OMChroma"))
+(om::set-lib-release 5.2 (find-library "OMChroma"))
 
 ;(cl-user::clean-sources (make-pathname :directory (append (pathname-directory *load-pathname*) '("sources"))))
 

@@ -352,7 +352,7 @@
       (let* ((classicon (and (find-class symbol nil) (om::omclass-p class)
                              (om::icon class)))
              (iconfile (om::om-relative-path '("icons") (format nil "~A.png" classicon) (om::lib-resources-folder lib))))
-        (if (om::file-exist-p iconfile)
+        (if (om::file-exists-p iconfile)
             (setf iconfile (namestring iconfile))
           (setf iconfile "./logo.png"))
         (write-line (concatenate 'string "<p class=right><img src=" iconfile " width=60></p>") index)

@@ -24,7 +24,7 @@
 (in-package :cr)
 
 ;;;============================
-;;; CR-MODEL for OM7
+;;; Equivalent of CR-MODEL in OM#
 ;;; J. Bresson 2019
 ;;;============================
 

@@ -23,7 +23,7 @@
 
 
 ;;;=======================
-;;; CR-CONTROL VERSION OM7
+;;; CR-CONTROL VERSION OM#
 ;;;=======================
 ; J. Bresson, 2019
 

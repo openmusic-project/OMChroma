@@ -15,7 +15,7 @@ The library contains a set of classes corresponding to numerous synthesis proces
 
 
 ------
-... the rest of the user maunal is still [here](http://support.ircam.fr/docs/om-libraries/omchroma/)
+... the rest of the user manual is still [here](http://support.ircam.fr/docs/om-libraries/omchroma/)
 
 ------
 Contributors: Luca Richelli, Marco Stroppa, Jean Bresson, Marco Bidin. 
