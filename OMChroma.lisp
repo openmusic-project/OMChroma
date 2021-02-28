@@ -118,7 +118,7 @@
           cr::pch-class->fq)
         )
 
-(import '(cr::spsht))
+;(import '(cr::spsht))
 
 
 (om::fill-library '((nil nil nil (synthesize chroma-prisma) nil)
