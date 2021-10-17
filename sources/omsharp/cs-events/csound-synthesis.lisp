@@ -52,11 +52,10 @@
 
 
 (defun normalize-output (path normalize format res)
-  (let ((s (make-instance 'om::sound :n-samples :n-channels))
+  (let ((s (om::objfromobjs path (make-instance 'om::sound)))
         (level (if (numberp normalize) normalize 0)))
-    (setf (om::file-pathname s) path)
-    (om::set-sound-info s path)
-    (om::om-print-format "Normalizing output to ~D" (list level))
+    (om::om-init-instance s)
+    (om::om-print-format "Normalizing to ~D" (list level))
     (om::save-sound 
      (om:sound-normalize s :level level)
      path :format format :resolution res)))
