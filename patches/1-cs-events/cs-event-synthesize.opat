@@ -1,22 +1,23 @@
 
 (:patch
- (:om-version 0.0111)
  (:name "cs-event-synthesize")
  (:doc "")
  (:info
   (:created "2019/08/06 15:42:58")
-  (:modified "2019/08/06 15:57:08"))
- (:window (:size (1018 660)) (:position (567 104)))
+  (:modified "2021/10/17 23:07:56")
+  (:by "om-sharp")
+  (:version 1.05))
+ (:window (:size (967 587)) (:position (560 23)))
  (:grid nil)
  (:lock nil)
  (:boxes
   (:box
-   (:reference fixnum)
    (:type :value)
+   (:reference fixnum)
    (:group-id nil)
    (:name "value box")
    (:x 87)
-   (:y 175)
+   (:y 170)
    (:w 32)
    (:h 30)
    (:color
@@ -26,13 +27,14 @@
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 10)
    (:id 0))
   (:box
-   (:reference single-float)
    (:type :value)
+   (:reference single-float)
    (:group-id nil)
    (:name "value box")
    (:x 179)
@@ -46,17 +48,18 @@
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 0.8)
    (:id 1))
   (:box
-   (:reference cons)
    (:type :value)
+   (:reference cons)
    (:group-id nil)
    (:name "value box")
-   (:x 216)
-   (:y 98)
+   (:x 208)
+   (:y 96)
    (:w 85)
    (:h 30)
    (:color
@@ -66,17 +69,18 @@
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value (:list 400 500 200))
    (:id 2))
   (:box
-   (:reference sound)
    (:type :object)
+   (:reference sound)
    (:group-id nil)
    (:name nil)
-   (:x 77)
-   (:y 467)
+   (:x 78)
+   (:y 460)
    (:w 178)
    (:h 69)
    (:color nil)
@@ -84,13 +88,12 @@
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -106,53 +109,35 @@
      (:slots
       ((:onset 0)
        (:duration 0)
-       (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))
-       (:default-frame-type marker-frame)
-       (:frames nil)
-       (:buffer nil)
-       (:n-samples 155109)
-       (:n-channels 1)
-       (:sample-rate 44100)
+       (:n-samples nil)
+       (:n-channels nil)
+       (:sample-rate nil)
        (:smpl-type :float)
-       (:sample-size 32)))
+       (:sample-size 16)))
      (:add-slots
       ((:markers nil)
-       (:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "out-files"))
-         (:device :unspecific)
-         (:host :unspecific)
-         (:name "my-synth")
-         (:type "aiff")))
-       (:sample-rate 44100)
-       (:n-channels 1)
-       (:n-samples 155109)
        (:gain 1.0)
-       (:access-from-file nil)))))
+       (:access-from-file nil)
+       (:file-pathname nil)))))
    (:id 3))
   (:box
-   (:reference om-random)
    (:type :function)
+   (:reference om-random)
    (:group-id nil)
    (:name "om-random")
-   (:x 125)
-   (:y 131)
-   (:w 97)
-   (:h 30)
+   (:x 114)
+   (:y 143)
+   (:w 103)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda :lambda)
+   (:reactive nil)
    (:inputs
     (:input (:type :standard) (:name "LOW") (:value 0) (:reactive nil))
     (:input
@@ -163,12 +148,12 @@
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 4))
   (:box
-   (:reference single-float)
    (:type :value)
+   (:reference single-float)
    (:group-id nil)
    (:name "value box")
-   (:x 135)
-   (:y 96)
+   (:x 125)
+   (:y 108)
    (:w 34)
    (:h 30)
    (:color
@@ -178,17 +163,18 @@
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 0.0)
    (:id 5))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "GEN07" "CHROMA"))
    (:type :object)
+   (:reference (:symbol "GEN07" "CHROMA"))
    (:group-id nil)
    (:name nil)
-   (:x 265)
+   (:x 256)
    (:y 131)
    (:w 70)
    (:h 49)
@@ -197,13 +183,12 @@
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname t)
    (:show-markers t)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -253,19 +238,15 @@
        (:id nil)
        (:size 4097)
        (:stime 0)))
-     (:add-slots
-      ((:color (:color 0.3 0.3 0.3 1.0))
-       (:name nil)
-       (:size 4097)
-       (:stime 0)))))
+     (:add-slots ((:name "GEN07")))))
    (:id 6))
   (:box
-   (:reference single-float)
    (:type :value)
+   (:reference single-float)
    (:group-id nil)
    (:name "value box")
-   (:x 178)
-   (:y 96)
+   (:x 172)
+   (:y 106)
    (:w 34)
    (:h 30)
    (:color
@@ -275,18 +256,19 @@
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 2.0)
    (:id 7))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "ADD-1" "CHROMA"))
    (:type :object)
+   (:reference (:symbol "ADD-1" "CHROMA"))
    (:group-id nil)
    (:name nil)
    (:x 63)
-   (:y 217)
+   (:y 198)
    (:w 230)
    (:h 160)
    (:color nil)
@@ -294,12 +276,11 @@
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -360,16 +341,16 @@
           (:default 0.0)
           (:data
            (:list
-            0.7832942
-            1.7873323
-            0.81771327
-            0.9007952
-            0.37814713
-            1.296535
-            1.4036131
-            1.1926453
-            0.8685248
-            0.6609044)))
+            0.6009033
+            1.0844288
+            1.6351082
+            0.47663355
+            0.5647888
+            0.70034695
+            0.6640191
+            1.639873
+            0.456321
+            0.58136726)))
          (:array-field
           (:name "durs")
           (:doc "duration [sec]")
@@ -413,11 +394,7 @@
               (:id nil)
               (:size 4097)
               (:stime 0)))
-            (:add-slots
-             ((:color (:color 0.0 0.0 0.0 1.0))
-              (:name nil)
-              (:size 4097)
-              (:stime 0)))))
+            (:add-slots ((:name nil)))))
           (:data
            (:list
             (:object
@@ -437,11 +414,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN07" "CHROMA"))
              (:slots
@@ -459,11 +432,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN07" "CHROMA"))
              (:slots
@@ -481,11 +450,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN07" "CHROMA"))
              (:slots
@@ -503,11 +468,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN07" "CHROMA"))
              (:slots
@@ -525,11 +486,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN07" "CHROMA"))
              (:slots
@@ -547,11 +504,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN07" "CHROMA"))
              (:slots
@@ -569,11 +522,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN07" "CHROMA"))
              (:slots
@@ -591,11 +540,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN07" "CHROMA"))
              (:slots
@@ -613,11 +558,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN07" "CHROMA"))
              (:slots
@@ -635,28 +576,26 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.3 0.3 0.3 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0)))))))))))))
+             (:add-slots ((:name nil)))))))))))))
    (:id 8))
   (:box
-   (:reference synthesize)
    (:type :function)
+   (:reference synthesize)
    (:group-id nil)
    (:name "synthesize")
    (:x 120)
-   (:y 429)
-   (:w 91)
-   (:h 30)
+   (:y 422)
+   (:w 94)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -666,21 +605,23 @@
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 9))
   (:box
-   (:reference list)
    (:type :function)
+   (:reference list)
    (:group-id nil)
    (:name "list")
-   (:x 741)
+   (:x 682)
    (:y 387)
-   (:w 53)
-   (:h 30)
+   (:w 54)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input (:type :optional) (:name "x") (:value nil) (:reactive nil))
     (:input (:type :optional) (:name "x") (:value nil) (:reactive nil))
@@ -692,10 +633,10 @@
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 10))
   (:comment
-   (:x 61)
-   (:y 15)
+   (:x 34)
+   (:y 16)
    (:w 448)
-   (:h 63)
+   (:h 59)
    (:fgcolor
     (:color-or-nil (:color (:color 0.0 0.0 0.0 1.0)) (:t-or-nil t)))
    (:bgcolor nil)
@@ -703,21 +644,20 @@
    (:roundness nil)
    (:text-font
     (:font-or-nil
-     (:font (:font (:face "Calibri") (:size 14.0D0) (:style :bold)))
+     (:font (:font (:face "Calibri") (:size 14) (:style :bold)))
      (:t-or-nil t)))
    (:align nil)
    (:text
-    "OMChroma contains an important set of synthesis classes (all subclasses of the class CS-EVT) correspondiong to different Csound instruments. See the whole list of available class in the \"Packages Library\".
-")
+    "OMChroma contains an important set of synthesis classes (all subclasses of the class CS-EVT) correspondiong to different Csound instruments. See the whole list of available class in the \"Packages Library\".")
    (:id 11))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "FM-1" "CHROMA"))
    (:type :object)
+   (:reference (:symbol "FM-1" "CHROMA"))
    (:group-id nil)
    (:name nil)
    (:x 397)
-   (:y 235)
+   (:y 231)
    (:w 181)
    (:h 127)
    (:color nil)
@@ -725,12 +665,11 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -794,7 +733,7 @@
           (:type number)
           (:decimals 4)
           (:default 0.0)
-          (:data (:list 0.43130112 0.87606717 1.2246473 0.447464)))
+          (:data (:list 1.5795531 1.4006608 1.5309336 0.3086388)))
          (:array-field
           (:name "durs")
           (:doc "duration [sec]")
@@ -865,11 +804,7 @@
               (:id nil)
               (:size 4097)
               (:stime 0)))
-            (:add-slots
-             ((:color (:color 0.0 0.0 0.0 1.0))
-              (:name nil)
-              (:size 4097)
-              (:stime 0)))))
+            (:add-slots ((:name nil)))))
           (:data
            (:list
             (:object
@@ -887,11 +822,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN05" "CHROMA"))
              (:slots
@@ -907,11 +838,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN05" "CHROMA"))
              (:slots
@@ -927,11 +854,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN05" "CHROMA"))
              (:slots
@@ -947,11 +870,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0)))))))
+             (:add-slots ((:name nil)))))))
          (:array-field
           (:name "ienv")
           (:doc "index envelope [GEN, exponential]]")
@@ -972,11 +891,7 @@
               (:id nil)
               (:size 4097)
               (:stime 0)))
-            (:add-slots
-             ((:color (:color 0.0 0.0 0.0 1.0))
-              (:name nil)
-              (:size 4097)
-              (:stime 0)))))
+            (:add-slots ((:name nil)))))
           (:data
            (:list
             (:object
@@ -994,11 +909,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN05" "CHROMA"))
              (:slots
@@ -1014,11 +925,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN05" "CHROMA"))
              (:slots
@@ -1034,11 +941,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0))))
+             (:add-slots ((:name nil))))
             (:object
              (:class (:symbol "GEN05" "CHROMA"))
              (:slots
@@ -1054,19 +957,15 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0)))))))))))))
+             (:add-slots ((:name nil)))))))))))))
    (:id 12))
   (:box
-   (:reference sound)
    (:type :object)
+   (:reference sound)
    (:group-id nil)
    (:name nil)
-   (:x 369)
-   (:y 464)
+   (:x 368)
+   (:y 468)
    (:w 206)
    (:h 67)
    (:color nil)
@@ -1074,13 +973,12 @@
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -1096,53 +994,35 @@
      (:slots
       ((:onset 0)
        (:duration 0)
-       (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))
-       (:default-frame-type marker-frame)
-       (:frames nil)
-       (:buffer nil)
-       (:n-samples 126999)
-       (:n-channels 1)
-       (:sample-rate 44100)
+       (:n-samples nil)
+       (:n-channels nil)
+       (:sample-rate nil)
        (:smpl-type :float)
-       (:sample-size 32)))
+       (:sample-size 16)))
      (:add-slots
       ((:markers nil)
-       (:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "out-files"))
-         (:device :unspecific)
-         (:host :unspecific)
-         (:name "my-synth")
-         (:type "aiff")))
-       (:sample-rate 44100)
-       (:n-channels 1)
-       (:n-samples 126999)
        (:gain 1.0)
-       (:access-from-file nil)))))
+       (:access-from-file nil)
+       (:file-pathname nil)))))
    (:id 13))
   (:box
-   (:reference synthesize)
    (:type :function)
+   (:reference synthesize)
    (:group-id nil)
    (:name "synthesize")
-   (:x 369)
+   (:x 368)
    (:y 417)
-   (:w 91)
-   (:h 30)
+   (:w 94)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -1152,8 +1032,8 @@
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 14))
   (:box
-   (:reference fixnum)
    (:type :value)
+   (:reference fixnum)
    (:group-id nil)
    (:name "value box")
    (:x 406)
@@ -1167,26 +1047,29 @@
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 4)
    (:id 15))
   (:box
-   (:reference om-random)
    (:type :function)
+   (:reference om-random)
    (:group-id nil)
    (:name "om-random")
-   (:x 448)
-   (:y 148)
-   (:w 97)
-   (:h 30)
+   (:x 447)
+   (:y 135)
+   (:w 103)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda :lambda)
+   (:reactive nil)
    (:inputs
     (:input (:type :standard) (:name "LOW") (:value 0) (:reactive nil))
     (:input
@@ -1197,8 +1080,8 @@
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 16))
   (:box
-   (:reference single-float)
    (:type :value)
+   (:reference single-float)
    (:group-id nil)
    (:name "value box")
    (:x 458)
@@ -1212,16 +1095,17 @@
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 0.0)
    (:id 17))
   (:box
-   (:reference single-float)
    (:type :value)
+   (:reference single-float)
    (:group-id nil)
    (:name "value box")
-   (:x 501)
+   (:x 505)
    (:y 113)
    (:w 34)
    (:h 30)
@@ -1232,13 +1116,14 @@
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 2.0)
    (:id 18))
   (:box
-   (:reference bpf)
    (:type :object)
+   (:reference bpf)
    (:group-id nil)
    (:name nil)
    (:x 557)
@@ -1250,13 +1135,12 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -1284,27 +1168,22 @@
      (:class bpf)
      (:slots
       ((:onset 0)
-       (:duration 2000.0)
+       (:duration 1864.46)
        (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))
        (:action nil)
        (:color (:color 0.0 0.0 0.0 1.0))
        (:decimals 2)
        (:x-points (:list 145.97 1864.46))
        (:y-points (:list 487.48 931.69))))
-     (:add-slots
-      ((:decimals 2)
-       (:color (:color 0.0 0.0 0.0 1.0))
-       (:name "BPF")
-       (:action nil)
-       (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))))))
+     (:add-slots ((:name "BPF")))))
    (:id 19))
   (:box
-   (:reference sound)
    (:type :object)
+   (:reference sound)
    (:group-id nil)
    (:name nil)
-   (:x 660)
-   (:y 468)
+   (:x 601)
+   (:y 467)
    (:w 206)
    (:h 67)
    (:color nil)
@@ -1312,13 +1191,12 @@
    (:roundness nil)
    (:text-font (:font (:face "Verdana") (:size 10) (:style :italic)))
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -1334,53 +1212,35 @@
      (:slots
       ((:onset 0)
        (:duration 0)
-       (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))
-       (:default-frame-type marker-frame)
-       (:frames nil)
-       (:buffer nil)
-       (:n-samples 176400)
-       (:n-channels 1)
-       (:sample-rate 44100)
+       (:n-samples nil)
+       (:n-channels nil)
+       (:sample-rate nil)
        (:smpl-type :float)
-       (:sample-size 32)))
+       (:sample-size 16)))
      (:add-slots
       ((:markers nil)
-       (:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "out-files"))
-         (:device :unspecific)
-         (:host :unspecific)
-         (:name "my-synth")
-         (:type "aiff")))
-       (:sample-rate 44100)
-       (:n-channels 1)
-       (:n-samples 176400)
        (:gain 1.0)
-       (:access-from-file nil)))))
+       (:access-from-file nil)
+       (:file-pathname nil)))))
    (:id 20))
   (:box
-   (:reference synthesize)
    (:type :function)
+   (:reference synthesize)
    (:group-id nil)
    (:name "synthesize")
-   (:x 717)
+   (:x 657)
    (:y 428)
-   (:w 91)
-   (:h 30)
+   (:w 94)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -1390,8 +1250,8 @@
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 21))
   (:comment
-   (:x 744)
-   (:y 568)
+   (:x 750)
+   (:y 389)
    (:w 168)
    (:h 25)
    (:fgcolor
@@ -1401,14 +1261,14 @@
    (:roundness nil)
    (:text-font
     (:font-or-nil
-     (:font (:font (:face "Calibri") (:size 14.0D0) (:style :bold)))
+     (:font (:font (:face "Calibri") (:size 14) (:style :bold)))
      (:t-or-nil t)))
    (:align nil)
-   (:text "Synthesize a list of events: ")
+   (:text "Synthesize a list of events")
    (:id 22))
   (:comment
    (:x 584)
-   (:y 330)
+   (:y 333)
    (:w 42)
    (:h 25)
    (:fgcolor
@@ -1418,15 +1278,15 @@
    (:roundness nil)
    (:text-font
     (:font-or-nil
-     (:font (:font (:face "Calibri") (:size 14.0D0) (:style :bold)))
+     (:font (:font (:face "Calibri") (:size 14) (:style :bold)))
      (:t-or-nil t)))
    (:align nil)
    (:text "FM-1")
    (:id 23))
   (:comment
    (:x 298)
-   (:y 321)
-   (:w 42)
+   (:y 333)
+   (:w 46)
    (:h 25)
    (:fgcolor
     (:color-or-nil (:color (:color 0.0 0.0 0.0 1.0)) (:t-or-nil t)))
@@ -1435,19 +1295,19 @@
    (:roundness nil)
    (:text-font
     (:font-or-nil
-     (:font (:font (:face "Calibri") (:size 14.0D0) (:style :bold)))
+     (:font (:font (:face "Calibri") (:size 14) (:style :bold)))
      (:t-or-nil t)))
    (:align nil)
    (:text "ADD-1")
    (:id 24))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "FM-1" "CHROMA"))
    (:type :object)
+   (:reference (:symbol "FM-1" "CHROMA"))
    (:group-id nil)
    (:name nil)
-   (:x 809)
-   (:y 276)
+   (:x 749)
+   (:y 273)
    (:w 100)
    (:h 90)
    (:color nil)
@@ -1455,12 +1315,11 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -1591,11 +1450,7 @@
               (:id nil)
               (:size 4097)
               (:stime 0)))
-            (:add-slots
-             ((:color (:color 0.0 0.0 0.0 1.0))
-              (:name nil)
-              (:size 4097)
-              (:stime 0)))))
+            (:add-slots ((:name nil)))))
           (:data
            (:list
             (:object
@@ -1613,11 +1468,7 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0)))))))
+             (:add-slots ((:name nil)))))))
          (:array-field
           (:name "ienv")
           (:doc "index envelope [GEN, exponential]]")
@@ -1638,11 +1489,7 @@
               (:id nil)
               (:size 4097)
               (:stime 0)))
-            (:add-slots
-             ((:color (:color 0.0 0.0 0.0 1.0))
-              (:name nil)
-              (:size 4097)
-              (:stime 0)))))
+            (:add-slots ((:name nil)))))
           (:data
            (:list
             (:object
@@ -1660,18 +1507,14 @@
                (:id nil)
                (:size 4097)
                (:stime 0)))
-             (:add-slots
-              ((:color (:color 0.0 0.0 0.0 1.0))
-               (:name nil)
-               (:size 4097)
-               (:stime 0)))))))))))))
+             (:add-slots ((:name nil)))))))))))))
    (:id 25))
   (:box
-   (:reference fixnum)
    (:type :value)
+   (:reference fixnum)
    (:group-id nil)
    (:name "value box")
-   (:x 848)
+   (:x 788)
    (:y 234)
    (:w 32)
    (:h 30)
@@ -1682,12 +1525,13 @@
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 3)
    (:id 26))
   (:comment
-   (:x 914)
+   (:x 854)
    (:y 338)
    (:w 42)
    (:h 25)
@@ -1698,16 +1542,16 @@
    (:roundness nil)
    (:text-font
     (:font-or-nil
-     (:font (:font (:face "Calibri") (:size 14.0D0) (:style :bold)))
+     (:font (:font (:face "Calibri") (:size 14) (:style :bold)))
      (:t-or-nil t)))
    (:align nil)
    (:text "FM-1")
    (:id 27))
   (:comment
-   (:x 808)
+   (:x 749)
    (:y 190)
    (:w 130)
-   (:h 40)
+   (:h 42)
    (:fgcolor
     (:color-or-nil (:color (:color 0.0 0.0 0.0 1.0)) (:t-or-nil t)))
    (:bgcolor nil)
@@ -1715,97 +1559,31 @@
    (:roundness nil)
    (:text-font
     (:font-or-nil
-     (:font (:font (:face "Calibri") (:size 14.0D0) (:style :plain)))
+     (:font (:font (:face "Calibri") (:size 14) (:style :plain)))
      (:t-or-nil t)))
    (:align nil)
    (:text "use <action-time> to set relative onsets")
    (:id 28)))
  (:connections
-  (:connection
-   (:from (:box 0 :out 0))
-   (:to (:box 8 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 1 :out 0))
-   (:to (:box 8 :in 5))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 2 :out 0))
-   (:to (:box 8 :in 6))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 4 :out 0))
-   (:to (:box 8 :in 4))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 5 :out 0))
-   (:to (:box 4 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 6 :out 0))
-   (:to (:box 8 :in 8))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 7 :out 0))
-   (:to (:box 4 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 8 :out 0))
-   (:to (:box 10 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 8 :out 0))
-   (:to (:box 9 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 9 :out 0))
-   (:to (:box 3 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 10 :out 0))
-   (:to (:box 21 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 12 :out 0))
-   (:to (:box 14 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 12 :out 0))
-   (:to (:box 10 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 14 :out 0))
-   (:to (:box 13 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 15 :out 0))
-   (:to (:box 12 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 16 :out 0))
-   (:to (:box 12 :in 4))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 17 :out 0))
-   (:to (:box 16 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 18 :out 0))
-   (:to (:box 16 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 19 :out 0))
-   (:to (:box 12 :in 5))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 21 :out 0))
-   (:to (:box 20 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 25 :out 0))
-   (:to (:box 10 :in 2))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 26 :out 0))
-   (:to (:box 25 :in 2))
-   (:attributes (:color nil :style nil :modif nil)))))
+  (:connection (:from (:box 0 :out 0)) (:to (:box 8 :in 1)))
+  (:connection (:from (:box 1 :out 0)) (:to (:box 8 :in 5)))
+  (:connection (:from (:box 2 :out 0)) (:to (:box 8 :in 6)))
+  (:connection (:from (:box 4 :out 0)) (:to (:box 8 :in 4)))
+  (:connection (:from (:box 5 :out 0)) (:to (:box 4 :in 0)))
+  (:connection (:from (:box 6 :out 0)) (:to (:box 8 :in 8)))
+  (:connection (:from (:box 7 :out 0)) (:to (:box 4 :in 1)))
+  (:connection (:from (:box 8 :out 0)) (:to (:box 10 :in 0)))
+  (:connection (:from (:box 8 :out 0)) (:to (:box 9 :in 0)))
+  (:connection (:from (:box 9 :out 0)) (:to (:box 3 :in 0)))
+  (:connection (:from (:box 10 :out 0)) (:to (:box 21 :in 0)))
+  (:connection (:from (:box 12 :out 0)) (:to (:box 14 :in 0)))
+  (:connection (:from (:box 12 :out 0)) (:to (:box 10 :in 1)))
+  (:connection (:from (:box 14 :out 0)) (:to (:box 13 :in 0)))
+  (:connection (:from (:box 15 :out 0)) (:to (:box 12 :in 1)))
+  (:connection (:from (:box 16 :out 0)) (:to (:box 12 :in 4)))
+  (:connection (:from (:box 17 :out 0)) (:to (:box 16 :in 0)))
+  (:connection (:from (:box 18 :out 0)) (:to (:box 16 :in 1)))
+  (:connection (:from (:box 19 :out 0)) (:to (:box 12 :in 5)))
+  (:connection (:from (:box 21 :out 0)) (:to (:box 20 :in 0)))
+  (:connection (:from (:box 25 :out 0)) (:to (:box 10 :in 2)))
+  (:connection (:from (:box 26 :out 0)) (:to (:box 25 :in 2)))))
