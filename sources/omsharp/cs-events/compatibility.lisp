@@ -29,6 +29,10 @@
 
 
 (defmethod om::put-precision ((self cs-array) precision) (setf (precision self) precision))
+
+;;; It can happen that the value passed to put-precision is NIL if the loaded class was not found
+(defmethod om::put-precision ((self t) precision) nil)
+
 (defmethod (setf om::precision) (val (self cs-array)) (setf (precision self) val))
 
 (defmethod (setf om::action-time) (val (obj cs-evt)) (setf (action-time obj) val))
