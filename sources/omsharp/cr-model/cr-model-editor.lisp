@@ -21,7 +21,6 @@
 ;Authors: C. Agon, M. Stroppa, J. Bresson, S. Lemouton
 
 
-
 ;;;=======================
 ;;; CR-MODEL EDITOR
 ;;;=======================
@@ -53,7 +52,7 @@
 
 (defmethod om::data-frame-text-description ((self cr-frame))
   (list "MODEL VPS"
-        (format nil "(~A elements)"(length (cr-partials-freqs (vps self))))))
+        (format nil "(~A elements)" (length (cr-partials-freqs (vps self))))))
 
 
 (defmethod om::draw-data-frame ((frame cr-frame) editor i &optional (active t))
@@ -75,5 +74,3 @@
               (oa::om-draw-line x1 y x2 y :line 2 :color (oa::om-make-color col col col .5))
               ))
       )))
-
-
