@@ -1,21 +1,22 @@
 
 (:patch
- (:om-version 0.0111)
  (:name "04-model-time-processing")
  (:doc "")
  (:info
   (:created "2019/08/04 13:53:29")
-  (:modified "2019/08/05 14:40:31"))
- (:window (:size (935 599)) (:position (808 208)))
+  (:modified "2022/04/16 0:38:09")
+  (:by "om-sharp")
+  (:version 1.06))
+ (:window (:size (935 599)) (:position (745 208)))
  (:grid nil)
  (:lock nil)
  (:boxes
   (:box
-   (:reference sdiffile)
    (:type :object)
+   (:reference sdiffile)
    (:group-id nil)
    (:name "Donna_short_trc.sdif")
-   (:x 45)
+   (:x 47)
    (:y 47)
    (:w 80)
    (:h 40)
@@ -24,12 +25,11 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name "Donna_short_trc.sdif")
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -42,23 +42,8 @@
    (:value
     (:object
      (:class sdiffile)
-     (:slots nil)
      (:add-slots
-      ((:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "in-files"))
-         (:device :unspecific)
-         (:host nil)
-         (:name "Donna_short_trc")
-         (:type "sdif")))
-       (:file-map
+      ((:file-map
         (:list
          (:fstream-desc
           (:id 0)
@@ -74,15 +59,32 @@
              (:rmax 255)
              (:tmin 0.0D0)
              (:tmax 2.507278911564626D0)
-             (:nf 116)))))))))))
+             (:nf 116)))))))
+       (:file-pathname
+        (:pathname
+         (:directory
+          (:relative
+           :up
+           :up
+           :up
+           :up
+           :up
+           "_SHARED-FILES"
+           "WORKSPACES"
+           "my-workspace"
+           "in-files"))
+         (:device :unspecific)
+         (:host :unspecific)
+         (:name "Donna_short_trc")
+         (:type "sdif")))))))
    (:id 0))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:type :object)
+   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:group-id nil)
    (:name nil)
-   (:x 16)
+   (:x 26)
    (:y 145)
    (:w 229)
    (:h 69)
@@ -91,13 +93,12 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
-   (:lock :locked)
+   (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -119,7 +120,7 @@
     (:output (:name "DATA") (:reactive nil))
     (:output (:name "TIME-STRUCT") (:reactive nil)))
    (:window (:size (535 328)) (:position (696 342)))
-   (:edition-params)
+   (:edition-params (:x2 5000) (:x1 0))
    (:value
     (:object
      (:class (:symbol "CR-MODEL" "CHROMA"))
@@ -133,11 +134,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 0)
             (:item-internal-time 0)
             (:item-type :master)
-            (:date 0)
-            (:attributes (:list :posy 29))
+            (:attributes nil)
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -909,11 +909,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 500)
             (:item-internal-time 500)
             (:item-type 500)
-            (:date 500)
-            (:attributes (:list :posy 17))
+            (:attributes nil)
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -1675,11 +1674,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 1000)
             (:item-internal-time 1000)
             (:item-type 1000)
-            (:date 1000)
-            (:attributes (:list :posy 31))
+            (:attributes nil)
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -2439,11 +2437,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 1500)
             (:item-internal-time 1500)
             (:item-type 1500)
-            (:date 1500)
-            (:attributes (:list :posy 12))
+            (:attributes nil)
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -3175,11 +3172,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 2000)
             (:item-internal-time 2000)
             (:item-type 2000)
-            (:date 2000)
-            (:attributes (:list :posy 67))
+            (:attributes nil)
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -3897,11 +3893,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 2500)
             (:item-internal-time 2500)
             (:item-type 2500)
-            (:date 2500)
-            (:attributes (:list :posy 19))
+            (:attributes nil)
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -4225,11 +4220,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 3000)
             (:item-internal-time 3000)
             (:item-type 3000)
-            (:date 3000)
-            (:attributes (:list :posy 33))
+            (:attributes nil)
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -4238,11 +4232,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 3500)
             (:item-internal-time 3500)
             (:item-type :master)
-            (:date 3500)
-            (:attributes (:list :posy 82))
+            (:attributes nil)
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -30562,21 +30555,23 @@
    (:id 1))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "GET-ANALYSIS-DATA" "CHROMA"))
    (:type :function)
+   (:reference (:symbol "GET-ANALYSIS-DATA" "CHROMA"))
    (:group-id nil)
    (:name "get-analysis-data")
    (:x 66)
    (:y 90)
-   (:w 121)
-   (:h 30)
+   (:w 141)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -30602,12 +30597,12 @@
    (:id 2))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:type :object)
+   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:group-id nil)
    (:name nil)
-   (:x 45)
-   (:y 467)
+   (:x 47)
+   (:y 468)
    (:w 221)
    (:h 79)
    (:color nil)
@@ -30615,13 +30610,12 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -30643,7 +30637,7 @@
     (:output (:name "DATA") (:reactive nil))
     (:output (:name "TIME-STRUCT") (:reactive nil)))
    (:window (:size (601 444)) (:position (641 147)))
-   (:edition-params)
+   (:edition-params (:y2 4687.1978) (:y1 1381.3411) (:x2 4500) (:x1 0))
    (:value
     (:object
      (:class (:symbol "CR-MODEL" "CHROMA"))
@@ -30657,11 +30651,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 0)
             (:item-internal-time 0)
             (:item-type :master)
-            (:date 0)
-            (:attributes (:list :posy 20))
+            (:attributes (:list :posy 83))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -31433,11 +31426,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 500)
             (:item-internal-time 500)
             (:item-type 500)
-            (:date 500)
-            (:attributes (:list :posy 72))
+            (:attributes (:list :posy 68))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -32199,11 +32191,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 1000)
             (:item-internal-time 1000)
             (:item-type 1000)
-            (:date 1000)
-            (:attributes (:list :posy 68))
+            (:attributes (:list :posy 77))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -32963,11 +32954,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 1500)
             (:item-internal-time 1500)
             (:item-type 1500)
-            (:date 1500)
-            (:attributes (:list :posy 17))
+            (:attributes (:list :posy 76))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -33699,11 +33689,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 2000)
             (:item-internal-time 2000)
             (:item-type 2000)
-            (:date 2000)
-            (:attributes (:list :posy 55))
+            (:attributes (:list :posy 89))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -34421,11 +34410,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 2500)
             (:item-internal-time 2500)
             (:item-type 2500)
-            (:date 2500)
-            (:attributes (:list :posy 22))
+            (:attributes (:list :posy 76))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -34749,11 +34737,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 3000)
             (:item-internal-time 3000)
             (:item-type :master)
-            (:date 3000)
-            (:attributes (:list :posy 54))
+            (:attributes (:list :posy 32))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -38812,21 +38799,23 @@
    (:id 3))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "MODEL-DATA" "CHROMA"))
    (:type :function)
+   (:reference (:symbol "MODEL-DATA" "CHROMA"))
    (:group-id nil)
    (:name "model-data")
    (:x 104)
-   (:y 325)
-   (:w 94)
-   (:h 30)
+   (:y 319)
+   (:w 98)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -38857,21 +38846,23 @@
    (:text "TIME-PROCESSING")
    (:id 5))
   (:box
-   (:reference first)
    (:type :function)
+   (:reference first)
    (:group-id nil)
    (:name "first")
-   (:x 307)
+   (:x 304)
    (:y 258)
-   (:w 57)
-   (:h 30)
+   (:w 68)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -38881,21 +38872,23 @@
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 6))
   (:box
-   (:reference mat-trans)
    (:type :function)
+   (:reference mat-trans)
    (:group-id nil)
    (:name "mat-trans")
    (:x 292)
    (:y 228)
-   (:w 86)
-   (:h 30)
+   (:w 92)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -38905,10 +38898,10 @@
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 7))
   (:comment
-   (:x 309)
+   (:x 304)
    (:y 368)
    (:w 83)
-   (:h 42)
+   (:h 36)
    (:fgcolor (:color 0 0 0 1.0))
    (:bgcolor nil)
    (:border 0)
@@ -38920,21 +38913,23 @@
 durations")
    (:id 8))
   (:box
-   (:reference reverse)
    (:type :function)
+   (:reference reverse)
    (:group-id nil)
    (:name "reverse")
-   (:x 234)
+   (:x 233)
    (:y 372)
-   (:w 74)
-   (:h 30)
+   (:w 80)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -38944,21 +38939,23 @@ durations")
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 9))
   (:box
-   (:reference dx->x)
    (:type :function)
+   (:reference dx->x)
    (:group-id nil)
    (:name "dx->x")
    (:x 225)
    (:y 410)
-   (:w 64)
-   (:h 30)
+   (:w 68)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -38973,10 +38970,10 @@ durations")
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 10))
   (:comment
-   (:x 250)
+   (:x 254)
    (:y 319)
    (:w 118)
-   (:h 28)
+   (:h 22)
    (:fgcolor (:color 0 0 0 1.0))
    (:bgcolor nil)
    (:border 0)
@@ -38986,21 +38983,23 @@ durations")
    (:text "onsets --> durations")
    (:id 11))
   (:box
-   (:reference x->dx)
    (:type :function)
+   (:reference x->dx)
    (:group-id nil)
    (:name "x->dx")
    (:x 369)
    (:y 319)
-   (:w 64)
-   (:h 30)
+   (:w 68)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -39011,8 +39010,8 @@ durations")
    (:id 12))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:type :object)
+   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:group-id nil)
    (:name nil)
    (:x 362)
@@ -39024,13 +39023,12 @@ durations")
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -39052,13 +39050,13 @@ durations")
     (:output (:name "DATA") (:reactive nil))
     (:output (:name "TIME-STRUCT") (:reactive nil)))
    (:window (:size (537 382)) (:position (538 117)))
-   (:edition-params)
+   (:edition-params (:x2 4470) (:x1 0))
    (:value
     (:object
      (:class (:symbol "CR-MODEL" "CHROMA"))
      (:slots
       ((:onset 0)
-       (:duration 2958)
+       (:duration 2945)
        (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))
        (:default-frame-type (:symbol "CR-VPS" "CHROMA"))
        (:frames
@@ -39066,11 +39064,10 @@ durations")
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 0)
             (:item-internal-time 0)
             (:item-type :master)
-            (:date 0)
-            (:attributes (:list :posy 2))
+            (:attributes (:list :posy 39))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -39838,15 +39835,14 @@ durations")
                   0.0010069966
                   8.0411317E-4))
                 (:bwl nil)))))
-            (:dur 0.4612012))))
+            (:dur 0.5395856))))
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
-            (:item-internal-time 461)
-            (:item-type 461)
-            (:date 461)
-            (:attributes (:list :posy 55))
+           ((:onset 540)
+            (:item-internal-time 540)
+            (:item-type 540)
+            (:attributes (:list :posy 36))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -40604,15 +40600,14 @@ durations")
                   1.7177128E-4
                   2.877928E-4))
                 (:bwl nil)))))
-            (:dur 0.45688117))))
+            (:dur 0.45798117))))
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
-            (:item-internal-time 918)
-            (:item-type 918)
-            (:date 918)
-            (:attributes (:list :posy 27))
+           ((:onset 998)
+            (:item-internal-time 998)
+            (:item-type 998)
+            (:attributes (:list :posy 84))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -41368,15 +41363,14 @@ durations")
                   2.4235739E-4
                   9.874554E-5))
                 (:bwl nil)))))
-            (:dur 0.48626232))))
+            (:dur 0.48497516))))
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
-            (:item-internal-time 1404)
-            (:item-type 1404)
-            (:date 1404)
-            (:attributes (:list :posy 29))
+           ((:onset 1483)
+            (:item-internal-time 1483)
+            (:item-type 1483)
+            (:attributes (:list :posy 66))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -42104,15 +42098,14 @@ durations")
                   0.0
                   9.707604E-5))
                 (:bwl nil)))))
-            (:dur 0.49470198))))
+            (:dur 0.50524307))))
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
-            (:item-internal-time 1899)
-            (:item-type 1899)
-            (:date 1899)
-            (:attributes (:list :posy 63))
+           ((:onset 1988)
+            (:item-internal-time 1988)
+            (:item-type 1988)
+            (:attributes (:list :posy 40))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -42826,15 +42819,14 @@ durations")
                   9.434469E-5
                   1.3087287E-4))
                 (:bwl nil)))))
-            (:dur 0.5179055))))
+            (:dur 0.5071677))))
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
-            (:item-internal-time 2417)
-            (:item-type 2417)
-            (:date 2417)
-            (:attributes (:list :posy 53))
+           ((:onset 2495)
+            (:item-internal-time 2495)
+            (:item-type 2495)
+            (:attributes (:list :posy 70))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -43154,20 +43146,19 @@ durations")
                   0.0
                   0.0))
                 (:bwl nil)))))
-            (:dur 0.54101635))))
+            (:dur 0.4505074))))
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
-            (:item-internal-time 2958)
+           ((:onset 2945)
+            (:item-internal-time 2945)
             (:item-type :master)
-            (:date 2958)
-            (:attributes (:list :posy 61))
+            (:attributes (:list :posy 62))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
               (:slots ((:the-list nil) (:amplitudes nil) (:bwl nil)))))
-            (:dur 0.49352288))))))
+            (:dur 0.5248773))))))
        (:data
         (:list
          (:object
@@ -47210,32 +47201,34 @@ durations")
           (:slots ((:the-list nil) (:amplitudes nil) (:bwl nil))))))
        (:time-struct
         (:list
-         (:list 0 0.4612012)
-         (:list 0.4612012 0.91808236)
-         (:list 0.91808236 1.4043447)
-         (:list 1.4043447 1.8990467)
-         (:list 1.8990467 2.4169522)
-         (:list 2.4169522 2.9579685)
-         (:list 2.9579685 3.4514914)))))
+         (:list 0 0.5395856)
+         (:list 0.5395856 0.99756676)
+         (:list 0.99756676 1.4825419)
+         (:list 1.4825419 1.987785)
+         (:list 1.987785 2.4949527)
+         (:list 2.4949527 2.94546)
+         (:list 2.94546 3.4703374)))))
      (:add-slots ((:data-type (:symbol "FQL" "CHROMA"))))))
    (:id 13))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "ADD-RANDOM" "CHROMA"))
    (:type :function)
+   (:reference (:symbol "ADD-RANDOM" "CHROMA"))
    (:group-id nil)
    (:name "add-random")
    (:x 506)
    (:y 373)
    (:w 98)
-   (:h 30)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -47250,8 +47243,8 @@ durations")
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 14))
   (:box
-   (:reference single-float)
    (:type :value)
+   (:reference single-float)
    (:group-id nil)
    (:name "value box")
    (:x 561)
@@ -47265,26 +47258,29 @@ durations")
    (:text-font nil)
    (:align nil)
    (:lock nil)
+   (:reactive nil)
    (:inputs)
    (:outputs (:output (:name "value") (:reactive nil)))
    (:value 0.1)
    (:id 15))
   (:box
-   (:reference dx->x)
    (:type :function)
+   (:reference dx->x)
    (:group-id nil)
    (:name "dx->x")
-   (:x 509)
+   (:x 507)
    (:y 415)
-   (:w 64)
-   (:h 30)
+   (:w 68)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -47299,21 +47295,23 @@ durations")
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 16))
   (:box
-   (:reference (:symbol "TIME-MAP-FUN" "CHROMA"))
    (:type :function)
+   (:reference (:symbol "TIME-MAP-FUN" "CHROMA"))
    (:group-id nil)
    (:name "time-map-fun")
-   (:x 719)
+   (:x 717)
    (:y 319)
-   (:w 106)
-   (:h 30)
+   (:w 111)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -47328,10 +47326,10 @@ durations")
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 17))
   (:comment
-   (:x 568)
-   (:y 217)
+   (:x 561)
+   (:y 246)
    (:w 165)
-   (:h 51)
+   (:h 50)
    (:fgcolor (:color 0 0 0 1.0))
    (:bgcolor nil)
    (:border 0)
@@ -47344,8 +47342,8 @@ on the time structure
 (uses cr-funs)")
    (:id 18))
   (:comment
-   (:x 739)
-   (:y 138)
+   (:x 738)
+   (:y 158)
    (:w 151)
    (:h 22)
    (:fgcolor (:color 0 0 0 1.0))
@@ -47358,21 +47356,23 @@ on the time structure
    (:id 19))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "MAKE-CR-FUN" "CHROMA"))
    (:type :function)
+   (:reference (:symbol "MAKE-CR-FUN" "CHROMA"))
    (:group-id nil)
    (:name "make-cr-fun")
-   (:x 740)
-   (:y 226)
-   (:w 98)
-   (:h 30)
+   (:x 738)
+   (:y 246)
+   (:w 105)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -47382,26 +47382,25 @@ on the time structure
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 20))
   (:box
-   (:reference bpf)
    (:type :object)
+   (:reference bpf)
    (:group-id nil)
    (:name "BPF")
    (:x 777)
-   (:y 169)
-   (:w 64)
+   (:y 189)
+   (:w 70)
    (:h 53)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name "BPF")
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -47436,17 +47435,12 @@ on the time structure
        (:decimals 0)
        (:x-points (:list 0 5 7 9 10))
        (:y-points (:list 0 24 91 20 100))))
-     (:add-slots
-      ((:decimals 0)
-       (:color (:color 0 0 0 1.0))
-       (:name "BPF")
-       (:action nil)
-       (:interpol (:number-or-nil (:number 50) (:t-or-nil nil)))))))
+     (:add-slots ((:name "BPF")))))
    (:id 21))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:type :object)
+   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:group-id nil)
    (:name nil)
    (:x 640)
@@ -47458,13 +47452,12 @@ on the time structure
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -47485,8 +47478,8 @@ on the time structure
     (:output (:name "SELF") (:reactive nil))
     (:output (:name "DATA") (:reactive nil))
     (:output (:name "TIME-STRUCT") (:reactive nil)))
-   (:window (:size (nil nil)) (:position (nil nil)))
-   (:edition-params)
+   (:window (:size (717 511)) (:position (102 83)))
+   (:edition-params (:x2 106107) (:x1 0))
    (:value
     (:object
      (:class (:symbol "CR-MODEL" "CHROMA"))
@@ -47500,11 +47493,10 @@ on the time structure
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 0)
             (:item-internal-time 0)
             (:item-type :master)
-            (:date 0)
-            (:attributes nil)
+            (:attributes (:list :posy 52))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -48276,11 +48268,10 @@ on the time structure
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 0)
             (:item-internal-time 0)
             (:item-type 0)
-            (:date 0)
-            (:attributes nil)
+            (:attributes (:list :posy 64))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -49042,11 +49033,10 @@ on the time structure
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 3429)
             (:item-internal-time 3429)
             (:item-type 3429)
-            (:date 3429)
-            (:attributes nil)
+            (:attributes (:list :posy 59))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -49806,11 +49796,10 @@ on the time structure
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 10286)
             (:item-internal-time 10286)
             (:item-type 10286)
-            (:date 10286)
-            (:attributes nil)
+            (:attributes (:list :posy 78))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -50542,11 +50531,10 @@ on the time structure
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 20571)
             (:item-internal-time 20571)
             (:item-type 20571)
-            (:date 20571)
-            (:attributes nil)
+            (:attributes (:list :posy 39))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -51264,11 +51252,10 @@ on the time structure
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 44536)
             (:item-internal-time 44536)
             (:item-type 44536)
-            (:date 44536)
-            (:attributes nil)
+            (:attributes (:list :posy 83))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -51592,11 +51579,10 @@ on the time structure
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 87500)
             (:item-internal-time 87500)
             (:item-type :master)
-            (:date 87500)
-            (:attributes nil)
+            (:attributes (:list :posy 57))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -55654,21 +55640,23 @@ on the time structure
      (:add-slots ((:data-type (:symbol "FQL" "CHROMA"))))))
    (:id 22))
   (:box
-   (:reference arithm-ser)
    (:type :function)
+   (:reference arithm-ser)
    (:group-id nil)
    (:name "arithm-ser")
-   (:x 193)
+   (:x 223)
    (:y 90)
-   (:w 89)
-   (:h 30)
+   (:w 98)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -55684,103 +55672,24 @@ on the time structure
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 23)))
  (:connections
-  (:connection
-   (:from (:box 0 :out 0))
-   (:to (:box 2 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 0 :out 0))
-   (:to (:box 2 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 1 :out 0))
-   (:to (:box 4 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 1 :out 0))
-   (:to (:box 4 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 1 :out 2))
-   (:to (:box 7 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 2 :out 0))
-   (:to (:box 1 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 2 :out 0))
-   (:to (:box 1 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 4 :out 0))
-   (:to (:box 3 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 4 :out 0))
-   (:to (:box 3 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 4 :out 0))
-   (:to (:box 13 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 4 :out 0))
-   (:to (:box 22 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 6 :out 0))
-   (:to (:box 12 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 6 :out 0))
-   (:to (:box 17 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 7 :out 0))
-   (:to (:box 6 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 9 :out 0))
-   (:to (:box 10 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 10 :out 0))
-   (:to (:box 3 :in 2))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 12 :out 0))
-   (:to (:box 9 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 12 :out 0))
-   (:to (:box 14 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 14 :out 0))
-   (:to (:box 16 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 15 :out 0))
-   (:to (:box 14 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 16 :out 0))
-   (:to (:box 13 :in 2))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 17 :out 0))
-   (:to (:box 22 :in 2))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 20 :out 0))
-   (:to (:box 17 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 21 :out 0))
-   (:to (:box 20 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 23 :out 0))
-   (:to (:box 1 :in 2))
-   (:attributes (:color nil :style nil :modif nil)))))
+  (:connection (:from (:box 0 :out 0)) (:to (:box 2 :in 0)))
+  (:connection (:from (:box 1 :out 0)) (:to (:box 4 :in 0)))
+  (:connection (:from (:box 1 :out 2)) (:to (:box 7 :in 0)))
+  (:connection (:from (:box 2 :out 0)) (:to (:box 1 :in 1)))
+  (:connection (:from (:box 4 :out 0)) (:to (:box 3 :in 1)))
+  (:connection (:from (:box 4 :out 0)) (:to (:box 13 :in 1)))
+  (:connection (:from (:box 4 :out 0)) (:to (:box 22 :in 1)))
+  (:connection (:from (:box 6 :out 0)) (:to (:box 12 :in 0)))
+  (:connection (:from (:box 6 :out 0)) (:to (:box 17 :in 0)))
+  (:connection (:from (:box 7 :out 0)) (:to (:box 6 :in 0)))
+  (:connection (:from (:box 9 :out 0)) (:to (:box 10 :in 1)))
+  (:connection (:from (:box 10 :out 0)) (:to (:box 3 :in 2)))
+  (:connection (:from (:box 12 :out 0)) (:to (:box 9 :in 0)))
+  (:connection (:from (:box 12 :out 0)) (:to (:box 14 :in 0)))
+  (:connection (:from (:box 14 :out 0)) (:to (:box 16 :in 1)))
+  (:connection (:from (:box 15 :out 0)) (:to (:box 14 :in 1)))
+  (:connection (:from (:box 16 :out 0)) (:to (:box 13 :in 2)))
+  (:connection (:from (:box 17 :out 0)) (:to (:box 22 :in 2)))
+  (:connection (:from (:box 20 :out 0)) (:to (:box 17 :in 1)))
+  (:connection (:from (:box 21 :out 0)) (:to (:box 20 :in 0)))
+  (:connection (:from (:box 23 :out 0)) (:to (:box 1 :in 2)))))

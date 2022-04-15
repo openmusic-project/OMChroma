@@ -1,12 +1,13 @@
 
 (:patch
- (:om-version 0.0111)
  (:name "01-make-model-from-sdif")
  (:doc "")
  (:info
   (:created "2019/08/04 1:00:51")
-  (:modified "2019/08/05 14:16:11"))
- (:window (:size (806 470)) (:position (274 118)))
+  (:modified "2022/04/16 0:33:32")
+  (:by "om-sharp")
+  (:version 1.06))
+ (:window (:size (804 427)) (:position (274 118)))
  (:grid nil)
  (:lock nil)
  (:boxes
@@ -14,7 +15,7 @@
    (:x 476)
    (:y 114)
    (:w 265)
-   (:h 39)
+   (:h 36)
    (:fgcolor
     (:color-or-nil
      (:color
@@ -32,7 +33,7 @@
    (:x 580)
    (:y 13)
    (:w 123)
-   (:h 56)
+   (:h 50)
    (:fgcolor
     (:color-or-nil
      (:color
@@ -56,7 +57,7 @@
    (:x 157)
    (:y 21)
    (:w 396)
-   (:h 42)
+   (:h 29)
    (:fgcolor
     (:color-or-nil
      (:color
@@ -126,8 +127,8 @@
    (:text "TRC")
    (:id 6))
   (:box
-   (:reference sdiffile)
    (:type :object)
+   (:reference sdiffile)
    (:group-id nil)
    (:name "SDIFFILE1")
    (:x 550)
@@ -139,12 +140,11 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name "SDIFFILE1")
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -157,23 +157,8 @@
    (:value
     (:object
      (:class sdiffile)
-     (:slots nil)
      (:add-slots
-      ((:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "in-files"))
-         (:device :unspecific)
-         (:host nil)
-         (:name "Bell_Westminster_A-cs")
-         (:type "sdif")))
-       (:file-map
+      ((:file-map
         (:list
          (:fstream-desc
           (:id 0)
@@ -203,11 +188,28 @@
              (:rmax 78)
              (:tmin 0.371530622243881D0)
              (:tmax 5.91827664399093D0)
-             (:nf 21)))))))))))
+             (:nf 21)))))))
+       (:file-pathname
+        (:pathname
+         (:directory
+          (:relative
+           :up
+           :up
+           :up
+           :up
+           :up
+           "_SHARED-FILES"
+           "WORKSPACES"
+           "my-workspace"
+           "in-files"))
+         (:device :unspecific)
+         (:host :unspecific)
+         (:name "Bell_Westminster_A-cs")
+         (:type "sdif")))))))
    (:id 7))
   (:box
-   (:reference sdiffile)
    (:type :object)
+   (:reference sdiffile)
    (:group-id nil)
    (:name "africa.mrk.sdif")
    (:x 249)
@@ -219,12 +221,11 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name "africa.mrk.sdif")
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -237,23 +238,8 @@
    (:value
     (:object
      (:class sdiffile)
-     (:slots nil)
      (:add-slots
-      ((:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "in-files"))
-         (:device :unspecific)
-         (:host nil)
-         (:name "africa.mrk")
-         (:type "sdif")))
-       (:file-map
+      ((:file-map
         (:list
          (:fstream-desc
           (:id 0)
@@ -283,11 +269,28 @@
              (:rmax 6)
              (:tmin 0.08387000113725662D0)
              (:tmax 4.991918087005615D0)
-             (:nf 58)))))))))))
+             (:nf 58)))))))
+       (:file-pathname
+        (:pathname
+         (:directory
+          (:relative
+           :up
+           :up
+           :up
+           :up
+           :up
+           "_SHARED-FILES"
+           "WORKSPACES"
+           "my-workspace"
+           "in-files"))
+         (:device :unspecific)
+         (:host :unspecific)
+         (:name "africa.mrk")
+         (:type "sdif")))))))
    (:id 8))
   (:box
-   (:reference sdiffile)
    (:type :object)
+   (:reference sdiffile)
    (:group-id nil)
    (:name "cherokee.f0.sdif")
    (:x 331)
@@ -299,12 +302,11 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name "cherokee.f0.sdif")
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -317,23 +319,8 @@
    (:value
     (:object
      (:class sdiffile)
-     (:slots nil)
      (:add-slots
-      ((:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "out-files"))
-         (:device :unspecific)
-         (:host nil)
-         (:name "f0")
-         (:type "sdif")))
-       (:file-map
+      ((:file-map
         (:list
          (:fstream-desc
           (:id 0)
@@ -349,11 +336,28 @@
              (:rmax 1)
              (:tmin 0.04642857142857143D0)
              (:tmax 2.4961337868480724D0)
-             (:nf 423)))))))))))
+             (:nf 423)))))))
+       (:file-pathname
+        (:pathname
+         (:directory
+          (:relative
+           :up
+           :up
+           :up
+           :up
+           :up
+           "_SHARED-FILES"
+           "WORKSPACES"
+           "my-workspace"
+           "out-files"))
+         (:device :unspecific)
+         (:host :unspecific)
+         (:name "f0")
+         (:type "sdif")))))))
    (:id 9))
   (:box
-   (:reference sdiffile)
    (:type :object)
+   (:reference sdiffile)
    (:group-id nil)
    (:name "trumpet-hrm.sdif")
    (:x 83)
@@ -365,12 +369,11 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name "trumpet-hrm.sdif")
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -383,24 +386,8 @@
    (:value
     (:object
      (:class sdiffile)
-     (:slots nil)
      (:add-slots
-      ((:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "Documents"
-           "Max 8"
-           "Packages"
-           "MuBu For Max"
-           "media"))
-         (:device :unspecific)
-         (:host nil)
-         (:name "trumpet-hrm")
-         (:type "sdif")))
-       (:file-map
+      ((:file-map
         (:list
          (:fstream-desc
           (:id 0)
@@ -416,24 +403,44 @@
              (:rmax 50)
              (:tmin -1.1337868480725624D-5)
              (:tmax 5.47312925170068D0)
-             (:nf 937)))))))))))
+             (:nf 937)))))))
+       (:file-pathname
+        (:pathname
+         (:directory
+          (:relative
+           :up
+           :up
+           :up
+           :up
+           :up
+           "Documents"
+           "Max 8"
+           "Packages"
+           "MuBu For Max"
+           "media"))
+         (:device :unspecific)
+         (:host :unspecific)
+         (:name "trumpet-hrm")
+         (:type "sdif")))))))
    (:id 10))
   (:box
-   (:reference arithm-ser)
    (:type :function)
+   (:reference arithm-ser)
    (:group-id nil)
    (:name "arithm-ser")
    (:x 595)
    (:y 216)
-   (:w 89)
-   (:h 30)
+   (:w 98)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -479,8 +486,8 @@
    (:text "HRM")
    (:id 13))
   (:box
-   (:reference sdiffile)
    (:type :object)
+   (:reference sdiffile)
    (:group-id nil)
    (:name "Donna-short_mrk.sdif")
    (:x 465)
@@ -492,12 +499,11 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name "Donna-short_mrk.sdif")
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -510,23 +516,8 @@
    (:value
     (:object
      (:class sdiffile)
-     (:slots nil)
      (:add-slots
-      ((:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "in-files"))
-         (:device :unspecific)
-         (:host nil)
-         (:name "Donna-short_mrk")
-         (:type "sdif")))
-       (:file-map
+      ((:file-map
         (:list
          (:fstream-desc
           (:id 0)
@@ -534,11 +525,28 @@
           (:tmin 0.0D0)
           (:tmax 2.5D0)
           (:nf 26)
-          (:matrices nil))))))))
+          (:matrices nil))))
+       (:file-pathname
+        (:pathname
+         (:directory
+          (:relative
+           :up
+           :up
+           :up
+           :up
+           :up
+           "_SHARED-FILES"
+           "WORKSPACES"
+           "my-workspace"
+           "in-files"))
+         (:device :unspecific)
+         (:host :unspecific)
+         (:name "Donna-short_mrk")
+         (:type "sdif")))))))
    (:id 14))
   (:box
-   (:reference sdiffile)
    (:type :object)
+   (:reference sdiffile)
    (:group-id nil)
    (:name "Donna_short_trc.sdif")
    (:x 167)
@@ -550,12 +558,11 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name "Donna_short_trc.sdif")
    (:display :mini-view)
    (:showname nil)
-   (:group-id nil)
    (:lock :locked)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -568,23 +575,8 @@
    (:value
     (:object
      (:class sdiffile)
-     (:slots nil)
      (:add-slots
-      ((:file-pathname
-        (:pathname
-         (:directory
-          (:absolute
-           "Users"
-           "bresson"
-           "_SHARED-FILES"
-           "WORKSPACES"
-           "my-workspace"
-           "in-files"))
-         (:device :unspecific)
-         (:host nil)
-         (:name "Donna_short_trc")
-         (:type "sdif")))
-       (:file-map
+      ((:file-map
         (:list
          (:fstream-desc
           (:id 0)
@@ -600,12 +592,29 @@
              (:rmax 255)
              (:tmin 0.0D0)
              (:tmax 2.507278911564626D0)
-             (:nf 116)))))))))))
+             (:nf 116)))))))
+       (:file-pathname
+        (:pathname
+         (:directory
+          (:relative
+           :up
+           :up
+           :up
+           :up
+           :up
+           "_SHARED-FILES"
+           "WORKSPACES"
+           "my-workspace"
+           "in-files"))
+         (:device :unspecific)
+         (:host :unspecific)
+         (:name "Donna_short_trc")
+         (:type "sdif")))))))
    (:id 15))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:type :object)
+   (:reference (:symbol "CR-MODEL" "CHROMA"))
    (:group-id nil)
    (:name nil)
    (:x 278)
@@ -617,13 +626,12 @@
    (:roundness nil)
    (:text-font nil)
    (:align :center)
-   (:name nil)
    (:display :mini-view)
    (:showname nil)
    (:show-markers t)
-   (:group-id nil)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -644,8 +652,8 @@
     (:output (:name "SELF") (:reactive nil))
     (:output (:name "DATA") (:reactive nil))
     (:output (:name "TIME-STRUCT") (:reactive nil)))
-   (:window (:size (1390 674)) (:position (530 384)))
-   (:edition-params)
+   (:window (:size (1390 674)) (:position (290 348)))
+   (:edition-params (:y2 18498.827) (:y1 7256.693) (:x2 6498) (:x1 0))
    (:value
     (:object
      (:class (:symbol "CR-MODEL" "CHROMA"))
@@ -659,11 +667,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 0)
             (:item-internal-time 0)
             (:item-type :master)
-            (:date 0)
-            (:attributes (:list :posy 79))
+            (:attributes (:list :posy 34))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -1205,11 +1212,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 372)
             (:item-internal-time 372)
             (:item-type 372)
-            (:date 372)
-            (:attributes (:list :posy 25))
+            (:attributes (:list :posy 50))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -1947,11 +1953,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 769)
             (:item-internal-time 769)
             (:item-type 769)
-            (:date 769)
-            (:attributes (:list :posy 48))
+            (:attributes (:list :posy 62))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -2401,11 +2406,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 974)
             (:item-internal-time 974)
             (:item-type 974)
-            (:date 974)
-            (:attributes (:list :posy 43))
+            (:attributes (:list :posy 55))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -2855,11 +2859,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 1179)
             (:item-internal-time 1179)
             (:item-type 1179)
-            (:date 1179)
-            (:attributes (:list :posy 30))
+            (:attributes (:list :posy 72))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -3335,11 +3338,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 1430)
             (:item-internal-time 1430)
             (:item-type 1430)
-            (:date 1430)
-            (:attributes (:list :posy 26))
+            (:attributes (:list :posy 52))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -3867,11 +3869,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 1718)
             (:item-internal-time 1718)
             (:item-type 1718)
-            (:date 1718)
-            (:attributes (:list :posy 49))
+            (:attributes (:list :posy 61))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -4531,11 +4532,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 2136)
             (:item-internal-time 2136)
             (:item-type 2136)
-            (:date 2136)
-            (:attributes (:list :posy 2))
+            (:attributes (:list :posy 45))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5071,11 +5071,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 2425)
             (:item-internal-time 2425)
             (:item-type 2425)
-            (:date 2425)
-            (:attributes (:list :posy 88))
+            (:attributes (:list :posy 75))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5113,11 +5112,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 2786)
             (:item-internal-time 2786)
             (:item-type 2786)
-            (:date 2786)
-            (:attributes (:list :posy 34))
+            (:attributes (:list :posy 42))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5126,11 +5124,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 3019)
             (:item-internal-time 3019)
             (:item-type 3019)
-            (:date 3019)
-            (:attributes (:list :posy 78))
+            (:attributes (:list :posy 60))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5139,11 +5136,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 3204)
             (:item-internal-time 3204)
             (:item-type 3204)
-            (:date 3204)
-            (:attributes (:list :posy 58))
+            (:attributes (:list :posy 36))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5152,11 +5148,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 3484)
             (:item-internal-time 3484)
             (:item-type 3484)
-            (:date 3484)
-            (:attributes (:list :posy 32))
+            (:attributes (:list :posy 41))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5165,11 +5160,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 3738)
             (:item-internal-time 3738)
             (:item-type 3738)
-            (:date 3738)
-            (:attributes (:list :posy 13))
+            (:attributes (:list :posy 42))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5178,11 +5172,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 4064)
             (:item-internal-time 4064)
             (:item-type 4064)
-            (:date 4064)
-            (:attributes (:list :posy 2))
+            (:attributes (:list :posy 44))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5191,11 +5184,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 4309)
             (:item-internal-time 4309)
             (:item-type 4309)
-            (:date 4309)
-            (:attributes (:list :posy 4))
+            (:attributes (:list :posy 82))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5204,11 +5196,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 4505)
             (:item-internal-time 4505)
             (:item-type 4505)
-            (:date 4505)
-            (:attributes (:list :posy 56))
+            (:attributes (:list :posy 68))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5217,11 +5208,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 4714)
             (:item-internal-time 4714)
             (:item-type 4714)
-            (:date 4714)
-            (:attributes (:list :posy 15))
+            (:attributes (:list :posy 88))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5230,11 +5220,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 4923)
             (:item-internal-time 4923)
             (:item-type 4923)
-            (:date 4923)
-            (:attributes (:list :posy 16))
+            (:attributes (:list :posy 44))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -5243,11 +5232,10 @@
          (:object
           (:class (:symbol "CR-FRAME" "CHROMA"))
           (:slots
-           ((:item-time nil)
+           ((:onset 5248)
             (:item-internal-time 5248)
             (:item-type :master)
-            (:date 5248)
-            (:attributes (:list :posy 88))
+            (:attributes (:list :posy 52))
             (:vps
              (:object
               (:class (:symbol "FQL" "CHROMA"))
@@ -31579,21 +31567,23 @@
    (:id 16))
   (:box
    (:library "OMChroma")
-   (:reference (:symbol "GET-ANALYSIS-DATA" "CHROMA"))
    (:type :function)
+   (:reference (:symbol "GET-ANALYSIS-DATA" "CHROMA"))
    (:group-id nil)
    (:name "get-analysis-data")
    (:x 188)
    (:y 211)
-   (:w 121)
-   (:h 30)
+   (:w 141)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -31621,7 +31611,7 @@
    (:x 53)
    (:y 200)
    (:w 123)
-   (:h 53)
+   (:h 50)
    (:fgcolor
     (:color-or-nil
      (:color
@@ -31635,21 +31625,23 @@
    (:text "Select the type of SDIF analysis data on the 2nd input =>")
    (:id 18))
   (:box
-   (:reference getsdiftimes)
    (:type :function)
+   (:reference getsdiftimes)
    (:group-id nil)
    (:name "getsdiftimes")
    (:x 463)
    (:y 214)
-   (:w 98)
-   (:h 30)
+   (:w 111)
+   (:h 29)
    (:color nil)
    (:border nil)
    (:roundness nil)
    (:text-font nil)
    (:align nil)
+   (:icon :left)
    (:lock nil)
    (:lambda nil)
+   (:reactive nil)
    (:inputs
     (:input
      (:type :standard)
@@ -31680,19 +31672,7 @@
    (:outputs (:output (:name "out") (:reactive nil)))
    (:id 19)))
  (:connections
-  (:connection
-   (:from (:box 7 :out 0))
-   (:to (:box 19 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 15 :out 0))
-   (:to (:box 17 :in 0))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 17 :out 0))
-   (:to (:box 16 :in 1))
-   (:attributes (:color nil :style nil :modif nil)))
-  (:connection
-   (:from (:box 19 :out 0))
-   (:to (:box 16 :in 2))
-   (:attributes (:color nil :style nil :modif nil)))))
+  (:connection (:from (:box 7 :out 0)) (:to (:box 19 :in 0)))
+  (:connection (:from (:box 15 :out 0)) (:to (:box 17 :in 0)))
+  (:connection (:from (:box 17 :out 0)) (:to (:box 16 :in 1)))
+  (:connection (:from (:box 19 :out 0)) (:to (:box 16 :in 2)))))
