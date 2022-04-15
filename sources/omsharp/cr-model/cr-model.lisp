@@ -59,7 +59,7 @@ It is used as element/data-frame for CR-MODELs.
 
 
 
-(defclass! cr-model (om::data-stream)
+(defclass! cr-model (om::data-track)
   ((data :accessor data :initarg :data :initform nil :documentation "model data: raw analysis data, or a list of CR-VPS instances")
    (time-struct :accessor time-struct :initarg :time-struct :initform nil :documentation "a list of time-markers or pairs of markers (begin/end)")
    (data-type :accessor data-type :initform 'cr::fql)
@@ -82,7 +82,7 @@ It is used as element/data-frame for CR-MODELs.
 ;;; (defmethod offset ((self cr-model)) 0.0)
 
 (defmethod get-model-contents ((self cr-model))
-  (om::data-stream-get-frames self))
+  (om::data-track-get-frames self))
 
 
 ;;;=======================
@@ -240,7 +240,7 @@ Data format:
                                (list (list 0.0 1.0)))) 
 
   ;;; generate the actual sequence from data + time-struct
-   (om::data-stream-set-frames 
+   (om::data-track-set-frames 
        self
        
        (cond 
