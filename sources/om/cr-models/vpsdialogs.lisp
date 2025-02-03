@@ -65,8 +65,10 @@
                                                               (newamp (read-from-string (om-dialog-item-text amp)))
                                                               (newbw (read-from-string (om-dialog-item-text bw))))
                                                           (setf (nth n (cr::fql obj)) newf)
-                                                          (setf (nth n (cr::amplitudes obj)) newamp)
-                                                          (setf (nth n (cr::bwl obj)) newbw)
+                                                          (when (cr::amplitudes obj)
+                                                            (setf (nth n (cr::amplitudes obj)) newamp))
+                                                          (when (cr::bwl obj)
+                                                          (setf (nth n (cr::bwl obj)) newbw))
                                                           (om-return-from-modal-dialog mydialog ())
                                                           ;(om-invalidate-view self t) ;ne marche pas...
                                                           (update-subviews (editor self))
