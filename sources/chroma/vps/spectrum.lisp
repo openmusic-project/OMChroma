@@ -228,7 +228,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(om::defclass! CRL (SPECTRUM) ()
+(om::defclass! CRL (SPECTRUM) 
+  ()
   (:documentation "Contiguous Ratios List")
   (:icon 622))
 

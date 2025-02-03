@@ -56,8 +56,8 @@
 
         
 ;;;;;;;;;
-(om::defclass! VPS 
-  (VS)
+
+(om::defclass! VPS (VS)
   ((fql :initform nil
         ;:initarg :fql
         :accessor fql
