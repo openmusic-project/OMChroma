@@ -23,8 +23,7 @@
 (in-package :cr)
 
 
-(defclass CHORD 
-  (VPS)
+(om::defclass! CHORD (VPS)
   ((sp-list :initform nil
             :documentation "list of symbolic-pitch objects"
             :accessor sp-list))
@@ -38,7 +37,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass SPL
+(om::defclass! SPL
   (CHORD)
   ((the-list :type list 
              :initform '(DO2  DO3 DO5)
@@ -153,7 +152,7 @@
     (get-cs-vps (get-gil x :midi t))))
 
 ;;;;;;;;;2
-(defclass RPL 
+(om::defclass! RPL 
   (CHORD)
   ((the-list :type list 
              :initform '(DO2  DO3 do5)
@@ -188,8 +187,7 @@
   (freqs-to-arl (get-fql x :octave octave) (pch->fq reference)))
 
 ;;;;;;;;;2b
-(defclass PPL 
-  (CHORD)
+(om::defclass! PPL (CHORD)
   ((the-list :type list 
              :initform '(DO LA SOL)
              :initarg :the-list 
@@ -237,7 +235,7 @@
 
 
 ;;;;;;;;;3
-(defclass CIL 
+(om::defclass! CIL 
   (CHORD)
   ((the-list :type list 
              :initform '(6- 7+ 6- 6-)
@@ -296,7 +294,7 @@
 
 
 ;;;;;;;;4
-(defclass AIL 
+(om::defclass! AIL 
   (anchored-vps CHORD)
   ((the-list :type list 
              :initform '((1 -1 12) (2+ 0 -5) 3+ 7+ (3- 1 -50))

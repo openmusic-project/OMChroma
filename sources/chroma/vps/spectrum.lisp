@@ -24,7 +24,7 @@
 (in-package :cr)
 
 
-(defclass SPECTRUM
+(om::defclass! SPECTRUM
   (VPS)
   ((amplitudes :initform nil
                :initarg :amplitudes
@@ -42,6 +42,8 @@
   )
 
 
+
+
 (defmethod check-amp ((x spectrum))
   (when (not (null (amplitudes x)))
     (if (not (eq (length (amplitudes x)) (length (fql x))))
@@ -57,6 +59,16 @@
             )
       )
     ))
+
+
+;form 5.2
+#|
+(defmethod check-amp ((x spectrum)) )
+  (if(not(null (amplitudes x)))
+    (if(not(eq(length(amplitudes x))(length(fql x))))
+      (error "pas le meme nombre d'amplitudes et de frequences"))))
+|#
+
 
 (defmethod check-bw ((x spectrum))
   (if (not (null (bwl x)))
@@ -166,7 +178,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;5
 
-(defclass FQL 
+(om::defclass! FQL 
   (SPECTRUM)
   ()
   (:documentation "Frequencies List" )
@@ -213,7 +225,7 @@
 
 
   ;;;;;;;;6
-(defclass CRL (SPECTRUM) ()
+(om::defclass! CRL (SPECTRUM) ()
   (:documentation "Contiguous Ratios List" )
   )
 
@@ -254,7 +266,7 @@
 
 ;;;;;;;;7
 
-(defclass ARL (anchored-vps SPECTRUM)
+(om::defclass! ARL (anchored-vps SPECTRUM)
   ((reference :initform 100.0 :initarg :reference :accessor reference))
   (:documentation "Anchored Ratios List (Spectrum)"))
 
@@ -286,7 +298,7 @@
 ;;;;;;;;8
 
 ;vps-spectrum-fql extension for partials model
-(defclass PTL 
+(om::defclass! PTL 
   (FQL)  
   ((duration :initform 0
              :initarg :duration

@@ -56,7 +56,7 @@
 
         
 ;;;;;;;;;
-(defclass VPS 
+(om::defclass! VPS 
   (VS)
   ((fql :initform nil
         ;:initarg :fql
@@ -69,7 +69,7 @@
   (:documentation "Vertical Pitch Structure" ))
 
 ;; mixin class for AIL and ARL
-(defclass anchored-vps ()
+(om::defclass! anchored-vps ()
   ((reference :initform nil :initarg :reference :accessor reference)))
 
 (defmethod reorder-vps ((x vps)) 
