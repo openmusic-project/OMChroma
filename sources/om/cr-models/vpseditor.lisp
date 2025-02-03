@@ -1,6 +1,25 @@
-
+;=====================================================
+; CHROMA 
+;=====================================================
+; part of the OMChroma library
+; -> High-level control of sound synthesis in OM
+;=====================================================
+;
+;This program is free software; you can redistribute it and/or
+;modify it under the terms of the GNU General Public License
+;as published by the Free Software Foundation; either version 2
+;of the License, or (at your option) any later version.
+;
+;See file LICENSE for further informations on licensing terms.
+;
+;This program is distributed in the hope that it will be useful,
+;but WITHOUT ANY WARRANTY; without even the implied warranty of
+;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;GNU General Public License for more details.
+;
+; File author: M. Stroppa, K. Haddad
+;=====================================================
 (in-package :om)
-
 
 (defmethod Class-has-editor-p  ((self cr::vps)) t)
 
@@ -35,12 +54,13 @@
 
 (defmethod selected-object ((self vpseditor)) (object self))
 
-(defmethod initialize-instance :after ((self vpseditor) &rest L) 
+(defmethod initialize-instance :after ((self vpseditor) &rest L)
   (declare (ignore l))
   (let* ((Panel (om-make-view (get-panel-class self) 
                               :position (om-make-point 90 *titlebars-h*) 
                               :size (om-make-point (- (w self) 90) (- (h self) (+ 50 *titlebars-h* (get-control-h self) 20)))
-                              :scrollbars :v))
+                              ;:scrollbars :v
+                              ))
          (envpanel (om-make-view (get-env-view self)
                               :position (om-make-point 30 *titlebars-h*) 
                               :size (om-make-point 50 (- (h self) (+ *titlebars-h* (get-control-h self))))
@@ -72,7 +92,7 @@
     (om-set-bg-color self *om-light-gray-color*)
     ))
 
-(defmethod update-view-of-ruler  ((self vpspanel))
+(defmethod update-view-of-ruler  ((self vpspanel)) 
    "Sometimes update drawing is hard, you can redefine this method."
   (setf (maxfreq (om-view-container self)) (second (rangey self)))
   (om-invalidate-view self)
@@ -106,7 +126,7 @@
   (om-invalidate-view self))
 
 
-(defmethod editor-null-event-handler :after ((self vpseditor))
+(defmethod editor-null-event-handler :after ((self vpseditor)) 
   (let ((pos (om-mouse-position self)))
     (let ((view (om-find-view-containing-point self pos))
            (p nil) freq amp)
@@ -192,22 +212,23 @@
       (initialize-instance vps :the-list freqs :amplitudes amps :bwl bws))
       )))
 
-(defmethod delete-partiels-from-pane ((self vpsPanel))
+
+
+(defmethod delete-partiels-from-pane ((self vpsPanel)) 
   (when (editable-p (editor self))
     (let* ((vps (selected-object (om-view-container self)))
            (freqs (position-remove (selection? self) (get-vps-freqs vps)))
            (amps (position-remove (selection? self) (get-vps-amps vps))))
       
+
       (setf (cr::the-list (selected-object (om-view-container self))) freqs)
       (setf (cr::amplitudes (selected-object (om-view-container self))) amps)
       (initialize-instance (selected-object (om-view-container self)))
-      
       (setf (selection? self) nil)
-    (om-invalidate-view self t)
-    (om-invalidate-view (envpanel self))
+      (om-invalidate-view self t)
+      (om-invalidate-view (envpanel self))
     ;(report-modifications (om-view-container self))
-    )))
-
+      )))
 
 
 (defmethod omselect-with-shift ((self vpsPanel) n)
@@ -215,15 +236,95 @@
     (setf (selection? self) (remove n (selection? self) :test '=))
     (push n (selection? self))))
 
+(defmethod update-titlebar-freqs ((self vpseditor) freq)
+  (om-with-focused-view (title-bar self)
+    (om-with-fg-color (title-bar self) *editor-bar-color*
+      (om-fill-rect 110 2 (- (w (title-bar self)) 102) 22))
+      (om-draw-string (- (w self) 80) 21 
+                      (format () "f = ~5f Hz" freq))))
+
+(defmethod move-up-freq ((Self vpsPanel))
+  (when (selection? self)
+    (let* ((obj (object (editor self)))
+           (freqs (loop for n in (selection? self)
+                        collect (nth n (cr::fql obj)))))
+      (cond 
+       ((and (om-shift-key-p) (om-command-key-p))
+        (loop for n in (selection? self)
+              for i in freqs
+              do (setf (nth n (cr::fql obj)) (+ 20 (nth n (cr::fql obj))))))
+       ((om-shift-key-p)
+        (loop for n in (selection? self)
+              for i in freqs
+              do (setf (nth n (cr::fql obj)) (+ 10 (nth n (cr::fql obj))))))
+       (t (loop for n in (selection? self)
+                for i in freqs
+                do (setf (nth n (cr::fql obj)) (+ 1 (nth n (cr::fql obj)))))))
+      
+      (report-modifications (editor self))
+      (update-titlebar-freqs (editor self) (car freqs))
+      (update-view-of-ruler self)
+      )))
+
+(defmethod move-down-freq ((Self vpsPanel))
+  (when (selection? self)
+    (let* ((obj (object (editor self)))
+           (freqs (loop for n in (selection? self)
+                        collect (nth n (cr::fql obj)))))
+      (cond 
+       ((and (om-shift-key-p) (om-command-key-p))
+        (loop for n in (selection? self)
+              for i in freqs
+              do (setf (nth n (cr::fql obj)) (- (nth n (cr::fql obj)) 20))))
+       ((om-shift-key-p)
+        (loop for n in (selection? self)
+              for i in freqs
+              do (setf (nth n (cr::fql obj)) (- (nth n (cr::fql obj)) 10))))
+       (t (loop for n in (selection? self)
+                for i in freqs
+                do (setf (nth n (cr::fql obj)) (- (nth n (cr::fql obj)) 1)))))
+      (report-modifications (editor self))
+      (update-titlebar-freqs (editor self) (car freqs))
+      (update-view-of-ruler self)
+      )))     
+
+
 (defmethod handle-key-event ((self vpsPanel) char)
-   (case char
-     (#\d (setf (amp-unit (editor self))
-                (if (equal (amp-unit (editor self)) :lin) :db :lin))
-          (om-invalidate-view self)
-          (om-invalidate-view (envpanel self))
-          (editor-null-event-handler (editor self)))
-     (:om-key-delete (when (selection? self) (delete-partiels-from-pane self)))
-     (otherwise nil)))
+  (case char
+    (#\h  (show-help-window (format nil "Commands for ~A Editor" 
+                                    (string-upcase (class-name (class-of (object (editor self)))))) 
+                            (get-help-list (editor self))))
+    (#\d (setf (amp-unit (editor self))
+               (if (equal (amp-unit (editor self)) :lin) :db :lin))
+         (om-invalidate-view self)
+         (om-invalidate-view (envpanel self))
+         (editor-null-event-handler (editor self)))
+    (#\o (when (selection? self)
+           (let* ((n (selection? self))
+                 (obj (object (om-view-container self))))
+             (loop for i in n
+                   do(set-fql-data self i 
+                           (nth i (cr::fql obj))
+                           (nth i (cr::amplitudes obj))
+                           (nth i (cr::bwl obj))
+                           )))))
+    (:om-key-delete (when (selection? self) 
+                      (delete-partiels-from-pane self)
+                      ;(om-invalidate-view self t)
+                      ))
+    (:om-key-up (move-up-freq self))
+    (:om-key-down (move-down-freq self))
+    (otherwise nil)))
+
+
+(defmethod get-help-list ((self vpseditor))
+  (list '(("tab" "Select next segment")      
+          (("d") "Switch Lin/dB amp. display")
+          (("i") "Reinit. view")
+          (("o") "Open Values dialog")
+          (("m") "Show/Hide time markers")
+          )))
+
 
 (defmethod om-view-click-handler ((self vpspanel) where)
   (let* ((n (click-in-freq self where)))
@@ -340,6 +441,8 @@
           (("d") "Switch Lin/dB Amp.")
           )))
 
+
+
 ;;;===============================================
 ;;; VPS LIST
 
@@ -424,8 +527,11 @@
                      (setf (selectedvps (editor self)) 0))
                    ))
     (:om-key-delete (when (selection? self) (delete-partiels-from-pane self)))
+   ; (#\h  (show-help-window (format nil "Commands for ~A Editor" 
+   ;                                 (string-upcase (class-name (class-of (object (editor self)))))) 
+   ;                         (get-help-list (editor self))))
     (#\d (setf (amp-unit (editor self))
-                (if (equal (amp-unit (editor self)) :lin) :db :lin))
+               (if (equal (amp-unit (editor self)) :lin) :db :lin))
          (om-invalidate-view self)
          (om-invalidate-view (envpanel self))
          (editor-null-event-handler (editor self)))
@@ -566,7 +672,7 @@
           for i = 0 then (+ i 1) do
           (om-with-focused-view self
             (when (and (integerp (selectedvps (editor self))) (= i (selectedvps (editor self))))
-              (om-with-fg-color self oa::*om-select-color-alpha*
+              (om-with-fg-color self  oa::*om-select-color-alpha*
               (om-fill-rect (round (* tfact t1)) 0 (round (* tfact (- t2 t1))) (h self))))
             (when (draw-markers self)
               (om-with-dashline
