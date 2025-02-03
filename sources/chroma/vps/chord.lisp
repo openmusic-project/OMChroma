@@ -36,16 +36,17 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;SPL;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(om::defclass! SPL
-  (CHORD)
+(om::defclass! SPL (CHORD)
   ((the-list :type list 
              :initform '(DO2  DO3 DO5)
              :initarg :the-list 
              :accessor the-list
              :reader get_vps))
-  (:documentation "Symbolic Pitch List" )
-)
+  (:documentation "Symbolic Pitch List")
+  (:icon 626))
 
 (defmethod initialize-instance :after ((x spl) &rest initargs)
   (declare (ignore initargs))
@@ -151,9 +152,11 @@
     (get-cs-vps (get-gil x :midi t) space)
     (get-cs-vps (get-gil x :midi t))))
 
-;;;;;;;;;2
-(om::defclass! RPL 
-  (CHORD)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;RPL;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(om::defclass! RPL (CHORD)
   ((the-list :type list 
              :initform '(DO2  DO3 do5)
              :initarg :the-list 
@@ -186,7 +189,10 @@
 (defmethod get-arl ((x rpl) &key reference octave)
   (freqs-to-arl (get-fql x :octave octave) (pch->fq reference)))
 
-;;;;;;;;;2b
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;PPL;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (om::defclass! PPL (CHORD)
   ((the-list :type list 
              :initform '(DO LA SOL)
@@ -234,16 +240,18 @@
   (freqs-to-arl (get-fql x :octave octave) (pch->fq reference)))
 
 
-;;;;;;;;;3
-(om::defclass! CIL 
-  (CHORD)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;CIL;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(om::defclass! CIL (CHORD)
   ((the-list :type list 
              :initform '(6- 7+ 6- 6-)
              :initarg :the-list 
              :accessor the-list
              :reader get_vps))
   (:documentation "Contiguous Interval List" )
-  ) 
+  (:icon 627)) 
 
 (defmethod initialize-instance :after ((x cil) &rest initargs)
   (declare (ignore initargs))
@@ -293,9 +301,11 @@
   (freqs-to-arl (get-fql x :reference reference) (pch->fq reference)))
 
 
-;;;;;;;;4
-(om::defclass! AIL 
-  (anchored-vps CHORD)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;AIL;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(om::defclass! AIL (anchored-vps CHORD)
   ((the-list :type list 
              :initform '((1 -1 12) (2+ 0 -5) 3+ 7+ (3- 1 -50))
              :initarg :the-list 
@@ -305,7 +315,7 @@
               :initarg :reference
               :accessor reference))
   (:documentation "Anchored Interval List" )
-  )
+  (:icon 628))
 
 (defmethod get-ail ((x ail) &key reference midi &allow-other-keys)
   (declare (ignore midi))
@@ -330,7 +340,7 @@
                          (or(null (third i))
                             (numberp (third i))
                             (memberp (third i) *DEVIATIONS* )))))
-        do (error "INTERVALLE NON AUTORISE : ~a" i)))
+        do (error "NON AUTORIZED INTERVAL : ~a" i)))
 
 (defmethod get-spl ((x ail) &key &allow-other-keys)
   (mapcar #'midi->pch (ail-to-midi (the-list x) (pch->midi(fq->pch(reference x))))))
