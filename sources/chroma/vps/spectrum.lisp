@@ -19,13 +19,9 @@
 ;
 ; File author: M. Stroppa
 ;=====================================================
-
-
 (in-package :cr)
 
-
-(om::defclass! SPECTRUM
-  (VPS)
+(om::defclass! SPECTRUM (VPS)
   ((amplitudes :initform nil
                :initarg :amplitudes
                :accessor amplitudes
@@ -42,12 +38,10 @@
   )
 
 
-
-
 (defmethod check-amp ((x spectrum))
   (when (not (null (amplitudes x)))
-    (if (not (eq (length (amplitudes x)) (length (fql x))))
-        (error (concatenate 'string "Error in " (string (type-of x)) ": not the same number of FREQUENCIES and AMPLITUDES.")))
+  ;  (if (not (eq (length (amplitudes x)) (length (fql x))))
+  ;      (error (concatenate 'string "Error in " (string (type-of x)) ": not the same number of FREQUENCIES and AMPLITUDES.")))
     (when (< (reduce #'min (amplitudes x) :initial-value MOST-POSITIVE-LONG-FLOAT) 0)
       ;; amplitudes in dB
       (when (> (reduce #'max (amplitudes x) :initial-value MOST-NEGATIVE-LONG-FLOAT) 0)
@@ -56,10 +50,11 @@
       (loop for a in (amplitudes x) for i = 0 then (+ i 1) do
             ;(when (> a 0) (setf (nth i (amplitudes x)) 0))
             (setf (nth i (amplitudes x)) (dbtolin (min 0 a)))
-            )
-      )
-    ))
-
+            )))
+  ;quand il n'y a pas d'amplitudes
+  (when (null (amplitudes x))
+  (let ((lgt (length (fql x))))
+    (setf (amplitudes x) (om::repeat-n 0.9 lgt)))))
 
 ;form 5.2
 #|
@@ -71,9 +66,14 @@
 
 
 (defmethod check-bw ((x spectrum))
-  (if (not (null (bwl x)))
+  (when (not (null (bwl x)))
       (if (not (eq (length (bwl x)) (length (fql x))))
-          (error (concatenate 'string "Error in " (string (type-of x)) ": not the same number of FREQUENCIES and BANDWIDTHS")))))
+         ; (error (concatenate 'string "Error in " (string (type-of x)) ": not the same number of FREQUENCIES and BANDWIDTHS"))
+ ))
+  (when (null (bwl x))
+  (let ((lgt (length (fql x))))
+    (setf (bwl x) (om::repeat-n 0.9 lgt)))))
+
 
 (defmethod get-max-amp ((x spectrum))
   (let ((l (amplitudes x)))
@@ -130,17 +130,17 @@
              (get-spl x
                       :reference reference :approx approx
                       :threshold threshold :max-nn max-nn))))
+
 (defmethod get-cil ((x spectrum) &key  approx (max-nn *MAX-NN*) threshold)
   (get-cil (make-instance 'spl
              :the-list (get-spl x :reference 'la4 :approx approx
                                 :threshold threshold :max-nn max-nn))))
+
 (defmethod get-ail ((x spectrum) &key reference approx (max-nn *MAX-NN*)
                       threshold &allow-other-keys)
   (get-ail (make-instance 'spl
              :the-list (get-spl x :approx approx :threshold threshold
-                                :max-nn max-nn)):reference reference)
-  )
-
+                                :max-nn max-nn)):reference reference))
 
 
 (defmethod reorder-vps ((x spectrum))  
@@ -174,15 +174,15 @@
 
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;5
+;;;;;;;;;;;;;;;;;;;;;FQL;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(om::defclass! FQL 
-  (SPECTRUM)
+
+(om::defclass! FQL (SPECTRUM)
   ()
-  (:documentation "Frequencies List" )
-  )
+  (:documentation "Frequencies List")
+  (:icon 621))
 
 (defmethod set-freq-list ((x fql))
   (if (the-list x)
@@ -223,11 +223,14 @@
           (slot-value x 'amplitudes)
           (slot-value x 'bwl)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;CRL;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  ;;;;;;;;6
+
 (om::defclass! CRL (SPECTRUM) ()
-  (:documentation "Contiguous Ratios List" )
-  )
+  (:documentation "Contiguous Ratios List")
+  (:icon 622))
 
 (defmethod initialize-instance :after ((x crl) &rest initargs)
   (declare (ignore initargs))
@@ -263,12 +266,14 @@
   "Number of Notes"
   (1+ (length (the-list x))))
 
-
-;;;;;;;;7
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;ARL;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (om::defclass! ARL (anchored-vps SPECTRUM)
   ((reference :initform 100.0 :initarg :reference :accessor reference))
-  (:documentation "Anchored Ratios List (Spectrum)"))
+  (:documentation "Anchored Ratios List (Spectrum)")
+ (:icon 623))
 
 (defmethod initialize-instance :after ((x arl) &rest initargs)
   (declare (ignore initargs))
@@ -295,11 +300,15 @@
           (documentation (class-name (class-of x))'type)
           (slot-value x 'the-list)
           (reference x)))
-;;;;;;;;8
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;PTL;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;vps-spectrum-fql extension for partials model
-(om::defclass! PTL 
-  (FQL)  
+(om::defclass! PTL (FQL)  
   ((duration :initform 0
              :initarg :duration
              :accessor duration
