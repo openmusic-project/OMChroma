@@ -59,7 +59,7 @@
 
 (om::defclass! VPS (VS)
   ((fql :initform nil
-        ;:initarg :fql
+        :initarg :fql ;unquoted, maybe this is the problem!
         :accessor fql
         :documentation "List of Frequencies")
    ;(reference :initform nil
