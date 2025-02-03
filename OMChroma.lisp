@@ -56,6 +56,7 @@
 
    "sources/om/cr-models/vps-tools"
    "sources/om/cr-models/vpseditor"
+   "sources/om/cr-models/vpsdialogs"
    "sources/om/cr-models/cr-model"
    "sources/om/cr-models/processing"
    "sources/om/cr-models/expand-model"
@@ -189,19 +190,19 @@
 
 (unless (fboundp 'om::set-lib-release) (defmethod om::set-lib-release (version &optional lib) nil))
 
-(om::set-lib-release 5.2 (find-library "OMChroma"))
+(om::set-lib-release 6.0 (find-library "OMChroma"))
 
 ;(cl-user::clean-sources (make-pathname :directory (append (pathname-directory *load-pathname*) '("sources"))))
 
 
 (print "
- ==============================
- OMChroma
- ==============================
+ =======================================================
+                       OMChroma
+ =======================================================
  High-level control of sound synthesis in OM
  (c) Ircam 2000-2018
- C. Agon, M. Stroppa, J. Bresson, S. Lemouton
- ==============================
+ C. Agon, M. Stroppa, J. Bresson, S. Lemouton, K. Haddad
+ =======================================================
 ")
 
 
