@@ -35,31 +35,31 @@
  #'(lambda (file)
      (compile&load (merge-pathnames file *load-pathname*)))
  
- '("sources/om6/chroma-init"
-   "sources/om6/chroma-fun"
+ '("sources/om/chroma-init"
+   "sources/om/chroma-fun"
 
-   "sources/om6/cs-events/general-parsing"
+   "sources/om/cs-events/general-parsing"
 
-   "sources/om6/cs-events/csound/cs-utils"
-   "sources/om6/cs-events/csound/cs-tables"
-   "sources/om6/cs-events/csound/csound-evt"
-   "sources/om6/cs-events/csound/csound-tools"
-   "sources/om6/cs-events/csound/csound-parsing"
+   "sources/om/cs-events/csound/cs-utils"
+   "sources/om/cs-events/csound/cs-tables"
+   "sources/om/cs-events/csound/csound-evt"
+   "sources/om/cs-events/csound/csound-tools"
+   "sources/om/cs-events/csound/csound-parsing"
 
-   "sources/om6/cs-events/user-funs/user-funs"
-   "sources/om6/cs-events/user-funs/methods"
+   "sources/om/cs-events/user-funs/user-funs"
+   "sources/om/cs-events/user-funs/methods"
 
-   "sources/om6/cs-events/chromaspat"
+   "sources/om/cs-events/chromaspat"
 
-   "sources/om6/chroma-reference"
-   "sources/om6/doc-chroma"
+   "sources/om/chroma-reference"
+   "sources/om/doc-chroma"
 
-   "sources/om6/cr-models/vps-tools"
-   "sources/om6/cr-models/vpseditor"
-   "sources/om6/cr-models/cr-model"
-   "sources/om6/cr-models/processing"
-   "sources/om6/cr-models/expand-model"
-   "sources/om6/cr-models/ctl"
+   "sources/om/cr-models/vps-tools"
+   "sources/om/cr-models/vpseditor"
+   "sources/om/cr-models/cr-model"
+   "sources/om/cr-models/processing"
+   "sources/om/cr-models/expand-model"
+   "sources/om/cr-models/ctl"
    ))
 
 (import '(cr::fq->pch 
@@ -181,9 +181,9 @@
   
   (setq *cs-orc-folder* (om-relative-path '("Csound") nil))
   
-  (load-chroma-classes (om-relative-path '("sources" "om6" "cs-events" "csound" "classes" "Basic") nil) basicpack)
-  (load-chroma-classes (om-relative-path '("sources" "om6" "cs-events" "csound" "classes" "Advanced") nil) advpack)
-  (load-chroma-classes (om-relative-path '("sources" "om6" "cs-events" "csound" "classes" "Panning") nil) spacepack)
+  (load-chroma-classes (om-relative-path '("sources" "om" "cs-events" "csound" "classes" "Basic") nil) basicpack)
+  (load-chroma-classes (om-relative-path '("sources" "om" "cs-events" "csound" "classes" "Advanced") nil) advpack)
+  (load-chroma-classes (om-relative-path '("sources" "om" "cs-events" "csound" "classes" "Panning") nil) spacepack)
   )
 
 
