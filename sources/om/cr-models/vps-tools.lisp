@@ -266,7 +266,7 @@ NB: RPL, CIL and CRL must be previously converted.
 (defmethod! get-vps-freqs ((self cr::rpl) &optional reference)
             (cr::get-fql self :octave reference))
 
-(defmethod! get-vps-freqs ((self cr::chord) &optional reference)
+(defmethod! get-vps-freqs ((self om::chord) &optional reference)
   (mc->f (lmidic self)))
 
 
@@ -278,7 +278,7 @@ NB: RPL, CIL and CRL must be previously converted.
 (defmethod! get-vps-amps ((self cr::fql))
   (cr::amplitudes self))
 
-(defmethod! get-vps-amps ((self cr::chord))
+(defmethod! get-vps-amps ((self om::chord))
   (om-scale (lvel self) 0.0 1.0))
 
 (defmethod! get-vps-maxamp ((x t))

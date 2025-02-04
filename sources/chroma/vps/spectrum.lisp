@@ -35,7 +35,7 @@
         :reader get-bw
         :documentation "List of Bandwidths"))
   (:documentation "Spectrum" )
-  )
+  (:icon 625))
 
 
 (defmethod check-amp ((x spectrum))

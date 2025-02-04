@@ -33,12 +33,14 @@
              ))
   (:documentation "Vertical Structure" ))
 
+
 (defmethod initialize-instance :after ((x vs) &rest initargs)
   (declare (ignore initargs))
   (if (null (the-list x)) 
     ;(error "MISSING LIST FOR ~a" (type-of x))
     (print (format nil "Warning: no list in ~a" (type-of x)))
     ))
+
 
 (defmethod print_vs ((x vs))
   (format t "Vertical Structure :~%~a    (~a)

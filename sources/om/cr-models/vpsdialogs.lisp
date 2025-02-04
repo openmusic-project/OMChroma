@@ -78,6 +78,7 @@
 
 
 ;peut-etre deplacer dans vps.lisp
+;non car il faut pour chaque classe....
 (defmethod om-view-doubleclick-handler ((Self vpspanel) Where) 
   (let ((n (click-in-freq self where))
         (obj (object (editor self))))
