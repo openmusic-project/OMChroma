@@ -154,6 +154,10 @@
                      (("Inspect" nil nil (model-max-amp model-max-freq model-min-freq model-nb-evts) nil)
                       ("Tools" nil nil (make-cr-fun time-map-fun add-random) nil))
                      (cr-model) (model-data expand-model) nil)
+                    ("VPS" 
+                     (("CHORD" nil (cr::chord cr::spl cr::rpl cr::ppl cr::cil cr::ail) nil nil)
+                      ("SPECTRUM" nil (cr::spectrum cr::fql cr::crl cr::arl cr::ptl) nil nil))
+                     )
                     )
                   (find-library "OMChroma"))
 
