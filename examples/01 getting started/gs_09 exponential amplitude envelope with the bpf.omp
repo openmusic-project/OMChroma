@@ -1,5 +1,5 @@
-; OM File Header - Saved 2013/10/29 22:34:29
-; (6.060017 :patc (om-make-point 10 60) (om-make-point 71 32) (om-make-point 1182 794) "" 183 0 "2012/11/15 8:18:09" "2013/10/29 10:40:31")
+; OM File Header - Saved 2025/02/06 18:22:39
+; (6.060017 :patc (om-make-point 10 60) (om-make-point 71 32) (om-make-point 1182 794) "" 183 0 nil "2025/02/06 18:22:39")
 ; End File Header
 ; External resources 
 ; (list (list (quote :sound) "../../../out-files/GS_09_B.aiff" "../../../out-files/GS_09_C.aiff" "../../../out-files/GS_09_F.aiff" "../../../out-files/GS_09_D.aiff" "../../../out-files/GS_09_A.aiff" "../../../out-files/GS_09_E.aiff"))

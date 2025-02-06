@@ -1,5 +1,5 @@
-; OM File Header - Saved 2013/10/29 22:34:30
-; (6.0602 :patc (om-make-point 216 227) (om-make-point 130 95) (om-make-point 585 452) "" 183 0 nil "2013/09/02 15:49:24")
+; OM File Header - Saved 2025/02/06 18:22:39
+; (6.0602 :patc (om-make-point 216 227) (om-make-point 130 95) (om-make-point 585 452) "" 183 0 nil "2025/02/06 18:22:39")
 ; End File Header
 ; External resources 
 ; (list (list (quote :sound) "../../in-files/gliss.aiff" "../../out-files/4CH-1_B.aiff" "../../out-files/4CH-1_A.aiff"))

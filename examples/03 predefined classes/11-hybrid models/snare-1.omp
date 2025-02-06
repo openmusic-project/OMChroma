@@ -1,5 +1,5 @@
-; OM File Header - Saved 2013/10/29 22:34:30
-; (6.0602 :patc (om-make-point 226 10) (om-make-point 100 141) (om-make-point 1055 763) "" 183 0 "2012/12/30 18:47:31" "2013/09/02 15:40:06")
+; OM File Header - Saved 2025/02/06 18:22:39
+; (6.0602 :patc (om-make-point 226 10) (om-make-point 100 141) (om-make-point 1055 763) "" 183 0 nil "2025/02/06 18:22:39")
 ; End File Header
 ; External resources 
 ; (list (list (quote :sound) "../../../out-files/snare-1_G.aiff" "../../../out-files/snare-1_H.aiff" "../../../out-files/snare-1_I.aiff" "../../../out-files/snare-1_C.aiff" "../../../out-files/snare-1_F.aiff" "../../../out-files/snare-1_B.aiff" "../../../out-files/snare-1_A.aiff"))

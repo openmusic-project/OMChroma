@@ -1,5 +1,5 @@
-; OM File Header - Saved 2013/10/30 13:45:25
-; (6.060015 :patc (om-make-point 13 138) (om-make-point 278 67) (om-make-point 1169 809) "non documentation" 183 0 "2013/10/26 23:28:15" "2013/10/30 13:41:10")
+; OM File Header - Saved 2025/02/06 18:22:39
+; (6.060015 :patc (om-make-point 13 138) (om-make-point 278 67) (om-make-point 1169 809) "non documentation" 183 0 nil "2025/02/06 18:22:39")
 ; End File Header
 ; External resources 
 ; (list (list (quote :sound) "../out-files/t12a.aiff"))

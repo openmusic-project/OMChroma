@@ -1,0 +1,4 @@
+; OM File Header - Saved 2025/02/06 18:53:32
+; (6.05 :patc (om-make-point 34 19) (om-make-point 50 50) (om-make-point 735 471) "non documentation" 183 0 nil "2025/02/06 18:53:32")
+; End File Header
+(in-package :om)(load-lib-for 'nil)(setf *om-current-persistent* (om-load-patch1 "readme" '((om-load-boxcomment "comment" (om-make-point 634 351) '"This folder contains the preliminary examples using the new class \"cr-models\", a powerful abstractions generating musical morphologies evolving in time.$It should however still be completed and expanded.$Use it as a simple starting point." nil (om-make-point 28 31) nil (om-make-color 1 0 0) (om-make-font "Arial" 36 :family nil :style '(:bold) :mode '(:srcor)))) 'nil nil 5.24))

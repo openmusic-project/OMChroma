@@ -1,5 +1,5 @@
-; OM File Header - Saved 2013/10/29 22:34:30
-; (6.0602 :patc (om-make-point 226 60) (om-make-point 527 115) (om-make-point 437 551) "" 183 0 "2013/02/23 15:19:02" "2013/09/03 9:38:34")
+; OM File Header - Saved 2025/02/06 18:22:39
+; (6.0602 :patc (om-make-point 226 60) (om-make-point 527 115) (om-make-point 437 551) "" 183 0 nil "2025/02/06 17:59:42")
 ; End File Header
 ; External resources 
 ; (list (list (quote :sound) "../../out-files/uf7_a.aiff"))

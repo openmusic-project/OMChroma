@@ -1,5 +1,5 @@
-; OM File Header - Saved 2013/10/29 22:34:30
-; (6.0602 :patc (om-make-point 226 10) (om-make-point 167 176) (om-make-point 1105 559) "" 183 0 "2012/12/07 22:15:47" "2012/12/20 13:54:26")
+; OM File Header - Saved 2025/02/06 18:22:39
+; (6.0602 :patc (om-make-point 226 10) (om-make-point 167 176) (om-make-point 1105 559) "" 183 0 nil "2025/02/06 18:22:39")
 ; End File Header
 ; External resources 
 ; (list (list (quote :sound) "../../../out-files/fof-2_D.aiff" "../../../out-files/fof-2_C.aiff" "../../../out-files/fof-2_B.aiff" "../../../out-files/fof-2_A.aiff"))

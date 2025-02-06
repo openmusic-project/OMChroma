@@ -1,5 +1,5 @@
-; OM File Header - Saved 2013/10/29 22:34:30
-; (6.0602 :patc (om-make-point 280 210) (om-make-point 308 86) (om-make-point 1138 524) "" 183 0 "2012/11/28 22:07:29" "2013/08/30 16:10:48")
+; OM File Header - Saved 2025/02/06 18:22:39
+; (6.0602 :patc (om-make-point 280 210) (om-make-point 308 86) (om-make-point 1138 524) "" 183 0 nil "2025/02/06 18:22:39")
 ; End File Header
 ; External resources 
 ; (list (list (quote :sound) "../../../../../out-files/PLUCK-1_B.aiff" "../../../../../out-files/PLUCK-1_C.aiff" "../../../../../out-files/PLUCK-1_A.aiff"))
