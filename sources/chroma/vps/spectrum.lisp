@@ -64,13 +64,19 @@
       (error "pas le meme nombre d'amplitudes et de frequences"))))
 |#
 
-
+#|
 (defmethod check-bw ((x spectrum))
   (when (not (null (bwl x)))
       (if (not (eq (length (bwl x)) (length (fql x))))
          ; (error (concatenate 'string "Error in " (string (type-of x)) ": not the same number of FREQUENCIES and BANDWIDTHS"))
  ))
   (when (null (bwl x))
+  (let ((lgt (length (fql x))))
+    (setf (bwl x) (om::repeat-n 0.9 lgt)))))
+|#
+
+(defmethod check-bw ((x spectrum))
+  (unless (bwl x)
   (let ((lgt (length (fql x))))
     (setf (bwl x) (om::repeat-n 0.9 lgt)))))
 
